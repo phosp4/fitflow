@@ -4,24 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="01f3fa44-97cb-4845-b1da-41ba5449209e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="01f3fa44-97cb-4845-b1da-41ba5449209e" name="Changes" comment="Create project, add entities and implement lombok">
       <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/entities/CreditTransaction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/entities/Reservation.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/entities/TrainerInterval.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/entities/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/entities/Visit.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/enums/ReservationStatus.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/enums/Role.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/enums/TrainerSpecialization.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/enums/TransactionType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,6 +46,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "reference.settingsdialog.IDE.editor.colors.VCS",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -77,11 +63,47 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1732627098013</updated>
-      <workItem from="1732627099044" duration="5519000" />
+      <workItem from="1732627099044" duration="6669000" />
     </task>
+    <task id="LOCAL-00001" summary="Create project, add entities and implement lombok">
+      <option name="closed" value="true" />
+      <created>1732661341311</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1732661341311</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Create project, add entities and implement lombok">
+      <option name="closed" value="true" />
+      <created>1732661774785</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1732661774785</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Create project, add entities and implement lombok" />
+    <option name="LAST_COMMIT_MESSAGE" value="Create project, add entities and implement lombok" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>
