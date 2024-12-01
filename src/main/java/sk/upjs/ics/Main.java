@@ -1,7 +1,26 @@
 package sk.upjs.ics;
 
-public class Main {
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+public class Main extends Application {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
+//        var mainController = new Controller();
+        var fxmlLoader = new FXMLLoader(getClass().getResource("HomeView.fxml"));
+//        fxmlLoader.setController(mainController);
+        Parent rootPane = fxmlLoader.load();
+
+        var scene = new Scene(rootPane);
+        stage.setTitle("FitFlow");
+        stage.setScene(scene);
+        stage.show();
     }
 }
