@@ -4,9 +4,11 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 
-public class Controller {
+public class MainLayoutController {
 
+    public StackPane contentArea;
     @FXML
     private MFXButton menuHistoryButton;
 
