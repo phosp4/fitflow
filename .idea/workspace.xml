@@ -4,14 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="01f3fa44-97cb-4845-b1da-41ba5449209e" name="Changes" comment="update readme file">
-      <change afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/Controller.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/IDELauncher.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/sk/upjs/ics/HomeView.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/sk/upjs/ics/style.css" afterDir="false" />
+    <list default="true" id="01f3fa44-97cb-4845-b1da-41ba5449209e" name="Changes" comment="add fxml file, css file, controller, IDELauncher and dependencies">
+      <change afterPath="$PROJECT_DIR$/fitflow_pro_db_navrh1.mwb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fitflow_pro_db_navrh1.mwb.bak" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,6 +66,9 @@
     <key name="CreateClassDialog.RecentsKey">
       <recent name="org.example" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration name="IDELauncher" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -110,7 +109,7 @@
       <workItem from="1732929251695" duration="4000" />
       <workItem from="1732929266447" duration="842000" />
       <workItem from="1733054940859" duration="2441000" />
-      <workItem from="1733057450642" duration="1603000" />
+      <workItem from="1733057450642" duration="3209000" />
     </task>
     <task id="LOCAL-00001" summary="Create project, add entities and implement lombok">
       <option name="closed" value="true" />
@@ -144,7 +143,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732663217166</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="add fxml file, css file, controller, IDELauncher and dependencies">
+      <option name="closed" value="true" />
+      <created>1733059263916</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1733059263916</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -155,7 +162,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -164,7 +183,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Create project, add entities and implement lombok" />
     <MESSAGE value="update readme file" />
-    <option name="LAST_COMMIT_MESSAGE" value="update readme file" />
+    <MESSAGE value="add fxml file, css file, controller, IDELauncher and dependencies" />
+    <option name="LAST_COMMIT_MESSAGE" value="add fxml file, css file, controller, IDELauncher and dependencies" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
