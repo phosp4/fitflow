@@ -1,0 +1,4 @@
+id,user_id,check_in_time,check_out_time,visit_secret,credit_transaction_id
+1,10,2023-11-23 12:34:56,2023-11-23 13:45:00,secret123,100
+2,20,2023-11-24 10:00:00,2023-11-24 11:30:00,secret456,200
+3,10,2023-11-25 14:00:00,2023-11-25 15:15:00,secret789,300
