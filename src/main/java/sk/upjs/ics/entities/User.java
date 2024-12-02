@@ -20,4 +20,5 @@ public class User {
     private Instant createdAt;
     private Instant updatedAt;
     private Set<Long> trainerSpecializationId;
+    private Set<Long> clientIdSet;
 }
