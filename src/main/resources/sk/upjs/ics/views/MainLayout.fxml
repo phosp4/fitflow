@@ -13,12 +13,12 @@
 <BorderPane xmlns="http://javafx.com/javafx/22"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="sk.upjs.ics.MainLayoutController"
-            prefHeight="400.0" prefWidth="600.0" stylesheets="@style.css">
+            prefHeight="500.0" prefWidth="800.0" stylesheets="@../style.css" fx:id="borderPane">
     <left>
-        <VBox alignment="CENTER_LEFT" prefHeight="400.0" prefWidth="145.0" style="-fx-background-color: #a7c957;">
+        <VBox alignment="CENTER_LEFT" prefHeight="400.0" prefWidth="145.0" styleClass="green-background">
             <Label fx:id="titleLabel" alignment="CENTER" prefHeight="73.0" prefWidth="160.0"
                    style="-fx-font-weight: bold;"
-                   text="FitFlow" textFill="#386641">
+                   text="FitFlow" textFill="#FFFFFF">
                 <font>
                     <Font name="Futura Medium" size="34.0"/>
                 </font>
@@ -28,8 +28,8 @@
             </Label>
             <MFXButton fx:id="menuHomeButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
                        minHeight="30.0" onAction="#showHomeScene" prefHeight="35.0" prefWidth="160.0"
-                       rippleColor="#5b5b5b"
-                       style="-fx-background-color: #a7c957;" text="Home" textAlignment="CENTER" textOverrun="CLIP">
+                       rippleColor="#FFFFFF"
+                       styleClass="green-background" text="Home" textAlignment="CENTER" textOverrun="CLIP">
                 <padding>
                     <Insets left="20.0"/>
                 </padding>
@@ -37,7 +37,7 @@
             <MFXButton fx:id="menuReservationsButton" maxHeight="1.7976931348623157E308"
                        maxWidth="1.7976931348623157E308"
                        minHeight="30.0" onAction="#showReservationsScene" prefHeight="35.0" prefWidth="160.0"
-                       rippleColor="#5b5b5b" style="-fx-background-color: #a7c957;" text="Reservations"
+                       rippleColor="#FFFFFF" styleClass="green-background" text="Reservations"
                        textAlignment="CENTER" textOverrun="CLIP">
                 <padding>
                     <Insets left="20.0"/>
@@ -45,7 +45,7 @@
             </MFXButton>
             <MFXButton fx:id="menuWalletButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
                        minHeight="30.0" onAction="#showWalletScene" prefHeight="35.0" prefWidth="160.0"
-                       rippleColor="#5b5b5b" style="-fx-background-color: #a7c957;" text="Wallet" textAlignment="CENTER"
+                       rippleColor="#FFFFFF" styleClass="green-background" text="Wallet" textAlignment="CENTER"
                        textOverrun="CLIP">
                 <padding>
                     <Insets left="20.0"/>
@@ -53,7 +53,7 @@
             </MFXButton>
             <MFXButton fx:id="menuHistoryButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
                        minHeight="30.0" onAction="#showHistoryScene" prefHeight="35.0" prefWidth="160.0"
-                       rippleColor="#5b5b5b" style="-fx-background-color: #a7c957;" text="History"
+                       rippleColor="#FFFFFF" styleClass="green-background" text="History"
                        textAlignment="CENTER"
                        textOverrun="CLIP">
                 <padding>
@@ -62,7 +62,7 @@
             </MFXButton>
             <MFXButton fx:id="menuSettingsButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
                        minHeight="30.0" onAction="#showSettingsScene" prefHeight="35.0" prefWidth="160.0"
-                       rippleColor="#5b5b5b" style="-fx-background-color: #a7c957;" text="Settings"
+                       rippleColor="#FFFFFF" styleClass="green-background" text="Settings"
                        textAlignment="CENTER"
                        textOverrun="CLIP">
                 <padding>
@@ -70,8 +70,8 @@
                 </padding>
             </MFXButton>
             <MFXButton maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="30.0"
-                       onAction="#logUserOut" prefHeight="35.0" prefWidth="160.0" rippleColor="#5b5b5b"
-                       style="-fx-background-color: #a7c957;" text="Log out" textAlignment="CENTER" textOverrun="CLIP">
+                       onAction="#logUserOut" prefHeight="35.0" prefWidth="160.0" rippleColor="#FFFFFF"
+                       styleClass="green-background" text="Log out" textAlignment="CENTER" textOverrun="CLIP">
                 <padding>
                     <Insets left="20.0"/>
                 </padding>
