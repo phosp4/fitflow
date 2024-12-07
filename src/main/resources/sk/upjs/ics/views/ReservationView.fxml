@@ -62,6 +62,7 @@
                       promptText="note to your trainer" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
         <MFXToggleButton fx:id="TestToggle" text="Send confirmation" GridPane.rowIndex="4"/>
         <MFXButton fx:id="createReservationButton" onAction="#createReservation" prefHeight="40.0" prefWidth="147.0"
-                   text="Create reservation" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                   text="Create reservation" GridPane.columnIndex="1" GridPane.rowIndex="5" rippleColor="#FFFFFF"
+                   styleClass="green-background" textAlignment="CENTER" textOverrun="CLIP"/>
     </GridPane>
 </VBox>

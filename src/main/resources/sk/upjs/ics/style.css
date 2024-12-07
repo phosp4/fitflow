@@ -7,12 +7,12 @@
     -fx-text-fill: #FFFFFF;
     -fx-font-size: 12px;
     -fx-font-weight: bold;
-    -fx-letter-spacing: 1.5px;
-    -fx-alignment: center-left;
+    -fx-letter-spacing: 2px;
+    -fx-alignment: center;
 }
 
-.icon {
-    -fx-font-size: 16px;
+.sidebar-button {
+    -fx-alignment: center-left;
 }
 
 .green-background {
