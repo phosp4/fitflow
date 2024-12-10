@@ -4,12 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="01f3fa44-97cb-4845-b1da-41ba5449209e" name="Changes" comment="Create proper database initialization">
+    <list default="true" id="01f3fa44-97cb-4845-b1da-41ba5449209e" name="Changes" comment="Finish SQLReservationDao">
+      <change afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/users/Role.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/users/SQLUserDao.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/users/UserDao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/enums/ReservationStatus.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/enums/Role.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/enums/TrainerSpecialization.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/enums/TransactionType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/Factory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/Factory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/entities/CreditTransaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/reservations/CreditTransaction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/entities/Reservation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/reservations/Reservation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/entities/TrainerInterval.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/reservations/TrainerInterval.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/users/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/entities/Visit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/reservations/Visit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/reservations/ReservationDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/reservations/ReservationDao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/reservations/SQLReservationDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/reservations/SQLReservationDao.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -21,8 +27,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="FxmlFile" />
-        <option value="Interface" />
         <option value="Enum" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -95,7 +101,7 @@
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "editor.preferences.completion",
+    "settings.editor.selected.configurable": "vcs.Git",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
@@ -113,7 +119,7 @@
       <recent name="$PROJECT_DIR$/src/main/resources/sk/upjs/ics/views" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.DatabaseUtil">
+  <component name="RunManager" selected="Application.IDELauncher">
     <configuration name="DatabaseUtil" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="sk.upjs.ics.DatabaseUtil" />
       <module name="fitflow" />
@@ -148,8 +154,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.DatabaseUtil" />
         <item itemvalue="Application.IDELauncher" />
+        <item itemvalue="Application.DatabaseUtil" />
       </list>
     </recent_temporary>
   </component>
@@ -189,7 +195,7 @@
       <workItem from="1733773207394" duration="366000" />
       <workItem from="1733773600651" duration="205000" />
       <workItem from="1733773812472" duration="16067000" />
-      <workItem from="1733834243209" duration="7306000" />
+      <workItem from="1733834243209" duration="12684000" />
     </task>
     <task id="LOCAL-00001" summary="Create project, add entities and implement lombok">
       <option name="closed" value="true" />
@@ -271,7 +277,15 @@
       <option name="project" value="LOCAL" />
       <updated>1733840466955</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Finish SQLReservationDao">
+      <option name="closed" value="true" />
+      <created>1733855488701</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1733855488701</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -299,7 +313,8 @@
     <MESSAGE value="add fxml for other views, implement sidebar logic, reorganize resources, redesign gui" />
     <MESSAGE value="Can't pull" />
     <MESSAGE value="Create proper database initialization" />
-    <option name="LAST_COMMIT_MESSAGE" value="Create proper database initialization" />
+    <MESSAGE value="Finish SQLReservationDao" />
+    <option name="LAST_COMMIT_MESSAGE" value="Finish SQLReservationDao" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

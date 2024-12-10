@@ -2,6 +2,8 @@ package sk.upjs.ics;
 
 import sk.upjs.ics.reservations.ReservationDao;
 import sk.upjs.ics.reservations.SQLReservationDao;
+import sk.upjs.ics.users.SQLUserDao;
+import sk.upjs.ics.users.UserDao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -14,6 +16,7 @@ public enum Factory {
 
     private volatile Connection connection;
     private volatile ReservationDao reservationDao;
+    private volatile UserDao userDao;
 
     private final Object lock = new Object();
 
@@ -39,4 +42,16 @@ public enum Factory {
         }
         return reservationDao;
     }
+
+    public UserDao getUserDao() throws SQLException {
+        if (userDao == null) {
+            synchronized (lock) {
+                if (userDao == null) {
+                    userDao = new SQLUserDao(getConnection());
+                }
+            }
+        }
+        return userDao;
+    }
+
 }

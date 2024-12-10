@@ -1,7 +1,5 @@
 package sk.upjs.ics.reservations;
 
-import sk.upjs.ics.entities.Reservation;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
