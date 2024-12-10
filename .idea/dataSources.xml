@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="fitflow" uuid="ebefdee5-5692-4f12-aa33-0f4c59b8c17a">
+    <data-source source="LOCAL" name="fitflow.db" uuid="0f9c899d-30be-43bc-b68c-5de3858a0c97">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
