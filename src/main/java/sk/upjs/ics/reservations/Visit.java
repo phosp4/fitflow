@@ -1,4 +1,4 @@
-package sk.upjs.ics.entities;
+package sk.upjs.ics.reservations;
 
 import lombok.Data;
 
