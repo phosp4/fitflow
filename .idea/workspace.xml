@@ -4,15 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="01f3fa44-97cb-4845-b1da-41ba5449209e" name="Changes" comment="Implement basic SQLUserDao">
-      <change afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/Exceptions/NotFoundException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/users/Specialization.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="01f3fa44-97cb-4845-b1da-41ba5449209e" name="Changes" comment="Finish SQL implementations">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/reservations/Reservation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/reservations/Reservation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/reservations/ReservationDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/reservations/ReservationDao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/reservations/SQLReservationDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/reservations/SQLReservationDao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/users/SQLUserDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/users/SQLUserDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/users/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/users/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/users/UserDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/users/UserDao.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,6 +38,7 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -293,7 +292,15 @@
       <option name="project" value="LOCAL" />
       <updated>1733864842674</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Finish SQL implementations">
+      <option name="closed" value="true" />
+      <created>1733907167855</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1733907167855</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -323,7 +330,8 @@
     <MESSAGE value="Create proper database initialization" />
     <MESSAGE value="Finish SQLReservationDao" />
     <MESSAGE value="Implement basic SQLUserDao" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implement basic SQLUserDao" />
+    <MESSAGE value="Finish SQL implementations" />
+    <option name="LAST_COMMIT_MESSAGE" value="Finish SQL implementations" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

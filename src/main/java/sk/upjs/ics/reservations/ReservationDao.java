@@ -1,6 +1,11 @@
 package sk.upjs.ics.reservations;
 
+import java.io.File;
+
 public interface ReservationDao {
+
+    void loadFromCsv(File file);
+
     void create(Reservation reservation);
 
     void delete(Reservation reservation);

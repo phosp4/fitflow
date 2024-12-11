@@ -1,6 +1,10 @@
 package sk.upjs.ics.users;
 
+import java.io.File;
+
 public interface UserDao {
+
+    void loadFromCsv(File file);
 
     void update(User user);
 

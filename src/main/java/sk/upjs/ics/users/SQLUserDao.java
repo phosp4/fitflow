@@ -2,9 +2,12 @@ package sk.upjs.ics.users;
 
 import sk.upjs.ics.Exceptions.NotFoundException;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class SQLUserDao implements UserDao {
 
@@ -13,8 +16,44 @@ public class SQLUserDao implements UserDao {
     public SQLUserDao(Connection connection) {
         this.connection = connection;
     }
+
     private final String selectQuery = "SELECT role, email, first_name, last_name, credit_balance, phone, birth_date, active FROM users";
 
+    @Override
+    public void loadFromCsv(File file) {
+        try (Scanner scanner = new Scanner(file)) {
+            // skip header
+            scanner.nextLine();
+
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+
+                if (line.isEmpty()) {
+                    continue;
+                }
+
+                String[] parts = line.split(",");
+
+                String insertQuery = "INSERT INTO users(role, email, password_hash, first_name, last_name, credit_balance, phone, birth_date, active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                try (PreparedStatement pstm = connection.prepareStatement(insertQuery)) {
+                    pstm.setLong(1, Long.parseLong(parts[0]));
+                    pstm.setString(2, parts[1]);
+                    pstm.setString(3, parts[2]);
+                    pstm.setString(4, parts[3]);
+                    pstm.setString(5, parts[4]);
+                    pstm.setFloat(6, Float.parseFloat(parts[5]));
+                    pstm.setString(7, parts[6]);
+                    pstm.setDate(8, Date.valueOf(parts[7]));
+                    pstm.setBoolean(9, Boolean.parseBoolean(parts[8]));
+                    pstm.executeUpdate();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
     @Override
     public void update(User user) {
         String updateQuery = "UPDATE users SET " +
