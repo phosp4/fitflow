@@ -1,27 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXListView?>
 <?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-      prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22">
-    <Label text="Home">
+<VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.ics.controllers.HomeViewController">
+    <Label text="Home" VBox.vgrow="ALWAYS">
         <font>
-            <Font size="37.0"/>
+            <Font size="37.0" />
         </font>
         <padding>
-            <Insets left="30.0"/>
+            <Insets left="30.0" />
         </padding>
     </Label>
-    <Separator maxWidth="1.7976931348623157E308">
+    <Separator maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
         <VBox.margin>
-            <Insets bottom="30.0" right="30.0" top="10.0"/>
+            <Insets bottom="30.0" right="30.0" top="10.0" />
         </VBox.margin>
         <padding>
-            <Insets left="30.0"/>
+            <Insets left="30.0" />
         </padding>
     </Separator>
+   <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+      <children>
+         <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS">
+            <children>
+               <ImageView fx:id="qrImageView" fitHeight="150.0" fitWidth="174.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
+                  <VBox.margin>
+                     <Insets bottom="10.0" />
+                  </VBox.margin>
+                  <viewport>
+                     <Rectangle2D />
+                  </viewport>
+               </ImageView>
+               <Label fx:id="timeLabel" text="00:00:00" VBox.vgrow="ALWAYS">
+                  <VBox.margin>
+                     <Insets bottom="10.0" />
+                  </VBox.margin>
+                  <font>
+                     <Font size="20.0" />
+                  </font>
+               </Label>
+               <MFXButton fx:id="enterButton" onAction="#enter" prefHeight="38.0" prefWidth="135.0" rippleColor="#FFFFFF" styleClass="green-background" text="Enter" VBox.vgrow="ALWAYS">
+                  <VBox.margin>
+                     <Insets bottom="10.0" />
+                  </VBox.margin>
+                  <font>
+                     <Font size="20.0" />
+                  </font>
+               </MFXButton>
+            </children>
+         </VBox>
+         <VBox alignment="TOP_CENTER" prefWidth="100.0" HBox.hgrow="ALWAYS">
+            <children>
+               <Label text="Active reservations" VBox.vgrow="ALWAYS">
+                  <font>
+                     <Font size="17.0" />
+                  </font>
+                  <VBox.margin>
+                     <Insets bottom="10.0" />
+                  </VBox.margin>
+               </Label>
+               <MFXListView fx:id="activeReservationsList" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="20.0" VBox.vgrow="ALWAYS" />
+            </children>
+         </VBox>
+      </children>
+      <padding>
+         <Insets bottom="20.0" left="20.0" right="20.0" />
+      </padding>
+   </HBox>
 </VBox>

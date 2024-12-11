@@ -1,4 +1,4 @@
-package sk.upjs.ics;
+package sk.upjs.ics.controllers;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;

@@ -1,27 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import io.github.palexdev.materialfx.controls.MFXListView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-      prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22">
-   <Label text="History">
+<VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.ics.controllers.HistoryViewController">
+   <Label prefHeight="46.0" prefWidth="607.0" text="History" VBox.vgrow="ALWAYS">
       <font>
-         <Font size="37.0"/>
+         <Font size="37.0" />
       </font>
       <padding>
-         <Insets left="30.0"/>
+         <Insets left="30.0" />
       </padding>
    </Label>
-   <Separator maxWidth="1.7976931348623157E308">
+   <Separator maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
       <VBox.margin>
-         <Insets bottom="30.0" right="30.0" top="10.0"/>
+         <Insets bottom="30.0" right="30.0" top="10.0" />
       </VBox.margin>
       <padding>
-         <Insets left="30.0"/>
+         <Insets left="30.0" />
       </padding>
    </Separator>
+   <HBox alignment="CENTER" prefHeight="264.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
+      <children>
+         <MFXListView fx:id="historyListView" hideScrollBars="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="246.0" HBox.hgrow="ALWAYS">
+            <HBox.margin>
+               <Insets left="30.0" right="30.0" />
+            </HBox.margin></MFXListView>
+      </children>
+      <VBox.margin>
+         <Insets bottom="30.0" />
+      </VBox.margin>
+   </HBox>
 </VBox>

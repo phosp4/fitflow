@@ -4,13 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="01f3fa44-97cb-4845-b1da-41ba5449209e" name="Changes" comment="add fxml for other views, implement sidebar logic, reorganize resources, redesign gui">
+    <list default="true" id="01f3fa44-97cb-4845-b1da-41ba5449209e" name="Changes" comment="fix clumsy materialFX and minor UI adjustments">
+      <change afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/controllers/HistoryViewController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/controllers/HomeViewController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/controllers/SettingsViewController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/controllers/WalletViewController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/sk/upjs/ics/test_image.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/MainLayoutController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/controllers/MainLayoutController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/ReservationViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sk/upjs/ics/controllers/ReservationViewController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/sk/upjs/ics/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/sk/upjs/ics/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/sk/upjs/ics/views/HistoryView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/sk/upjs/ics/views/HistoryView.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/sk/upjs/ics/views/HomeView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/sk/upjs/ics/views/HomeView.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/sk/upjs/ics/views/MainLayout.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/sk/upjs/ics/views/MainLayout.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/sk/upjs/ics/views/ReservationView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/sk/upjs/ics/views/ReservationView.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/sk/upjs/ics/views/SettingsView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/sk/upjs/ics/views/SettingsView.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/sk/upjs/ics/views/WalletView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/sk/upjs/ics/views/WalletView.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,8 +30,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
-        <option value="Class" />
         <option value="FxmlFile" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -63,31 +72,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Application.DatabaseHelper.executor&quot;: &quot;Run&quot;,
-    &quot;Application.IDELauncher.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.fitflow [javafx:run].executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_directory_selection&quot;: &quot;/Users/lukas/Developer/skola/java/paz1c/fitflow/src/main/java/sk/upjs/ics&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Application.DatabaseHelper.executor": "Run",
+    "Application.IDELauncher.executor": "Run",
+    "Application.Main.executor": "Run",
+    "Maven.fitflow [javafx:run].executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_directory_selection": "/Users/lukas/Developer/skola/java/paz1c/fitflow/src/main/java/sk/upjs/ics",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "com.github.copilot.settings.ApplicationConfigurable",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="org.example" />
@@ -103,7 +112,7 @@
       <module name="fitflow" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="sk.upjs.ics.*" />
+          <option name="PATTERN" value="sk.upjs.ics.controllers.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -118,7 +127,7 @@
       <module name="fitflow" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="sk.upjs.ics.*" />
+          <option name="PATTERN" value="sk.upjs.ics.controllers.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -161,7 +170,9 @@
       <workItem from="1733390956758" duration="2606000" />
       <workItem from="1733485344696" duration="203000" />
       <workItem from="1733485552128" duration="2405000" />
-      <workItem from="1733612419688" duration="49000" />
+      <workItem from="1733612419688" duration="402000" />
+      <workItem from="1733783039078" duration="792000" />
+      <workItem from="1733833840544" duration="24756000" />
     </task>
     <task id="LOCAL-00001" summary="Create project, add entities and implement lombok">
       <option name="closed" value="true" />
@@ -235,7 +246,15 @@
       <option name="project" value="LOCAL" />
       <updated>1733277402489</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="fix clumsy materialFX and minor UI adjustments">
+      <option name="closed" value="true" />
+      <created>1733612677595</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1733612677595</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -261,7 +280,8 @@
     <MESSAGE value="add sqlite jdbc" />
     <MESSAGE value="add sqlite example connection" />
     <MESSAGE value="add fxml for other views, implement sidebar logic, reorganize resources, redesign gui" />
-    <option name="LAST_COMMIT_MESSAGE" value="add fxml for other views, implement sidebar logic, reorganize resources, redesign gui" />
+    <MESSAGE value="fix clumsy materialFX and minor UI adjustments" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix clumsy materialFX and minor UI adjustments" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

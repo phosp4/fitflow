@@ -4,11 +4,11 @@
 
 .button {
     -fx-font-family: 'Arial Rounded MT Bold';
-    -fx-text-fill: #FFFFFF;
     -fx-font-size: 12px;
     -fx-font-weight: bold;
     -fx-letter-spacing: 2px;
     -fx-alignment: center;
+    -fx-text-fill: #FFFFFF;
 }
 
 .sidebar-button {
@@ -18,3 +18,15 @@
 .green-background {
     -fx-background-color: #2ECC71;
 }
+
+.green-text {
+    -fx-text-fill: #2ECC71;
+}
+
+/*.green-borders {*/
+/*    -fx-border-color: #2ECC71;*/
+/*}*/
+
+/*.MFXDatePicker:focused {*/
+/*    -fx-border-color: #03DAC6; !* Focused color *!*/
+/*}*/

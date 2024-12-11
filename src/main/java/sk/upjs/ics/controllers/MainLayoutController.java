@@ -1,4 +1,4 @@
-package sk.upjs.ics;
+package sk.upjs.ics.controllers;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
@@ -42,32 +42,32 @@ public class MainLayoutController {
 
     @FXML
     void showAboutScene(ActionEvent event) {
-        loadView("views/MainLayout.fxml");
+        loadView("../views/MainLayout.fxml");
     }
 
     @FXML
     void showHistoryScene(ActionEvent event) {
-        loadView("views/HistoryView.fxml");
+        loadView("../views/HistoryView.fxml");
     }
 
     @FXML
     void showHomeScene(ActionEvent event) {
-        loadView("views/HomeView.fxml");
+        loadView("../views/HomeView.fxml");
     }
 
     @FXML
     void showReservationsScene(ActionEvent event) {
-        loadView("views/ReservationView.fxml");
+        loadView("../views/ReservationView.fxml");
     }
 
     @FXML
     void showSettingsScene(ActionEvent event) {
-        loadView("views/SettingsView.fxml");
+        loadView("../views/SettingsView.fxml");
     }
 
     @FXML
     void showWalletScene(ActionEvent event) {
-        loadView("views/WalletView.fxml");
+        loadView("../views/WalletView.fxml");
     }
 
     private void loadView(String view) {

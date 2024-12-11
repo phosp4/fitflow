@@ -1,27 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
+<?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-      prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22">
+<VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.ics.controllers.WalletViewController">
     <Label text="Wallet">
         <font>
-            <Font size="37.0"/>
+            <Font size="37.0" />
         </font>
         <padding>
-            <Insets left="30.0"/>
+            <Insets left="30.0" />
         </padding>
     </Label>
     <Separator maxWidth="1.7976931348623157E308">
         <VBox.margin>
-            <Insets bottom="30.0" right="30.0" top="10.0"/>
+            <Insets bottom="30.0" right="30.0" top="10.0" />
         </VBox.margin>
         <padding>
-            <Insets left="30.0"/>
+            <Insets left="30.0" />
         </padding>
     </Separator>
+   <HBox alignment="CENTER" prefHeight="199.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
+      <children>
+         <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="162.0" prefWidth="316.0">
+            <children>
+               <Label text="Current credit">
+                  <VBox.margin>
+                     <Insets bottom="10.0" />
+                  </VBox.margin>
+                  <font>
+                     <Font size="26.0" />
+                  </font>
+               </Label>
+               <Label fx:id="currentCreditLabel" text="0 €">
+                  <VBox.margin>
+                     <Insets bottom="10.0" />
+                  </VBox.margin>
+                  <font>
+                     <Font size="37.0" />
+                  </font>
+               </Label>
+            </children>
+         </VBox>
+         <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="162.0" prefWidth="316.0">
+            <children>
+               <Label text="Add credit">
+                  <VBox.margin>
+                     <Insets bottom="10.0" />
+                  </VBox.margin>
+                  <font>
+                     <Font size="26.0" />
+                  </font>
+               </Label>
+               <Label fx:id="creditChoiceLabel" styleClass="green-text" text="0 €">
+                  <VBox.margin>
+                     <Insets bottom="10.0" />
+                  </VBox.margin>
+                  <font>
+                     <Font size="37.0" />
+                  </font>
+               </Label>
+            </children>
+         </VBox>
+         <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="125.0" prefWidth="226.0">
+            <children>
+               <MFXButton fx:id="plusCreditButton" onAction="#creditChoiceUp" styleClass="green-text" prefHeight="27.0" prefWidth="87.0" style="-fx-font-size: 30;" text="+" VBox.vgrow="ALWAYS">
+                  <VBox.margin>
+                     <Insets bottom="5.0" />
+                  </VBox.margin>
+               </MFXButton>
+               <MFXTextField fx:id="addCreditTextField" alignment="CENTER" floatMode="DISABLED" onKeyReleased="#updateCreditChoiceLabel" prefWidth="58.0" style="-fx-alignment: center;">
+                  <VBox.margin>
+                     <Insets bottom="5.0" />
+                  </VBox.margin>
+               </MFXTextField>
+               <MFXButton fx:id="minusCreditButton" styleClass="green-text" onAction="#creditChoiceDown" prefHeight="27.0" prefWidth="87.0" style="-fx-font-size: 30;" text="–" VBox.vgrow="ALWAYS">
+                  <VBox.margin>
+                     <Insets bottom="5.0" />
+                  </VBox.margin>
+               </MFXButton>
+            </children>
+         </VBox>
+      </children>
+   </HBox>
+   <HBox alignment="CENTER" prefHeight="40.0" prefWidth="600.0">
+      <children>
+         <MFXButton fx:id="payCreditButton" onAction="#payCredit" prefHeight="72.0" prefWidth="138.0" rippleColor="#FFFFFF" styleClass="green-background" text="Pay now" textFill="WHITE" />
+      </children>
+      <VBox.margin>
+         <Insets top="30.0" />
+      </VBox.margin>
+   </HBox>
 </VBox>
