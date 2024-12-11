@@ -1,9 +1,9 @@
 package sk.upjs.ics.users;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import sk.upjs.ics.Exceptions.NotFoundException;
+
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SQLUserDao implements UserDao {
@@ -13,6 +13,7 @@ public class SQLUserDao implements UserDao {
     public SQLUserDao(Connection connection) {
         this.connection = connection;
     }
+    private final String selectQuery = "SELECT role, email, first_name, last_name, credit_balance, phone, birth_date, active FROM users";
 
     @Override
     public void update(User user) {
@@ -60,12 +61,39 @@ public class SQLUserDao implements UserDao {
 
     @Override
     public User findById(Long id) {
-        return null;
+        try (PreparedStatement pstmt = connection.prepareStatement(selectQuery + " WHERE id = ?")) {
+            pstmt.setLong(1, id);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (!rs.next()) {
+                throw new NotFoundException("User with id " + id + " not found");
+            }
+
+            return User.fromResultSet(rs);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public List<User> findAll() {
-        return null;
+        try (Statement stmt = connection.createStatement()) {
+            ResultSet rs = stmt.executeQuery(selectQuery);
+            ArrayList<User> users = new ArrayList<>();
+
+            while (rs.next()) {
+                users.add(User.fromResultSet(rs));
+            }
+
+            if (users.isEmpty()) {
+                throw new NotFoundException("No users found");
+            }
+
+            return users;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

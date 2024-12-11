@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -21,10 +22,11 @@ public class User {
     private boolean active;
     private Instant createdAt;
     private Instant updatedAt;
-    private Set<Long> trainerSpecializationId;
+    private Set<Specialization> trainerSpecializationId;
 
     public static User fromResultSet(ResultSet rs) throws SQLException {
         User user = new User();
+
         if (rs.wasNull()) {
             return null;
         }
@@ -40,7 +42,7 @@ public class User {
         user.setActive(rs.getBoolean("active"));
         user.setCreatedAt(rs.getTimestamp("created_at").toInstant());
         user.setUpdatedAt(rs.getTimestamp("updated_at").toInstant());
-        // pridať specializations
+        user.setTrainerSpecializationId(new HashSet<>());
 
         return user;
     }
