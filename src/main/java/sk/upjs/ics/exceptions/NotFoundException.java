@@ -1,4 +1,4 @@
-package sk.upjs.ics.Exceptions;
+package sk.upjs.ics.exceptions;
 
 public class NotFoundException extends RuntimeException {
     public NotFoundException(String message) {

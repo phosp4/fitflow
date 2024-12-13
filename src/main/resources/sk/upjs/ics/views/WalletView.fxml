@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.ics.controllers.WalletViewController">
+<VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.ics.controllers.WalletViewController">
     <Label text="Wallet">
         <font>
             <Font size="37.0" />
@@ -70,7 +70,7 @@
          </VBox>
          <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="125.0" prefWidth="226.0">
             <children>
-               <MFXButton fx:id="plusCreditButton" onAction="#creditChoiceUp" styleClass="green-text" prefHeight="27.0" prefWidth="87.0" style="-fx-font-size: 30;" text="+" VBox.vgrow="ALWAYS">
+               <MFXButton fx:id="plusCreditButton" onAction="#creditChoiceUp" prefHeight="27.0" prefWidth="87.0" style="-fx-font-size: 30;" styleClass="green-text" text="+" VBox.vgrow="ALWAYS">
                   <VBox.margin>
                      <Insets bottom="5.0" />
                   </VBox.margin>
@@ -80,7 +80,7 @@
                      <Insets bottom="5.0" />
                   </VBox.margin>
                </MFXTextField>
-               <MFXButton fx:id="minusCreditButton" styleClass="green-text" onAction="#creditChoiceDown" prefHeight="27.0" prefWidth="87.0" style="-fx-font-size: 30;" text="–" VBox.vgrow="ALWAYS">
+               <MFXButton fx:id="minusCreditButton" onAction="#creditChoiceDown" prefHeight="27.0" prefWidth="87.0" style="-fx-font-size: 30;" styleClass="green-text" text="–" VBox.vgrow="ALWAYS">
                   <VBox.margin>
                      <Insets bottom="5.0" />
                   </VBox.margin>

@@ -19,6 +19,8 @@ public class Main extends Application {
         Parent rootPane = fxmlLoader.load();
 
         var scene = new Scene(rootPane);
+        //stage.setMinHeight(600);
+        //stage.setMinWidth(800);
         stage.setTitle("FitFlow");
         stage.setScene(scene);
         stage.show();

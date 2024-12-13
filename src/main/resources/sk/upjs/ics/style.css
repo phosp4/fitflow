@@ -17,6 +17,7 @@
 
 .green-background {
     -fx-background-color: #2ECC71;
+    -fx-text-fill: #FFFFFF;
 }
 
 .green-text {
