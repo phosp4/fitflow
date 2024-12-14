@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import sk.upjs.ics.controllers.SignInViewController;
 
 public class Main extends Application {
     public static void main(String[] args) {
@@ -13,10 +14,13 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-//        var mainController = new Controller();
-        var fxmlLoader = new FXMLLoader(getClass().getResource("views/MainLayout.fxml"));
-//        fxmlLoader.setController(mainController);
+
+        var fxmlLoader = new FXMLLoader(getClass().getResource("views/SignInView.fxml"));
         Parent rootPane = fxmlLoader.load();
+
+        // get the controller and pass the Stage
+        SignInViewController signInViewController = fxmlLoader.getController();
+        signInViewController.setStage(stage);
 
         var scene = new Scene(rootPane);
         //stage.setMinHeight(600);

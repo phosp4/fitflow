@@ -8,11 +8,15 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+import lombok.Setter;
 
 import java.io.IOException;
 
 public class MainLayoutController {
 
+    @Setter
+    private Stage stage;
     public StackPane contentArea;
 
     @FXML

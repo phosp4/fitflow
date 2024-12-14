@@ -4,6 +4,7 @@
 <?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
 <?import io.github.palexdev.materialfx.controls.MFXTextField?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -11,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.ics.controllers.SignInViewController">
+<VBox stylesheets="@../style.css" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.ics.controllers.SignInViewController">
    <children>
       <Label text="Sign in">
          <font>
@@ -33,12 +34,12 @@
             <Label text="Email" />
             <MFXTextField fx:id="emailTextField" floatMode="DISABLED" floatingText="Email" maxWidth="1.7976931348623157E308" prefHeight="51.0" prefWidth="360.0" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
             <Label text="Password" GridPane.rowIndex="2" />
-            <MFXButton fx:id="signInButton" styleClass="green-background" onAction="#signIn" prefHeight="37.0" prefWidth="76.0" text="Sign in" GridPane.halignment="CENTER" GridPane.rowIndex="4">
+            <MFXButton rippleColor="#FFFFFF" fx:id="signInButton" onAction="#signIn" prefHeight="37.0" prefWidth="76.0" styleClass="green-background" text="Sign in" GridPane.halignment="CENTER" GridPane.rowIndex="4">
                <GridPane.margin>
                   <Insets />
                </GridPane.margin>
             </MFXButton>
-            <MFXPasswordField fx:id="passwordField" maxWidth="1.7976931348623157E308" prefHeight="51.0" prefWidth="361.0" GridPane.rowIndex="3" />
+            <MFXPasswordField fx:id="passwordField" floatMode="DISABLED" maxWidth="1.7976931348623157E308" prefHeight="51.0" prefWidth="361.0" GridPane.rowIndex="3" />
          </children>
       </GridPane>
       <GridPane maxWidth="1000.0">
@@ -50,8 +51,8 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label fx:id="signUpLabel" onTouchReleased="#openSignUpview" text="Do not have an account? Sign up here" GridPane.rowIndex="1" />
-            <Label fx:id="forgotPasswordLabel" onTouchReleased="#openForgotPasswordView" text="Forgot password?" />
+            <Hyperlink fx:id="signUpHereHyperlink" onAction="#openSignUpView" text="Do not have an account? Sign up here" GridPane.rowIndex="1" />
+            <Hyperlink fx:id="forgotPasswordHyperlink" onAction="#showForgotPasswordView" text="Forgot password?" />
          </children>
          <VBox.margin>
             <Insets top="20.0" />

@@ -6,9 +6,19 @@ import io.github.palexdev.materialfx.controls.MFXPasswordField;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.input.TouchEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import lombok.Setter;
+import javafx.scene.control.Hyperlink;
+
+import java.io.IOException;
 
 public class SignUpViewController {
+
+    @FXML
+    private Hyperlink SignInHereHyperlink;
 
     @FXML
     private MFXDatePicker birthDateField;
@@ -34,9 +44,20 @@ public class SignUpViewController {
     @FXML
     private MFXButton registerButton;
 
-    @FXML
-    void openSignInView(TouchEvent event) {
+    @Setter
+    private Stage stage;
 
+    @FXML
+    void openSignInView(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/SignInView.fxml"));
+        Parent root = loader.load();
+
+        // pass the controller
+        SignInViewController signInViewController = loader.getController();
+        signInViewController.setStage(stage);
+
+        Scene signUpScene = new Scene(root);
+        stage.setScene(signUpScene);
     }
 
     @FXML
