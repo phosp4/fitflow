@@ -1,6 +1,6 @@
 package sk.upjs.ics.reservations;
 
-import sk.upjs.ics.Exceptions.NotFoundException;
+import sk.upjs.ics.exceptions.NotFoundException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,7 +20,7 @@ public class SQLReservationDao implements ReservationDao {
         this.connection = connection;
     }
 
-    private final String insertQuery = "INSERT INTO reservations(customer_id, status, note, transaction_id) VALUES (?, ?, ?, ?)";
+    private final String insertQuery = "INSERT INTO reservations (customer_id, status, note, transaction_id) VALUES (?, ?, ?, ?)";
 
     @Override
     public void loadFromCsv(File file) {

@@ -1,6 +1,6 @@
 package sk.upjs.ics.users;
 
-import sk.upjs.ics.Exceptions.NotFoundException;
+import sk.upjs.ics.exceptions.NotFoundException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
