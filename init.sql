@@ -126,3 +126,28 @@ INSERT INTO trainer_specializations (title)
 VALUES ('Yoga'),
        ('Pilates'),
        ('CrossFit');
+
+INSERT INTO users (id, role, email, password_hash, first_name, last_name, credit_balance, phone, birth_date, active, created_at, updated_at) VALUES
+(1, 1, 'user1@example.com', '$2b$10$xY/j5.25h8xL0t5c.jR7Bu.5x74j9.2gV9/0/j109.4e1Z9.3160', 'John', 'Doe', 100.00, '123-456-7890', '1990-01-01', 1, '2023-11-23 12:34:56', '2023-11-23 12:34:56'),
+(2, 2, 'user2@example.com', '$2b$10$xY/j5.25h8xL0t5c.jR7Bu.5x74j9.2gV9/0/j109.4e1Z9.3160', 'Jane', 'Smith', 50.50, '987-654-3210', '1995-02-15', 1, '2023-11-23 12:34:56', '2023-11-23 12:34:56'),
+(3, 3, 'admin@example.com', '$2b$10$xY/j5.25h8xL0t5c.jR7Bu.5x74j9.2gV9/0/j109.4e1Z9.3160', 'Alice', 'Johnson', 0.00, '555-555-5555', '2000-03-30', 1, '2023-11-23 12:34:56', '2023-11-23 12:34:56');
+
+INSERT INTO reservations (id, customer_id, status, note, created_at, updated_at, transaction_id) VALUES
+(1, 10, 'pending', 'Please focus on core strength exercises.', '2023-11-23 12:34:56', '2023-11-23 12:34:56', 100),
+(2, 20, 'confirmed', 'No special requests.', '2023-11-24 10:00:00', '2023-11-24 10:00:00', 200),
+(3, 10, 'canceled', 'Canceled due to illness.', '2023-11-25 14:00:00', '2023-11-25 14:00:00', 300);
+
+INSERT INTO trainers_intervals (id, trainer_id, day, start_time, end_time, reservation_id) VALUES
+(100, 1, '2023-11-23', '12:34:56', '13:45:00', 1),
+(200, 2, '2023-11-24', '10:00:00', '11:30:00', 2),
+(300, 1, '2023-11-25', '14:00:00', '15:15:00', 3);
+
+INSERT INTO transactions (id, user_id, amount, transaction_type_id, created_at) VALUES
+(100, 10, 10.00, 1, '2023-11-23 12:34:56'),
+(200, 20, 20.00, 2, '2023-11-24 10:00:00'),
+(300, 10, 30.00, 1, '2023-11-25 14:00:00');
+
+INSERT INTO visits (id, user_id, check_in_time, check_out_time, visit_secret, transaction_id) VALUES
+(1, 10, '2023-11-23 12:34:56', '2023-11-23 13:45:00', 'secret123', 100),
+(2, 20, '2023-11-24 10:00:00', '2023-11-24 11:30:00', 'secret456', 200),
+(3, 10, '2023-11-25 14:00:00', '2023-11-25 15:15:00', 'secret789', 300);

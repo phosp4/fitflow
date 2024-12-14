@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import sk.upjs.ics.controllers.UtilitiesController;
 import sk.upjs.ics.controllers.SignInViewController;
 
 public class Main extends Application {
@@ -22,9 +23,12 @@ public class Main extends Application {
         SignInViewController signInViewController = fxmlLoader.getController();
         signInViewController.setStage(stage);
 
+        UtilitiesController utilitiesController = new UtilitiesController();
+        utilitiesController.setStage(stage);
+
         var scene = new Scene(rootPane);
-        //stage.setMinHeight(600);
-        //stage.setMinWidth(800);
+        stage.setMinWidth(400);
+        stage.setMinHeight(480);
         stage.setTitle("FitFlow");
         stage.setScene(scene);
         stage.show();

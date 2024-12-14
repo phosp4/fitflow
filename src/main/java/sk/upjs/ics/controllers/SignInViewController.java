@@ -47,7 +47,7 @@ public class SignInViewController {
     @FXML
     void signIn(ActionEvent event) throws IOException {
 
-        // TODO
+        // TODO ma to overovat prihlasenie
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/MainLayout.fxml"));
         Parent root = loader.load();
 
@@ -55,10 +55,9 @@ public class SignInViewController {
         MainLayoutController mainLayoutController = loader.getController();
         mainLayoutController.setStage(stage);
 
+        Scene MainLayoutScene = new Scene(root);
         stage.setMinHeight(600);
         stage.setMinWidth(800);
-
-        Scene MainLayoutScene = new Scene(root);
         stage.setScene(MainLayoutScene);
     }
 
