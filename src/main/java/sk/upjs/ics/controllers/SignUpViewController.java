@@ -57,6 +57,15 @@ public class SignUpViewController {
         signInViewController.setStage(stage);
 
         Scene signUpScene = new Scene(root);
+
+        // passing the information about the theme
+        Scene currentScene = birthDateField.getScene();
+        if (currentScene.getStylesheets().contains(getClass().getResource("/sk/upjs/ics/style-dark.css").toExternalForm())) {
+            signUpScene.getStylesheets().add(getClass().getResource("/sk/upjs/ics/style-dark.css").toExternalForm());
+        } else {
+            signUpScene.getStylesheets().add(getClass().getResource("/sk/upjs/ics/style-light.css").toExternalForm());
+        }
+
         stage.setScene(signUpScene);
     }
 

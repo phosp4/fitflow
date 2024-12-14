@@ -1,0 +1,30 @@
+@import url('style-common.css');
+
+.root {
+    -fx-background-color: #ffffff;
+}
+
+.button {
+    -fx-text-fill: #FFFFFF;
+}
+
+.green-background {
+    -fx-text-fill: #FFFFFF;
+}
+
+.main-title {
+    -fx-text-fill: #FFFFFF
+}
+
+Label {
+    -fx-text-fill: #383838;
+}
+
+.green-text {
+    -fx-text-fill: #2ECC71;
+    -fx-background-color: #ffffff;
+}
+
+MFXToggleButton {
+    -fx-text-fill: #383838;
+}

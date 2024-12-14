@@ -55,10 +55,20 @@ public class SignInViewController {
         MainLayoutController mainLayoutController = loader.getController();
         mainLayoutController.setStage(stage);
 
-        Scene MainLayoutScene = new Scene(root);
+        Scene mainLayoutScene = new Scene(root);
+
+        // passing the information about the theme
+        Scene currentScene = emailTextField.getScene();
+        if (currentScene.getStylesheets().contains(getClass().getResource("/sk/upjs/ics/style-dark.css").toExternalForm())) {
+            mainLayoutScene.getStylesheets().add(getClass().getResource("/sk/upjs/ics/style-dark.css").toExternalForm());
+        } else {
+            mainLayoutScene.getStylesheets().add(getClass().getResource("/sk/upjs/ics/style-light.css").toExternalForm());
+        }
+
         stage.setMinHeight(600);
         stage.setMinWidth(800);
-        stage.setScene(MainLayoutScene);
+
+        stage.setScene(mainLayoutScene);
     }
 
     @FXML
@@ -76,6 +86,15 @@ public class SignInViewController {
         signUpViewController.setStage(stage);
 
         Scene signUpScene = new Scene(root);
+
+        // passing the information about the theme
+        Scene currentScene = emailTextField.getScene();
+        if (currentScene.getStylesheets().contains(getClass().getResource("/sk/upjs/ics/style-dark.css").toExternalForm())) {
+            signUpScene.getStylesheets().add(getClass().getResource("/sk/upjs/ics/style-dark.css").toExternalForm());
+        } else {
+            signUpScene.getStylesheets().add(getClass().getResource("/sk/upjs/ics/style-light.css").toExternalForm());
+        }
+
         stage.setScene(signUpScene);
     }
 

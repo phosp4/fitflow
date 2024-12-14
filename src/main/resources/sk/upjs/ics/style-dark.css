@@ -1,0 +1,52 @@
+@import url('style-common.css');
+
+.root {
+    -fx-background-color: #222731;
+}
+
+.button {
+    -fx-text-fill: #222731;
+}
+
+.green-background {
+    -fx-text-fill: #222731;
+}
+
+.main-title {
+    -fx-text-fill: #222731;
+}
+
+Label {
+    -fx-text-fill: #dcdcdc;
+}
+
+MFXToggleButton {
+    -fx-text-fill: #dcdcdc;
+}
+
+.green-text {
+    -fx-text-fill: #2ECC71;
+    -fx-background-color: #222731;
+}
+
+MFXComboBox, MFXDatePicker, MFXTextField, MFXTextArea, MFXPasswordField {
+    -fx-text-fill: #dfdfdf;
+    -fx-background-color: #222731;
+    -fx-border-color: #dfdfdf;
+}
+
+/*MFXListView*/
+
+.mfx-list-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.mfx-list-view .virtual-flow {
+    -fx-background-color: transparent;
+}
+
+.mfx-list-view {
+    -fx-background-color: #222731;
+    -fx-border-color: #dfdfdf;
+}

@@ -50,13 +50,13 @@
                   <Insets left="100.0" right="100.0" />
               </VBox.margin>
               <Label text="Pick a date:" GridPane.rowIndex="1" />
-              <MFXDatePicker fx:id="reserveDatePicker" promptText="select a date" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+              <MFXDatePicker fx:id="reserveDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="1" />
               <Label text="Choose a trainer:" />
-              <MFXComboBox fx:id="reserveTimeComboBox" floatMode="DISABLED" prefHeight="20.0" prefWidth="200.0" promptText="select a time" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+              <MFXComboBox fx:id="reserveTimeComboBox" floatMode="DISABLED" prefHeight="20.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
               <Label text="Pick a time:" GridPane.rowIndex="2" />
-              <MFXComboBox fx:id="reserveTrainerComboBox" floatMode="DISABLED" prefHeight="5.0" prefWidth="200.0" promptText="select a trainer" GridPane.columnIndex="1" />
+              <MFXComboBox fx:id="reserveTrainerComboBox" floatMode="DISABLED" prefHeight="5.0" prefWidth="200.0" GridPane.columnIndex="1" />
               <Label text="Leave note:" GridPane.rowIndex="3" />
-              <MFXTextField fx:id="noteToTrainer" floatMode="DISABLED" prefHeight="10.0" prefWidth="200.0" promptText="note to your trainer" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+              <MFXTextField fx:id="noteToTrainer" floatMode="DISABLED" prefHeight="10.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
               <MFXToggleButton fx:id="TestToggle" text="Send confirmation" GridPane.rowIndex="4" />
               <MFXButton fx:id="createReservationButton" onAction="#createReservation" prefHeight="40.0" prefWidth="147.0" rippleColor="#FFFFFF" styleClass="green-background" text="Create reservation" textAlignment="CENTER" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="5" />
           </GridPane>

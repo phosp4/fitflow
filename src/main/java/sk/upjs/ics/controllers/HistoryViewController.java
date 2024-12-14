@@ -4,6 +4,7 @@ import io.github.palexdev.materialfx.controls.MFXListView;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ListView;
 import sk.upjs.ics.Factory;
 import sk.upjs.ics.users.SQLUserDao;
 import sk.upjs.ics.users.User;
@@ -17,7 +18,13 @@ import java.util.ResourceBundle;
 public class HistoryViewController implements Initializable {
 
     @FXML
-    private MFXListView<String> historyListView;
+    private MFXListView<String> historyEntriesList;
+
+    @FXML
+    private MFXListView<String> historyReservationsList;
+
+    @FXML
+    private MFXListView<String> historyTransactionsList;
 
     private final UserDao userDao = Factory.INSTANCE.getUserDao();
 
@@ -43,6 +50,6 @@ public class HistoryViewController implements Initializable {
         a.add("platba 4");
         a.add("platba 4");
         a.add("platba 4");
-        historyListView.setItems(FXCollections.observableArrayList(a));
+        historyTransactionsList.setItems(FXCollections.observableArrayList(a));
     }
 }

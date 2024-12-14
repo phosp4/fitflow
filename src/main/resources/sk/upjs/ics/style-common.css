@@ -1,14 +1,10 @@
-.root {
-    -fx-background-color: #ffffff;
-}
-
 .button {
     -fx-font-family: 'Arial Rounded MT Bold';
     -fx-font-size: 12px;
     -fx-font-weight: bold;
     -fx-letter-spacing: 2px;
     -fx-alignment: center;
-    -fx-text-fill: #FFFFFF;
+    /*-fx-text-fill: #FFFFFF;*/
 }
 
 .sidebar-button {
@@ -17,17 +13,22 @@
 
 .green-background {
     -fx-background-color: #2ECC71;
-    -fx-text-fill: #FFFFFF;
+    /*-fx-text-fill: #FFFFFF;*/
 }
 
 .green-text {
     -fx-text-fill: #2ECC71;
 }
 
+.main-title {
+    -fx-font-weight: bold;
+    /*-fx-text-fill: #FFFFFF;*/
+}
+
 /*.green-borders {*/
 /*    -fx-border-color: #2ECC71;*/
 /*}*/
 
-/*.MFXDatePicker:focused {*/
-/*    -fx-border-color: #03DAC6; !* Focused color *!*/
+/*MFXDatePicker {*/
+/*    -fx-border-color: #03DAC6;*/
 /*}*/

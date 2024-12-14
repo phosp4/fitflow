@@ -27,6 +27,7 @@ public class Main extends Application {
         utilitiesController.setStage(stage);
 
         var scene = new Scene(rootPane);
+        scene.getStylesheets().add(getClass().getResource("/sk/upjs/ics/style-light.css").toExternalForm());
         stage.setMinWidth(400);
         stage.setMinHeight(480);
         stage.setTitle("FitFlow");
