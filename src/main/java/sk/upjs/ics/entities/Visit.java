@@ -7,9 +7,7 @@ import sk.upjs.ics.exceptions.CouldNotAccessResultSetException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Data
 public class Visit {
