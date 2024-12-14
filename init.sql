@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS visits
 (
     id             INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id        INTEGER   NOT NULL,
-    check_in_time  TIMESTAMP NOT NULL,
+    check_in_time  TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP),
     check_out_time TIMESTAMP,
     visit_secret   TEXT      NOT NULL,
     transaction_id INTEGER   NOT NULL,
