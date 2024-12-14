@@ -1,4 +1,6 @@
-package sk.upjs.ics.reservations;
+package sk.upjs.ics.daos.interfaces;
+
+import sk.upjs.ics.entities.Reservation;
 
 import java.io.File;
 

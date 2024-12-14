@@ -1,4 +1,6 @@
-package sk.upjs.ics.users;
+package sk.upjs.ics.daos.interfaces;
+
+import sk.upjs.ics.entities.User;
 
 import java.io.File;
 

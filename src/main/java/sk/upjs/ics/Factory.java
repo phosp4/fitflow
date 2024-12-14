@@ -1,9 +1,8 @@
 package sk.upjs.ics;
 
-import sk.upjs.ics.reservations.ReservationDao;
-import sk.upjs.ics.reservations.SQLReservationDao;
-import sk.upjs.ics.users.SQLUserDao;
-import sk.upjs.ics.users.UserDao;
+import sk.upjs.ics.daos.interfaces.*;
+import sk.upjs.ics.daos.sql.*;
+import sk.upjs.ics.exceptions.CouldNotConnectToDatabaseException;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,14 +16,22 @@ public enum Factory {
     private volatile Connection connection;
     private volatile ReservationDao reservationDao;
     private volatile UserDao userDao;
+    private volatile TransactionTypeDao transactionTypeDao;
+    private volatile CreditTransactionDao creditTransactionDao;
+    private volatile RoleDao roleDao;
+    private volatile ReservationStatusDao reservationStatusDao;
 
     private final Object lock = new Object();
 
-    public Connection getConnection() throws SQLException {
+    public Connection getConnection() {
         if (connection == null) {
             synchronized (lock) {
                 System.out.println("Connecting to database...");
-                connection = DriverManager.getConnection(DB_URL);
+                try {
+                    connection = DriverManager.getConnection(DB_URL);
+                } catch (SQLException e) {
+                    throw new CouldNotConnectToDatabaseException("Could not connect to the database.");
+                }
                 System.out.println("Connection successful!");
             }
         }
@@ -32,7 +39,7 @@ public enum Factory {
         return connection;
     }
 
-    public ReservationDao getReservationDao() throws SQLException {
+    public ReservationDao getReservationDao() {
         if (reservationDao == null) {
             synchronized (lock) {
                 if (reservationDao == null) {
@@ -43,7 +50,7 @@ public enum Factory {
         return reservationDao;
     }
 
-    public UserDao getUserDao() throws SQLException {
+    public UserDao getUserDao() {
         if (userDao == null) {
             synchronized (lock) {
                 if (userDao == null) {
@@ -52,6 +59,50 @@ public enum Factory {
             }
         }
         return userDao;
+    }
+
+    public TransactionTypeDao getTransactionTypeDao() {
+        if (transactionTypeDao == null) {
+            synchronized (lock) {
+                if (transactionTypeDao == null) {
+                    transactionTypeDao = new SQLTransactionTypeDao(getConnection());
+                }
+            }
+        }
+        return transactionTypeDao;
+    }
+
+    public CreditTransactionDao getCreditTransactionDao() {
+        if (creditTransactionDao == null) {
+            synchronized (lock) {
+                if (creditTransactionDao == null) {
+                    creditTransactionDao = new SQLCreditTransactionDao(getConnection());
+                }
+            }
+        }
+        return creditTransactionDao;
+    }
+
+    public RoleDao getRoleDao() {
+        if (roleDao == null) {
+            synchronized (lock) {
+                if (roleDao == null) {
+                    roleDao = new SQLRoleDao(getConnection());
+                }
+            }
+        }
+        return roleDao;
+    }
+
+    public ReservationStatusDao getReservationStatusDao() {
+        if (reservationStatusDao == null) {
+            synchronized (lock) {
+                if (reservationStatusDao == null) {
+                    reservationStatusDao = new SQLReservationStatusDao(getConnection());
+                }
+            }
+        }
+        return reservationStatusDao;
     }
 
 }

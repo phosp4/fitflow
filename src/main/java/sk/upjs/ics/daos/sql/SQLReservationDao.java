@@ -1,6 +1,9 @@
-package sk.upjs.ics.reservations;
+package sk.upjs.ics.daos.sql;
 
+import sk.upjs.ics.daos.interfaces.ReservationDao;
+import sk.upjs.ics.exceptions.CouldNotAccessDatabaseException;
 import sk.upjs.ics.exceptions.NotFoundException;
+import sk.upjs.ics.entities.Reservation;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -8,8 +11,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class SQLReservationDao implements ReservationDao {
@@ -56,14 +59,18 @@ public class SQLReservationDao implements ReservationDao {
     public void create(Reservation reservation) {
         try (PreparedStatement pstmt = connection.prepareStatement(insertQuery)) {
             pstmt.setLong(1, reservation.getId());
-            pstmt.setLong(2, reservation.getReservationStatusId());
+
+            pstmt.setLong(2, reservation.getReservationStatus().getId());
             if (reservation.getNoteToTrainer() != null) {
                 pstmt.setString(3, reservation.getNoteToTrainer());
+            } else {
+                pstmt.setNull(3, Types.VARCHAR); // need to set to VARCHAR, what equals to SQLite TEXT - JBDC needs to know this under the hood
             }
-            pstmt.setLong(4, reservation.getCreditTransactionId());
+
+            pstmt.setLong(4, reservation.getCreditTransaction().getId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new CouldNotAccessDatabaseException("Database not accessible");
         }
     }
 
@@ -74,7 +81,7 @@ public class SQLReservationDao implements ReservationDao {
             pstmt.setLong(1, reservation.getId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new CouldNotAccessDatabaseException("Database not accessible");
         }
     }
 
@@ -82,14 +89,14 @@ public class SQLReservationDao implements ReservationDao {
     public void update(Reservation reservation) {
         String updateQuery = "UPDATE reservations SET customer_id = ?, status = ?, note = ?, transaction_id = ? WHERE id = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(updateQuery)) {
-            pstmt.setLong(1, reservation.getCustomerId());
-            pstmt.setLong(2, reservation.getReservationStatusId());
+            pstmt.setLong(1, reservation.getCustomer().getId());
+            pstmt.setLong(2, reservation.getReservationStatus().getId());
             pstmt.setString(3, reservation.getNoteToTrainer());
-            pstmt.setLong(4, reservation.getCreditTransactionId());
+            pstmt.setLong(4, reservation.getCreditTransaction().getId());
             pstmt.setLong(5, reservation.getId());
             pstmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException _) {
+            throw new CouldNotAccessDatabaseException("Database not accessible");
         }
     }
 
@@ -104,26 +111,28 @@ public class SQLReservationDao implements ReservationDao {
                 }
                 return Reservation.fromResultSet(resultSet);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException _) {
+            throw new CouldNotAccessDatabaseException("Database not accessible");
         }
     }
 
     @Override
-    public List<Reservation> findAll() {
-        String findAllQuery = "SELECT * FROM reservations";
+    public ArrayList<Reservation> findAll() {
+        String findAllQuery = "SELECT id, customer_id, status, note, created_at, updated_at, transaction_id FROM reservations";
         try (PreparedStatement pstmt = connection.prepareStatement(findAllQuery);
              ResultSet resultSet = pstmt.executeQuery()) {
-            ArrayList<Reservation> reservations = new ArrayList<>();
-                while (resultSet.next()) {
+             ArrayList<Reservation> reservations = new ArrayList<>();
+
+             while (resultSet.next()) {
                 reservations.add(Reservation.fromResultSet(resultSet));
-            }
-            if (reservations.isEmpty()) {
-                throw new RuntimeException("No reservations found");
-            }
+             }
+
+             if (reservations.isEmpty()) {
+                throw new NotFoundException("No reservations found");
+             }
             return reservations;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException _) {
+            throw new CouldNotAccessDatabaseException("Database not accessible");
         }
     }
 }
