@@ -12,6 +12,10 @@ public class CreditTransactionType {
     private String name;
 
     public static CreditTransactionType fromResultSet(ResultSet rs) {
+        return fromResultSet(rs, "");
+    }
+
+    public static CreditTransactionType fromResultSet(ResultSet rs, String prefix) {
         CreditTransactionType creditTransactionType = new CreditTransactionType();
 
         try {
@@ -19,8 +23,8 @@ public class CreditTransactionType {
                 return null;
             }
 
-            creditTransactionType.setId(rs.getLong("id"));
-            creditTransactionType.setName(rs.getString("name"));
+            creditTransactionType.setId(rs.getLong(prefix + "id"));
+            creditTransactionType.setName(rs.getString(prefix + "name"));
 
             return creditTransactionType;
         } catch (SQLException e) {

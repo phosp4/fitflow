@@ -1,7 +1,6 @@
 package sk.upjs.ics.entities;
 
 import lombok.Data;
-import sk.upjs.ics.Factory;
 import sk.upjs.ics.exceptions.CouldNotAccessResultSetException;
 
 import java.sql.ResultSet;
@@ -18,6 +17,10 @@ public class CreditTransaction {
     private Instant updatedAt;
 
     public static CreditTransaction fromResultSet(ResultSet rs) {
+        return fromResultSet(rs, "");
+    }
+
+    public static CreditTransaction fromResultSet(ResultSet rs, String prefix) {
         CreditTransaction creditTransaction = new CreditTransaction();
 
         try {
@@ -25,17 +28,12 @@ public class CreditTransaction {
                 return null;
             }
 
-            creditTransaction.setId(rs.getLong("id"));
-
-            User user = Factory.INSTANCE.getUserDao().findById(rs.getLong("user_id"));
-            creditTransaction.setUser(user);
-
-            CreditTransactionType creditTransactionType = Factory.INSTANCE.getTransactionTypeDao().findById(rs.getLong("transaction_type_id"));
-            creditTransaction.setCreditTransactionType(creditTransactionType);
-
-            creditTransaction.setAmount(rs.getDouble("amount"));
-            creditTransaction.setCreatedAt(rs.getTimestamp("created_at").toInstant());
-            creditTransaction.setUpdatedAt(rs.getTimestamp("updated_at").toInstant());
+            creditTransaction.setId(rs.getLong(prefix + "id"));
+            creditTransaction.setUser(null);
+            creditTransaction.setCreditTransactionType(null);
+            creditTransaction.setAmount(rs.getDouble(prefix + "amount"));
+            creditTransaction.setCreatedAt(rs.getTimestamp(prefix + "created_at").toInstant());
+            creditTransaction.setUpdatedAt(rs.getTimestamp(prefix + "updated_at").toInstant());
 
             return creditTransaction;
         } catch (SQLException e) {

@@ -12,6 +12,10 @@ public class Role {
     private String name;
 
     public static Role fromResultSet(ResultSet rs) {
+        return fromResultSet(rs, "");
+    }
+
+    public static Role fromResultSet(ResultSet rs, String prefix) {
         Role role = new Role();
 
         try {
@@ -19,8 +23,8 @@ public class Role {
                 return null;
             }
 
-            role.setId(rs.getLong("id"));
-            role.setName(rs.getString("name"));
+            role.setId(rs.getLong(prefix + "id"));
+            role.setName(rs.getString(prefix + "name"));
 
             return role;
         } catch (SQLException e) {
