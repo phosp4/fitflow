@@ -104,5 +104,4 @@ public enum Factory {
         }
         return reservationStatusDao;
     }
-
 }

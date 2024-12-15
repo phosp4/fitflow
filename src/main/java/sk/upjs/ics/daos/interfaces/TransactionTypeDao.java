@@ -12,5 +12,5 @@ public interface TransactionTypeDao {
 
      TransactionType findById(Long id);
 
-     public Iterable<TransactionType> findAll();
+     Iterable<TransactionType> findAll();
 }

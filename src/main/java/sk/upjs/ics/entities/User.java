@@ -51,7 +51,7 @@ public class User {
             user.setTrainerSpecializationSet(new HashSet<>());
 
             return user;
-        } catch (SQLException _) {
+        } catch (SQLException e) {
             throw new CouldNotAccessResultSetException("Could not access ResultSet");
         }
     }

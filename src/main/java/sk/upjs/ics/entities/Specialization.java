@@ -22,7 +22,7 @@ public class Specialization {
             specialization.setName(rs.getString("name"));
 
             return specialization;
-        } catch (SQLException _) {
+        } catch (SQLException e) {
             throw new CouldNotAccessResultSetException("Could not access ResultSet");
         }
 

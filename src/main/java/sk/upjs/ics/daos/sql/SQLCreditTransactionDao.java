@@ -26,7 +26,7 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
             pstmt.setDouble(2, creditTransaction.getAmount());
             pstmt.setLong(3, creditTransaction.getTransactionType().getId());
             pstmt.executeUpdate();
-        } catch (SQLException _) {
+        } catch (SQLException e) {
             throw new CouldNotAccessDatabaseException("Database not accessible");
         }
 
@@ -38,7 +38,7 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
         try (PreparedStatement pstmt = connection.prepareStatement(deleteQuery)) {
             pstmt.setLong(1, creditTransaction.getId());
             pstmt.executeUpdate();
-        } catch (SQLException _) {
+        } catch (SQLException e) {
             throw new CouldNotAccessDatabaseException("Database not accessible");
         }
     }
@@ -52,7 +52,7 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
             pstmt.setLong(3, creditTransaction.getTransactionType().getId());
             pstmt.setLong(4, creditTransaction.getId());
             pstmt.executeUpdate();
-        } catch (SQLException _) {
+        } catch (SQLException e) {
             throw new CouldNotAccessDatabaseException("Database not accessible");
         }
     }
@@ -70,7 +70,7 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
 
             return CreditTransaction.fromResultSet(rs);
 
-        } catch (SQLException _) {
+        } catch (SQLException e) {
             throw new CouldNotAccessDatabaseException("Database not accessible");
         }
     }
@@ -90,7 +90,7 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
            }
 
            return creditTransactions;
-       } catch (SQLException _) {
+       } catch (SQLException e) {
            throw new CouldNotAccessDatabaseException("Database not accessible");
        }
     }

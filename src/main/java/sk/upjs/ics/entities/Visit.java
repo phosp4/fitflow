@@ -41,7 +41,7 @@ public class Visit {
             visit.setCreditTransaction(creditTransaction);
 
             return visit;
-        } catch (SQLException _) {
+        } catch (SQLException e) {
             throw new CouldNotAccessResultSetException("Could not access ResultSet");
         }
     }

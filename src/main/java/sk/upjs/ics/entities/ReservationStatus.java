@@ -23,7 +23,7 @@ public class ReservationStatus {
             reservationStatus.setName(rs.getString("name"));
 
             return reservationStatus;
-        } catch (SQLException _) {
+        } catch (SQLException e) {
             throw new CouldNotAccessResultSetException("Could not access ResultSet");
         }
     }

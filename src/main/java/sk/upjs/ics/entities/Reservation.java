@@ -42,7 +42,7 @@ public class Reservation {
             reservation.setCreditTransaction(creditTransaction);
 
             return reservation;
-        } catch (SQLException _) {
+        } catch (SQLException e) {
             throw new CouldNotAccessResultSetException("Could not access ResultSet");
         }
     }

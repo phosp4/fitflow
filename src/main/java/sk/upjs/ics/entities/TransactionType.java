@@ -23,7 +23,7 @@ public class TransactionType {
             transactionType.setName(rs.getString("name"));
 
             return transactionType;
-        } catch (SQLException _) {
+        } catch (SQLException e) {
             throw new CouldNotAccessResultSetException("Could not access ResultSet");
         }
     }

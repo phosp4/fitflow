@@ -23,7 +23,7 @@ public class Role {
             role.setName(rs.getString("name"));
 
             return role;
-        } catch (SQLException _) {
+        } catch (SQLException e) {
             throw new CouldNotAccessResultSetException("Could not access ResultSet");
         }
     }

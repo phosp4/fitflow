@@ -39,7 +39,7 @@ public class TrainerInterval {
             trainerInterval.setReservation(reservation);
 
             return trainerInterval;
-        } catch (SQLException _) {
+        } catch (SQLException e) {
             throw new CouldNotAccessResultSetException("Could not access ResultSet");
         }
     }

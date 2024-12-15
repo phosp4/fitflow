@@ -23,7 +23,7 @@ public class SQLVisitDao implements VisitDao {
             pstmt.setString(2, visit.getVisitSecret());
             pstmt.setLong(3, visit.getCreditTransaction().getId());
             pstmt.executeUpdate();
-        } catch (SQLException _) {
+        } catch (SQLException e) {
             throw new CouldNotAccessDatabaseException("Database not accessible");
         }
     }
@@ -34,7 +34,7 @@ public class SQLVisitDao implements VisitDao {
         try (PreparedStatement pstmt = connection.prepareStatement(deleteQuery)) {
             pstmt.setLong(1, id);
             pstmt.executeUpdate();
-        } catch (SQLException _) {
+        } catch (SQLException e) {
             throw new CouldNotAccessDatabaseException("Database not accessible");
         }
     }

@@ -95,7 +95,7 @@ public class SQLReservationDao implements ReservationDao {
             pstmt.setLong(4, reservation.getCreditTransaction().getId());
             pstmt.setLong(5, reservation.getId());
             pstmt.executeUpdate();
-        } catch (SQLException _) {
+        } catch (SQLException e) {
             throw new CouldNotAccessDatabaseException("Database not accessible");
         }
     }
@@ -111,7 +111,7 @@ public class SQLReservationDao implements ReservationDao {
                 }
                 return Reservation.fromResultSet(resultSet);
             }
-        } catch (SQLException _) {
+        } catch (SQLException e) {
             throw new CouldNotAccessDatabaseException("Database not accessible");
         }
     }
@@ -131,7 +131,7 @@ public class SQLReservationDao implements ReservationDao {
                 throw new NotFoundException("No reservations found");
              }
             return reservations;
-        } catch (SQLException _) {
+        } catch (SQLException e) {
             throw new CouldNotAccessDatabaseException("Database not accessible");
         }
     }
