@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS transactions
     amount              REAL,
     transaction_type_id INTEGER   NOT NULL,
     created_at          TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+    updated_at          TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP),
     FOREIGN KEY (user_id) REFERENCES users (id),
     FOREIGN KEY (transaction_type_id) REFERENCES transaction_types (id)
 );
