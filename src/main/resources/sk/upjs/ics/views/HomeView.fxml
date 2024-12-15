@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 
 <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.ics.controllers.HomeViewController">
-    <Label text="Home" VBox.vgrow="ALWAYS">
+    <Label text="%home.title" VBox.vgrow="ALWAYS">
         <font>
             <Font size="37.0" />
         </font>
@@ -48,7 +48,7 @@
                      <Font size="20.0" />
                   </font>
                </Label>
-               <MFXButton fx:id="enterButton" onAction="#enter" prefHeight="38.0" prefWidth="135.0" rippleColor="#FFFFFF" styleClass="green-background" text="Enter" VBox.vgrow="ALWAYS">
+               <MFXButton fx:id="enterButton" onAction="#enter" prefHeight="38.0" prefWidth="135.0" rippleColor="#FFFFFF" styleClass="green-background" text="%home.enter" VBox.vgrow="ALWAYS">
                   <VBox.margin>
                      <Insets bottom="10.0" />
                   </VBox.margin>
@@ -60,7 +60,7 @@
          </VBox>
          <VBox alignment="TOP_CENTER" prefWidth="100.0" HBox.hgrow="ALWAYS">
             <children>
-               <Label text="Active reservations" VBox.vgrow="ALWAYS">
+               <Label text="%home.activeReservations" VBox.vgrow="ALWAYS">
                   <font>
                      <Font size="17.0" />
                   </font>

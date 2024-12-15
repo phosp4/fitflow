@@ -13,8 +13,10 @@ import javafx.scene.input.TouchEvent;
 import javafx.stage.Stage;
 import javafx.scene.control.Hyperlink;
 import lombok.Setter;
+import sk.upjs.ics.LocaleManager;
 
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 public class SignInViewController {
 
@@ -47,28 +49,15 @@ public class SignInViewController {
     @FXML
     void signIn(ActionEvent event) throws IOException {
 
-        // TODO ma to overovat prihlasenie
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/MainLayout.fxml"));
-        Parent root = loader.load();
-
-        // pass the controller
-        MainLayoutController mainLayoutController = loader.getController();
-        mainLayoutController.setStage(stage);
-
-        Scene mainLayoutScene = new Scene(root);
-
-        // passing the information about the theme
-        Scene currentScene = emailTextField.getScene();
-        if (currentScene.getStylesheets().contains(getClass().getResource("/sk/upjs/ics/style-dark.css").toExternalForm())) {
-            mainLayoutScene.getStylesheets().add(getClass().getResource("/sk/upjs/ics/style-dark.css").toExternalForm());
-        } else {
-            mainLayoutScene.getStylesheets().add(getClass().getResource("/sk/upjs/ics/style-light.css").toExternalForm());
-        }
-
-        stage.setMinHeight(600);
-        stage.setMinWidth(800);
-
-        stage.setScene(mainLayoutScene);
+        MainLayoutController controller = SceneLoader.loadScene(
+                stage,
+                "../views/MainLayout.fxml",
+                LocaleManager.getLocale(),
+                emailTextField.getScene().getStylesheets().toString(),
+                600,
+                800
+        );
+        controller.setStage(stage);
     }
 
     @FXML
@@ -78,24 +67,14 @@ public class SignInViewController {
 
     @FXML
     void openSignUpView(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/SignUpView.fxml"));
-        Parent root = loader.load();
-
-        // pass the controller
-        SignUpViewController signUpViewController = loader.getController();
-        signUpViewController.setStage(stage);
-
-        Scene signUpScene = new Scene(root);
-
-        // passing the information about the theme
-        Scene currentScene = emailTextField.getScene();
-        if (currentScene.getStylesheets().contains(getClass().getResource("/sk/upjs/ics/style-dark.css").toExternalForm())) {
-            signUpScene.getStylesheets().add(getClass().getResource("/sk/upjs/ics/style-dark.css").toExternalForm());
-        } else {
-            signUpScene.getStylesheets().add(getClass().getResource("/sk/upjs/ics/style-light.css").toExternalForm());
-        }
-
-        stage.setScene(signUpScene);
+        SignUpViewController controller = SceneLoader.loadScene(
+                stage,
+                "../views/SignUpView.fxml",
+                LocaleManager.getLocale(),
+                emailTextField.getScene().getStylesheets().toString(),
+                480,
+                400
+        );
+        controller.setStage(stage);
     }
-
 }

@@ -18,32 +18,32 @@
                     <Insets bottom="20.0" top="10.0" />
                 </VBox.margin>
             </Label>
-            <MFXButton fx:id="menuHomeButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="30.0" onAction="#showHomeScene" prefHeight="35.0" prefWidth="160.0" rippleColor="#FFFFFF" styleClass="green-background, sidebar-button" text="Home" textAlignment="CENTER" textOverrun="CLIP">
+            <MFXButton fx:id="menuHomeButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="30.0" onAction="#showHomeScene" prefHeight="35.0" prefWidth="160.0" rippleColor="#FFFFFF" styleClass="green-background, sidebar-button" text="%sidebar.home" textAlignment="CENTER" textOverrun="CLIP">
                 <padding>
                     <Insets left="20.0" />
                 </padding>
             </MFXButton>
-            <MFXButton fx:id="menuReservationsButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="30.0" onAction="#showReservationsScene" prefHeight="35.0" prefWidth="160.0" rippleColor="#FFFFFF" styleClass="green-background, sidebar-button" text="Reservations" textAlignment="CENTER" textOverrun="CLIP">
+            <MFXButton fx:id="menuReservationsButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="30.0" onAction="#showReservationsScene" prefHeight="35.0" prefWidth="160.0" rippleColor="#FFFFFF" styleClass="green-background, sidebar-button" text="%sidebar.reservations" textAlignment="CENTER" textOverrun="CLIP">
                 <padding>
                     <Insets left="20.0" />
                 </padding>
             </MFXButton>
-            <MFXButton fx:id="menuWalletButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="30.0" onAction="#showWalletScene" prefHeight="35.0" prefWidth="160.0" rippleColor="#FFFFFF" styleClass="green-background, sidebar-button" text="Wallet" textAlignment="CENTER" textOverrun="CLIP">
+            <MFXButton fx:id="menuWalletButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="30.0" onAction="#showWalletScene" prefHeight="35.0" prefWidth="160.0" rippleColor="#FFFFFF" styleClass="green-background, sidebar-button" text="%sidebar.wallet" textAlignment="CENTER" textOverrun="CLIP">
                 <padding>
                     <Insets left="20.0" />
                 </padding>
             </MFXButton>
-            <MFXButton fx:id="menuHistoryButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="30.0" onAction="#showHistoryScene" prefHeight="35.0" prefWidth="160.0" rippleColor="#FFFFFF" styleClass="green-background, sidebar-button" text="History" textAlignment="CENTER" textOverrun="CLIP">
+            <MFXButton fx:id="menuHistoryButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="30.0" onAction="#showHistoryScene" prefHeight="35.0" prefWidth="160.0" rippleColor="#FFFFFF" styleClass="green-background, sidebar-button" text="%sidebar.history" textAlignment="CENTER" textOverrun="CLIP">
                 <padding>
                     <Insets left="20.0" />
                 </padding>
             </MFXButton>
-            <MFXButton fx:id="menuSettingsButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="30.0" onAction="#showSettingsScene" prefHeight="35.0" prefWidth="160.0" rippleColor="#FFFFFF" styleClass="green-background, sidebar-button" text="Settings" textAlignment="CENTER" textOverrun="CLIP">
+            <MFXButton fx:id="menuSettingsButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="30.0" onAction="#showSettingsScene" prefHeight="35.0" prefWidth="160.0" rippleColor="#FFFFFF" styleClass="green-background, sidebar-button" text="%sidebar.settings" textAlignment="CENTER" textOverrun="CLIP">
                 <padding>
                     <Insets left="20.0" />
                 </padding>
             </MFXButton>
-            <MFXButton maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="30.0" onAction="#logUserOut" prefHeight="35.0" prefWidth="160.0" rippleColor="#FFFFFF" styleClass="green-background, sidebar-button" text="Log out" textAlignment="CENTER" textOverrun="CLIP">
+            <MFXButton maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="30.0" onAction="#logUserOut" prefHeight="35.0" prefWidth="160.0" rippleColor="#FFFFFF" styleClass="green-background, sidebar-button" text="%sidebar.logout" textAlignment="CENTER" textOverrun="CLIP">
                 <padding>
                     <Insets left="20.0" />
                 </padding>

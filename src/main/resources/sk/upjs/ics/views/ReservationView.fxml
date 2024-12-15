@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 
 <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.ics.controllers.ReservationViewController">
-    <Label text="Reservation">
+    <Label text="%reservation.title">
         <font>
           <Font size="37.0" />
         </font>
@@ -49,16 +49,16 @@
               <VBox.margin>
                   <Insets left="100.0" right="100.0" />
               </VBox.margin>
-              <Label text="Pick a date:" GridPane.rowIndex="1" />
+              <Label text="%reservation.pickDate" GridPane.rowIndex="1" />
               <MFXDatePicker fx:id="reserveDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-              <Label text="Choose a trainer:" />
+              <Label text="%reservation.chooseTrainer" />
               <MFXComboBox fx:id="reserveTimeComboBox" floatMode="DISABLED" prefHeight="20.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-              <Label text="Pick a time:" GridPane.rowIndex="2" />
+              <Label text="%reservation.pickTime" GridPane.rowIndex="2" />
               <MFXComboBox fx:id="reserveTrainerComboBox" floatMode="DISABLED" prefHeight="5.0" prefWidth="200.0" GridPane.columnIndex="1" />
-              <Label text="Leave note:" GridPane.rowIndex="3" />
+              <Label text="%reservation.leaveNote" GridPane.rowIndex="3" />
               <MFXTextField fx:id="noteToTrainer" floatMode="DISABLED" prefHeight="10.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-              <MFXToggleButton fx:id="TestToggle" text="Send confirmation" GridPane.rowIndex="4" />
-              <MFXButton fx:id="createReservationButton" onAction="#createReservation" prefHeight="40.0" prefWidth="147.0" rippleColor="#FFFFFF" styleClass="green-background" text="Create reservation" textAlignment="CENTER" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+              <MFXToggleButton fx:id="TestToggle" text="%reservation.sendConfirmation" GridPane.rowIndex="4" />
+              <MFXButton fx:id="createReservationButton" onAction="#createReservation" prefHeight="40.0" prefWidth="147.0" rippleColor="#FFFFFF" styleClass="green-background" text="%reservation.create" textAlignment="CENTER" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="5" />
           </GridPane>
       </children>
    </VBox>

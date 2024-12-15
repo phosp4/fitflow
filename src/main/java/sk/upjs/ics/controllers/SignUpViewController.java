@@ -12,8 +12,11 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import lombok.Setter;
 import javafx.scene.control.Hyperlink;
+import sk.upjs.ics.LocaleManager;
 
 import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class SignUpViewController {
 
@@ -49,24 +52,16 @@ public class SignUpViewController {
 
     @FXML
     void openSignInView(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../views/SignInView.fxml"));
-        Parent root = loader.load();
 
-        // pass the controller
-        SignInViewController signInViewController = loader.getController();
-        signInViewController.setStage(stage);
-
-        Scene signUpScene = new Scene(root);
-
-        // passing the information about the theme
-        Scene currentScene = birthDateField.getScene();
-        if (currentScene.getStylesheets().contains(getClass().getResource("/sk/upjs/ics/style-dark.css").toExternalForm())) {
-            signUpScene.getStylesheets().add(getClass().getResource("/sk/upjs/ics/style-dark.css").toExternalForm());
-        } else {
-            signUpScene.getStylesheets().add(getClass().getResource("/sk/upjs/ics/style-light.css").toExternalForm());
-        }
-
-        stage.setScene(signUpScene);
+        SignInViewController controller = SceneLoader.loadScene(
+                stage,
+                "../views/SignInView.fxml",
+                LocaleManager.getLocale(),
+                emailField.getScene().getStylesheets().toString(),
+                480,
+                400
+        );
+        controller.setStage(stage);
     }
 
     @FXML

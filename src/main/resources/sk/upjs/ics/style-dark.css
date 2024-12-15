@@ -50,3 +50,14 @@ MFXComboBox, MFXDatePicker, MFXTextField, MFXTextArea, MFXPasswordField {
     -fx-background-color: #222731;
     -fx-border-color: #dfdfdf;
 }
+
+/*MFXCombobox*/
+
+/*.floating-text {*/
+/*    -fx-background-color: transparent;*/
+/*    -fx-text-fill: transparent;*/
+/*}*/
+
+/*.caret .mfx-font-icon {*/
+/*    -mfx-color: transparent;*/
+/*}*/

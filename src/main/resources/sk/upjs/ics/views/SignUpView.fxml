@@ -15,7 +15,7 @@
 
 <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.ics.controllers.SignUpViewController">
    <children>
-      <Label maxHeight="200.0" text="Registration" VBox.vgrow="ALWAYS">
+      <Label maxHeight="200.0" text="%registration.title" VBox.vgrow="ALWAYS">
          <font>
             <Font size="28.0" />
          </font>
@@ -43,13 +43,13 @@
          <children>
             <Label text="Email" GridPane.rowIndex="2" />
             <MFXTextField fx:id="emailField" floatMode="DISABLED" floatingText="Email" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
-            <Label text="Password" GridPane.rowIndex="5" />
+            <Label text="%registration.password" GridPane.rowIndex="5" />
             <Label GridPane.rowIndex="6" />
-            <Label text="First name" />
-            <Label text="Last name" GridPane.rowIndex="1" />
-            <Label text="Birth date" GridPane.rowIndex="4" />
-            <Label text="Phone" GridPane.rowIndex="3" />
-            <Label text="Repeat password" GridPane.rowIndex="6" />
+            <Label text="%registration.firstname" />
+            <Label text="%registration.lastname" GridPane.rowIndex="1" />
+            <Label text="%registration.birthdate" GridPane.rowIndex="4" />
+            <Label text="%registration.phone" GridPane.rowIndex="3" />
+            <Label text="%registration.repeatPassword" GridPane.rowIndex="6" />
             <MFXTextField fx:id="firstNameField" floatMode="DISABLED" maxWidth="1.7976931348623157E308" prefWidth="182.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
             <MFXTextField fx:id="lastNameField" floatMode="DISABLED" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
             <MFXTextField fx:id="phoneField" floatMode="DISABLED" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
@@ -58,12 +58,12 @@
             <MFXPasswordField fx:id="passwordField2" floatMode="DISABLED" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
          </children>
       </GridPane>
-      <MFXButton fx:id="registerButton" onAction="#registerUser" prefHeight="38" prefWidth="75.0" rippleColor="#FFFFFF" styleClass="green-background" text="Register">
+      <MFXButton fx:id="registerButton" onAction="#registerUser" prefHeight="38" rippleColor="#FFFFFF" styleClass="green-background" text="%registration.register">
          <VBox.margin>
             <Insets top="15.0" />
          </VBox.margin>
       </MFXButton>
-      <Hyperlink onAction="#openSignInView" text="Already have an account? Sign in here">
+      <Hyperlink onAction="#openSignInView" text="%auth.alreadyRegistered">
          <VBox.margin>
             <Insets bottom="25.0" top="10.0" />
          </VBox.margin>

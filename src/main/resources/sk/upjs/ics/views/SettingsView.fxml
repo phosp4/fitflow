@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 
 <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.ics.controllers.SettingsViewController">
-    <Label text="Settings">
+    <Label text="%settings.title">
         <font>
             <Font size="37.0" />
         </font>
@@ -38,9 +38,9 @@
        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
      </rowConstraints>
       <children>
-         <Label text="Language" />
-         <MFXComboBox fx:id="languageComboBox" floatMode="DISABLED" GridPane.columnIndex="1" />
-         <Label text="Dark mode" GridPane.rowIndex="1" />
+         <Label text="%settings.language" />
+         <MFXComboBox fx:id="languageComboBox" floatMode="DISABLED" onAction="#changeLanguage" GridPane.columnIndex="1" />
+         <Label text="%settings.darkMode" GridPane.rowIndex="1" />
          <MFXToggleButton fx:id="darkModeToggle" onMouseClicked="#changeToDarkMode" text=" " GridPane.columnIndex="1" GridPane.rowIndex="1" />
       </children>
       <VBox.margin>

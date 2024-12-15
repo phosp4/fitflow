@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 
 <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.ics.controllers.WalletViewController">
-    <Label text="Wallet">
+    <Label text="%wallet.title">
         <font>
             <Font size="37.0" />
         </font>
@@ -30,7 +30,7 @@
       <children>
          <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="162.0" prefWidth="316.0" HBox.hgrow="ALWAYS">
             <children>
-               <Label text="Current credit">
+               <Label text="%wallet.currentCredit">
                   <VBox.margin>
                      <Insets bottom="10.0" />
                   </VBox.margin>
@@ -50,7 +50,7 @@
          </VBox>
          <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="162.0" prefWidth="316.0" HBox.hgrow="ALWAYS">
             <children>
-               <Label text="Add credit">
+               <Label text="%wallet.addCredit">
                   <VBox.margin>
                      <Insets bottom="10.0" />
                   </VBox.margin>
@@ -91,7 +91,7 @@
    </HBox>
    <HBox alignment="CENTER" prefHeight="40.0" prefWidth="600.0">
       <children>
-         <MFXButton fx:id="payCreditButton" onAction="#payCredit" prefHeight="72.0" prefWidth="138.0" rippleColor="#FFFFFF" styleClass="green-background" text="Pay now" textFill="WHITE" />
+         <MFXButton fx:id="payCreditButton" onAction="#payCredit" prefHeight="72.0" prefWidth="138.0" rippleColor="#FFFFFF" styleClass="green-background" text="%wallet.payNow" textFill="WHITE" />
       </children>
       <VBox.margin>
          <Insets top="30.0" />
