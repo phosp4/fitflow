@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class SQLVisitDao implements VisitDao {
 
-    Connection connection;
+    private final Connection connection;
 
     public SQLVisitDao(Connection connection) {
         this.connection = connection;

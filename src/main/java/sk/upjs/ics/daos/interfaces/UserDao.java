@@ -8,11 +8,11 @@ public interface UserDao {
 
     void loadFromCsv(File file);
 
+    void delete(User user);
+
     void update(User user);
 
     void updatePassword(User user, String password_hash);
-
-    void delete(User user);
 
     User findById(Long id);
 

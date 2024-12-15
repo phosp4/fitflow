@@ -30,11 +30,10 @@ public class SQLRoleDao implements RoleDao {
     }
 
     @Override
-    public void update(Role role) {
-        String updateQuery = "UPDATE roles SET name = ? WHERE id = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(updateQuery)) {
-            pstmt.setString(1, role.getName());
-            pstmt.setLong(2, role.getId());
+    public void delete(Role role) {
+        String deleteQuery = "DELETE FROM roles WHERE id = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(deleteQuery)) {
+            pstmt.setLong(1, role.getId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new CouldNotAccessDatabaseException("Database not accessible");
@@ -42,10 +41,11 @@ public class SQLRoleDao implements RoleDao {
     }
 
     @Override
-    public void delete(Role role) {
-        String deleteQuery = "DELETE FROM roles WHERE id = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(deleteQuery)) {
-            pstmt.setLong(1, role.getId());
+    public void update(Role role) {
+        String updateQuery = "UPDATE roles SET name = ? WHERE id = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(updateQuery)) {
+            pstmt.setString(1, role.getName());
+            pstmt.setLong(2, role.getId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new CouldNotAccessDatabaseException("Database not accessible");

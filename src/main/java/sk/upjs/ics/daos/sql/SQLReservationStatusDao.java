@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class SQLReservationStatusDao implements ReservationStatusDao {
 
-    Connection connection;
+    private final Connection connection;
 
     public SQLReservationStatusDao(Connection connection) {
         this.connection = connection;

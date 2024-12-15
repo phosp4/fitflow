@@ -1,7 +1,6 @@
 package sk.upjs.ics.entities;
 
 import lombok.Data;
-import sk.upjs.ics.Factory;
 import sk.upjs.ics.exceptions.CouldNotAccessResultSetException;
 
 import java.sql.ResultSet;
@@ -27,6 +26,10 @@ public class User {
     private Set<Specialization> trainerSpecializationSet;
 
     public static User fromResultSet(ResultSet rs) {
+        return fromResultSet(rs, "");
+    }
+
+    public static User fromResultSet(ResultSet rs, String prefix) {
         User user = new User();
 
         try {
@@ -34,20 +37,17 @@ public class User {
                 return null;
             }
 
-            user.setId(rs.getLong("id"));
-
-            Role role = Factory.INSTANCE.getRoleDao().findById(rs.getLong("role_id"));
-            user.setRole(role);
-
-            user.setFirstName(rs.getString("first_name"));
-            user.setLastName(rs.getString("last_name"));
-            user.setEmail(rs.getString("email"));
-            user.setCreditBalance(rs.getLong("credit_balance"));
-            user.setPhone(rs.getString("phone"));
-            user.setBirthDate(rs.getDate("birth_date").toLocalDate());
-            user.setActive(rs.getBoolean("active"));
-            user.setCreatedAt(rs.getTimestamp("created_at").toInstant());
-            user.setUpdatedAt(rs.getTimestamp("updated_at").toInstant());
+            user.setId(rs.getLong(prefix + "id"));
+            user.setRole(null);
+            user.setFirstName(rs.getString(prefix + "first_name"));
+            user.setLastName(rs.getString(prefix + "last_name"));
+            user.setEmail(rs.getString(prefix + "email"));
+            user.setCreditBalance(rs.getLong(prefix + "credit_balance"));
+            user.setPhone(rs.getString(prefix + "phone"));
+            user.setBirthDate(rs.getDate(prefix + "birth_date").toLocalDate());
+            user.setActive(rs.getBoolean(prefix + "active"));
+            user.setCreatedAt(rs.getTimestamp(prefix + "created_at").toInstant());
+            user.setUpdatedAt(rs.getTimestamp(prefix + "updated_at").toInstant());
             user.setTrainerSpecializationSet(new HashSet<>());
 
             return user;
