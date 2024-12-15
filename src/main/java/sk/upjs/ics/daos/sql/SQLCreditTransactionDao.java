@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class SQLCreditTransactionDao implements CreditTransactionDao {
 
-    Connection connection;
+    private final Connection connection;
 
     public SQLCreditTransactionDao(Connection connection) {
         this.connection = connection;

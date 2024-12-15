@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class SQLTransactionTypeDao implements TransactionTypeDao {
 
-    Connection connection;
+    private final Connection connection;
 
     public SQLTransactionTypeDao(Connection connection) {
         this.connection = connection;
