@@ -1,7 +1,7 @@
 package sk.upjs.ics.daos.sql;
 
 import sk.upjs.ics.daos.interfaces.TransactionTypeDao;
-import sk.upjs.ics.entities.TransactionType;
+import sk.upjs.ics.entities.CreditTransactionType;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -31,12 +31,12 @@ public class SQLTransactionTypeDao implements TransactionTypeDao {
     }
 
     @Override
-    public TransactionType findById(Long id) {
+    public CreditTransactionType findById(Long id) {
         return null;
     }
 
     @Override
-    public ArrayList<TransactionType> findAll() {
+    public ArrayList<CreditTransactionType> findAll() {
         return null;
     }
 }

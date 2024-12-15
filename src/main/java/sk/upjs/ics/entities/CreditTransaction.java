@@ -12,7 +12,7 @@ import java.time.Instant;
 public class CreditTransaction {
     private Long id;
     private User user;
-    private TransactionType transactionType;
+    private CreditTransactionType creditTransactionType;
     private double amount;
     private Instant createdAt;
     private Instant updatedAt;
@@ -30,8 +30,8 @@ public class CreditTransaction {
             User user = Factory.INSTANCE.getUserDao().findById(rs.getLong("user_id"));
             creditTransaction.setUser(user);
 
-            TransactionType transactionType = Factory.INSTANCE.getTransactionTypeDao().findById(rs.getLong("transaction_type_id"));
-            creditTransaction.setTransactionType(transactionType);
+            CreditTransactionType creditTransactionType = Factory.INSTANCE.getTransactionTypeDao().findById(rs.getLong("transaction_type_id"));
+            creditTransaction.setCreditTransactionType(creditTransactionType);
 
             creditTransaction.setAmount(rs.getDouble("amount"));
             creditTransaction.setCreatedAt(rs.getTimestamp("created_at").toInstant());

@@ -1,6 +1,6 @@
 package sk.upjs.ics.daos.interfaces;
 
-import sk.upjs.ics.entities.TransactionType;
+import sk.upjs.ics.entities.CreditTransactionType;
 
 public interface TransactionTypeDao {
 
@@ -10,7 +10,7 @@ public interface TransactionTypeDao {
 
      void update(String transactionType);
 
-     TransactionType findById(Long id);
+     CreditTransactionType findById(Long id);
 
-     Iterable<TransactionType> findAll();
+     Iterable<CreditTransactionType> findAll();
 }

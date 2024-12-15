@@ -33,13 +33,13 @@ CREATE TABLE IF NOT EXISTS users
     FOREIGN KEY (role) REFERENCES roles (id)
 );
 
-CREATE TABLE IF NOT EXISTS transaction_types
+CREATE TABLE IF NOT EXISTS credit_ttransaction_types
 (
     id   INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS transactions
+CREATE TABLE IF NOT EXISTS credit_transactions
 (
     id                  INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id             INT       NOT NULL,

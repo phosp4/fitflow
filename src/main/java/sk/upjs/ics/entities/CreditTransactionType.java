@@ -7,22 +7,22 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Data
-public class TransactionType {
+public class CreditTransactionType {
     private Long id;
     private String name;
 
-    public static TransactionType fromResultSet(ResultSet rs) {
-        TransactionType transactionType = new TransactionType();
+    public static CreditTransactionType fromResultSet(ResultSet rs) {
+        CreditTransactionType creditTransactionType = new CreditTransactionType();
 
         try {
             if (rs.wasNull()) {
                 return null;
             }
 
-            transactionType.setId(rs.getLong("id"));
-            transactionType.setName(rs.getString("name"));
+            creditTransactionType.setId(rs.getLong("id"));
+            creditTransactionType.setName(rs.getString("name"));
 
-            return transactionType;
+            return creditTransactionType;
         } catch (SQLException e) {
             throw new CouldNotAccessResultSetException("Could not access ResultSet");
         }
