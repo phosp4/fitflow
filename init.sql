@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS roles
 CREATE TABLE IF NOT EXISTS users
 (
     id             INTEGER PRIMARY KEY AUTOINCREMENT,
-    role           INTEGER   NOT NULL,
+    role_id        INTEGER   NOT NULL,
     email          TEXT      NOT NULL,
     salt           TEXT      NOT NULL,
     password_hash  TEXT      NOT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS users
     active         BOOLEAN   NOT NULL DEFAULT 1,
     created_at     TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP),
     updated_at     TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP),
-    FOREIGN KEY (role) REFERENCES roles (id)
+    FOREIGN KEY (role_id) REFERENCES roles (id)
 );
 
 CREATE TABLE IF NOT EXISTS credit_transaction_types
@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS trainers_intervals
 CREATE TABLE IF NOT EXISTS trainer_specializations
 (
     id    INTEGER PRIMARY KEY AUTOINCREMENT,
-    title VARCHAR(45) NOT NULL
+    name VARCHAR(45) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS trainers_have_specializations
@@ -126,12 +126,12 @@ VALUES ('pending'),
        ('confirmed'),
        ('cancelled');
 
-INSERT INTO trainer_specializations (title)
+INSERT INTO trainer_specializations (name)
 VALUES ('Yoga'),
        ('Pilates'),
        ('CrossFit');
 
-INSERT INTO users (id, role, email, salt, password_hash, first_name, last_name, credit_balance, phone, birth_date, active, created_at, updated_at) VALUES
+INSERT INTO users (id, role_id, email, salt, password_hash, first_name, last_name, credit_balance, phone, birth_date, active, created_at, updated_at) VALUES
 (1, 1, 'user1@example.com', '123456', '$2b$10$xY/j5.25h8xL0t5c.jR7Bu.5x74j9.2gV9/0/j109.4e1Z9.3160', 'John', 'Doe', 100.00, '123-456-7890', '1990-01-01', 1, '2023-11-23 12:34:56', '2023-11-23 12:34:56'),
 (2, 2, 'user2@example.com', '123456', '$2b$10$xY/j5.25h8xL0t5c.jR7Bu.5x74j9.2gV9/0/j109.4e1Z9.3160', 'Jane', 'Smith', 50.50, '987-654-3210', '1995-02-15', 1, '2023-11-23 12:34:56', '2023-11-23 12:34:56'),
 (3, 3, 'admin@example.com', '123456', '$2b$10$xY/j5.25h8xL0t5c.jR7Bu.5x74j9.2gV9/0/j109.4e1Z9.3160', 'Alice', 'Johnson', 0.00, '555-555-5555', '2000-03-30', 1, '2023-11-23 12:34:56', '2023-11-23 12:34:56');
