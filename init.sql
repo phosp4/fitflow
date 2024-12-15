@@ -53,10 +53,12 @@ CREATE TABLE IF NOT EXISTS visits
 (
     id             INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id        INTEGER   NOT NULL,
-    check_in_time  TIMESTAMP NOT NULL,
-    check_out_time TIMESTAMP,
+    check_in_time  DATETIME NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+    check_out_time DATETIME,
     visit_secret   TEXT      NOT NULL,
     transaction_id INTEGER   NOT NULL,
+    created_at     TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+    updated_at     TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP),
     FOREIGN KEY (user_id) REFERENCES users (id),
     FOREIGN KEY (transaction_id) REFERENCES transactions (id)
 );

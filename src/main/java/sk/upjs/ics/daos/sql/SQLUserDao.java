@@ -1,6 +1,8 @@
-package sk.upjs.ics.users;
+package sk.upjs.ics.daos.sql;
 
+import sk.upjs.ics.daos.interfaces.UserDao;
 import sk.upjs.ics.exceptions.NotFoundException;
+import sk.upjs.ics.entities.User;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -60,7 +62,7 @@ public class SQLUserDao implements UserDao {
                 "role = ?, email = ?, first_name = ?, last_name = ?, credit_balance = ?, phone = ?, birth_date = ?, active = ?" +
                 "WHERE id = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(updateQuery)) {
-           pstmt.setLong(1, user.getRoleId());
+           pstmt.setLong(1, user.getRole().getId());
            pstmt.setString(2, user.getEmail());
            pstmt.setString(3, user.getFirstName());
            pstmt.setString(4, user.getLastName());
