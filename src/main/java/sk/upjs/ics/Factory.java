@@ -20,6 +20,8 @@ public enum Factory {
     private volatile CreditTransactionDao creditTransactionDao;
     private volatile RoleDao roleDao;
     private volatile ReservationStatusDao reservationStatusDao;
+    private volatile SpecializationDao specializationDao;
+    private volatile TrainerIntervalDao trainerIntervalDao;
 
     private final Object lock = new Object();
 
@@ -104,4 +106,27 @@ public enum Factory {
         }
         return reservationStatusDao;
     }
+
+    public SpecializationDao getSpecializationDao() {
+        if (specializationDao == null) {
+            synchronized (lock) {
+                if (specializationDao == null) {
+                    specializationDao = new SQLSpecializationDao(getConnection());
+                }
+            }
+        }
+        return specializationDao;
+    }
+
+    public TrainerIntervalDao getTrainerIntervalDao() {
+        if (trainerIntervalDao == null) {
+            synchronized (lock) {
+                if (trainerIntervalDao == null) {
+                    trainerIntervalDao = new SQLTrainerIntervalDao(getConnection());
+                }
+            }
+        }
+        return trainerIntervalDao;
+    }
+
 }
