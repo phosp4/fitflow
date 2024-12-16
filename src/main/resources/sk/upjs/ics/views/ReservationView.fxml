@@ -57,7 +57,7 @@
               <MFXComboBox fx:id="reserveTrainerComboBox" floatMode="DISABLED" prefHeight="5.0" prefWidth="200.0" GridPane.columnIndex="1" />
               <Label text="%reservation.leaveNote" GridPane.rowIndex="3" />
               <MFXTextField fx:id="noteToTrainer" floatMode="DISABLED" prefHeight="10.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-              <MFXToggleButton fx:id="TestToggle" text="%reservation.sendConfirmation" GridPane.rowIndex="4" />
+<!--              <MFXToggleButton fx:id="TestToggle" text="%reservation.sendConfirmation" GridPane.rowIndex="4" />-->
               <MFXButton fx:id="createReservationButton" onAction="#createReservation" prefHeight="40.0" prefWidth="147.0" rippleColor="#FFFFFF" styleClass="green-background" text="%reservation.create" textAlignment="CENTER" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="5" />
           </GridPane>
       </children>

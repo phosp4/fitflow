@@ -15,8 +15,8 @@ import java.util.ResourceBundle;
 
 public class ReservationViewController implements Initializable {
 
-    @FXML
-    private MFXToggleButton TestToggle;
+//    @FXML
+//    private MFXToggleButton TestToggle;
 
     @FXML
     private MFXButton createReservationButton;
@@ -35,6 +35,8 @@ public class ReservationViewController implements Initializable {
 
     @FXML
     void createReservation(ActionEvent event) {
+        // vytvorit nejakych trenerov a dat im intervaly
+        // nacitat ich do comboboxov
     }
 
     @Override

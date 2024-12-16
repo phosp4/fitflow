@@ -15,6 +15,7 @@ import sk.upjs.ics.entities.CreditTransaction;
 import sk.upjs.ics.entities.Reservation;
 import sk.upjs.ics.entities.Visit;
 import sk.upjs.ics.models.TransactionModel;
+import sk.upjs.ics.models.VisitModel;
 import sk.upjs.ics.security.Auth;
 import sk.upjs.ics.security.Principal;
 
@@ -45,6 +46,12 @@ public class HistoryViewController implements Initializable {
         TransactionModel transactionModel = new TransactionModel();
         ArrayList<String> transactionHistory = transactionModel.loadTransactionsHistory();
         historyTransactionsList.setItems(FXCollections.observableArrayList(transactionHistory));
+
+        VisitModel visitModel = new VisitModel();
+        ArrayList<String> visitHistory = visitModel.loadVisitsHistory();
+        historyEntriesList.setItems(FXCollections.observableArrayList(visitHistory));
+
+
         //// nacitaj tranzakcie
         // nacitaj arraylist tranzakcii prisluchajucich userovi
         // vyfiltruj len tie, ktore su purchases

@@ -117,9 +117,10 @@ VALUES ('admin'),
        ('user'),
        ('trainer');
 
-INSERT INTO credit_transaction_types (name)
-VALUES ('purchase'),
-       ('refund');
+INSERT INTO credit_transaction_types (id, name)
+VALUES (3, 'refund'),
+       (1, 'visit'),
+       (2, 'credit_purchase');
 
 INSERT INTO reservation_statuses (name)
 VALUES ('pending'),
