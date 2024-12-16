@@ -25,7 +25,7 @@ public class Reservation {
         Reservation reservation = new Reservation();
 
         try {
-            Long id = rs.getLong("id");
+            Long id = rs.getLong(prefix + "id");
 
             if (rs.wasNull()) {
                 return null;
