@@ -1,6 +1,5 @@
 package sk.upjs.ics.daos.sql;
 
-import sk.upjs.ics.Factory;
 import sk.upjs.ics.daos.interfaces.CreditTransactionDao;
 import sk.upjs.ics.entities.*;
 import sk.upjs.ics.exceptions.CouldNotAccessDatabaseException;

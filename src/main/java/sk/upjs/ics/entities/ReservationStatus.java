@@ -8,24 +8,29 @@ import java.sql.SQLException;
 
 @Data
 public class ReservationStatus {
-    private int id;
+    private Long id;
     private String name;
 
     public static ReservationStatus fromResultSet(ResultSet rs) {
+        return fromResultSet(rs, "");
+    }
+
+    public static ReservationStatus fromResultSet(ResultSet rs, String prefix) {
         ReservationStatus reservationStatus = new ReservationStatus();
 
         try {
-            var id = rs.getInt("id");
+            Long id = rs.getLong("id");
             if (rs.wasNull()) {
                 return null;
             }
 
-            reservationStatus.setId(id);
-            reservationStatus.setName(rs.getString("name"));
+            reservationStatus.setId(rs.getInt(prefix + "id"));
+            reservationStatus.setName(rs.getString(prefix + "name"));
 
             return reservationStatus;
         } catch (SQLException e) {
             throw new CouldNotAccessResultSetException("Could not access ResultSet");
         }
+
     }
 }
