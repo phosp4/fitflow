@@ -125,18 +125,18 @@ public class SQLReservationDao implements ReservationDao {
         return reservations;
     }
 
-    String reservationColumns = "r.id AS r_id, r.note AS r_note, r.created_at AS r_created_at," +
+    private final String reservationColumns = "r.id AS r_id, r.note AS r_note, r.created_at AS r_created_at," +
             " r.updated_at AS r_updated_at";
-    String userColumns = "us.id AS us_id, us.email AS us_email, us.first_name AS us_first_name, " +
+    private final String userColumns = "us.id AS us_id, us.email AS us_email, us.first_name AS us_first_name, " +
             "us.last_name AS us_last_name, us.credit_balance AS us_credit_balance, us.phone AS us_phone, " +
             "us.birth_date AS us_birth_date, us.active AS us_active, us.created_at AS us_created_at, us.updated_at AS us_updated_at";
-    String roleColumns = "rl.id AS rl_id, rl.name AS rl_name";
-    String specializationColumns = "tsp.id AS tsp_id, tsp.name AS tsp_name";
-    String statusColumns = "rs.id AS rs_id, rs.name AS rs_name";
-    String creditTransactionColumns = "ct.id AS ct_id, ct.amount AS ct_amount, ct.created_at AS ct_created_at, ct.updated_at AS ct_updated_at";
-    String creditTransactionTypeColumns = "ctt.id AS ctt_id, ctt.name AS ctt_name";
+    private final String roleColumns = "rl.id AS rl_id, rl.name AS rl_name";
+    private final String specializationColumns = "tsp.id AS tsp_id, tsp.name AS tsp_name";
+    private final String statusColumns = "rs.id AS rs_id, rs.name AS rs_name";
+    private final String creditTransactionColumns = "ct.id AS ct_id, ct.amount AS ct_amount, ct.created_at AS ct_created_at, ct.updated_at AS ct_updated_at";
+    private final String creditTransactionTypeColumns = "ctt.id AS ctt_id, ctt.name AS ctt_name";
 
-    String joins = "LEFT JOIN users us ON us.id = r.customer_id " +
+    private final String joins = "LEFT JOIN users us ON us.id = r.customer_id " +
             "LEFT JOIN roles rl ON rl.id = us.role_id " +
             "LEFT JOIN trainers_have_specializations ts ON ts.trainer_id = us.id " +
             "LEFT JOIN trainer_specializations tsp ON tsp.id = ts.specialization_id " +
@@ -144,8 +144,7 @@ public class SQLReservationDao implements ReservationDao {
             "LEFT JOIN credit_transactions ct ON ct.id = r.credit_transaction_id " +
             "LEFT JOIN credit_transaction_types ctt ON ctt.id = ct.credit_transaction_type_id";
 
-    String selectQuery = "SELECT " + reservationColumns + ", " + userColumns + ", " + roleColumns + ", " + specializationColumns + ", " + statusColumns + ", " + creditTransactionColumns + ", "+ creditTransactionTypeColumns + " FROM reservations r " + joins;
-
+    private final String selectQuery = "SELECT " + reservationColumns + ", " + userColumns + ", " + roleColumns + ", " + specializationColumns + ", " + statusColumns + ", " + creditTransactionColumns + ", "+ creditTransactionTypeColumns + " FROM reservations r " + joins;
     private final String insertQuery = "INSERT INTO reservations (customer_id, status, note, credit_transaction_id) VALUES (?, ?, ?, ?)";
 
     @Override
@@ -182,6 +181,10 @@ public class SQLReservationDao implements ReservationDao {
     public void create(Reservation reservation) {
         if (reservation == null) {
             throw new IllegalArgumentException("Reservation cannot be null");
+        }
+
+        if (reservation.getId() != null) {
+            throw new IllegalArgumentException("The reservation already has an id");
         }
 
         try (PreparedStatement pstmt = connection.prepareStatement(insertQuery)) {

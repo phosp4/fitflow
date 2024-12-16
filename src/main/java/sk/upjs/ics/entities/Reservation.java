@@ -1,7 +1,6 @@
 package sk.upjs.ics.entities;
 
 import lombok.Data;
-import sk.upjs.ics.Factory;
 import sk.upjs.ics.exceptions.CouldNotAccessResultSetException;
 
 import java.sql.ResultSet;
@@ -32,7 +31,7 @@ public class Reservation {
                 return null;
             }
 
-            reservation.setId(rs.getLong(prefix + "id"));
+            reservation.setId(id);
             reservation.setCustomer(null);
             reservation.setReservationStatus(null);
             reservation.setNoteToTrainer(rs.getString(prefix + "note"));

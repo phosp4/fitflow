@@ -92,21 +92,22 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
         return creditTransactions;
     }
     
-    String creditTransactionColumns = "ct.id AS ct_id, ct.amount AS ct_amount, ct.created_at AS ct_created_at, ct.updated_at AS ct_updated_at";
+    private final String creditTransactionColumns = "ct.id AS ct_id, ct.amount AS ct_amount, ct.created_at AS ct_created_at, ct.updated_at AS ct_updated_at";
     String userColumns = "us.id AS us_id, us.email AS us_email, us.first_name AS us_first_name, " +
             "us.last_name AS us_last_name, us.credit_balance AS us_credit_balance, us.phone AS us_phone, " +
             "us.birth_date AS us_birth_date, us.active AS us_active, us.created_at AS us_created_at, us.updated_at AS us_updated_at";
-    String roleColumns = "r.id AS r_id, r.name AS r_name";
-    String specializationColumns = "tsp.id AS tsp_id, tsp.name AS tsp_name";
-    String creditTransactionTypeColumns = "ctt.id AS ctt_id, ctt.name AS ctt_name";
+    private final String roleColumns = "r.id AS r_id, r.name AS r_name";
+    private final String specializationColumns = "tsp.id AS tsp_id, tsp.name AS tsp_name";
+    private final String creditTransactionTypeColumns = "ctt.id AS ctt_id, ctt.name AS ctt_name";
 
-    String joins = "LEFT JOIN users us ON us.id = ct.user_id " +
+    private final String joins = "LEFT JOIN users us ON us.id = ct.user_id " +
             "LEFT JOIN roles r ON r.id = us.role_id " +
             "LEFT JOIN trainers_have_specializations ts ON ts.trainer_id = us.id " +
             "LEFT JOIN trainer_specializations tsp ON tsp.id = ts.specialization_id " +
             "LEFT JOIN credit_transaction_types ctt ON ctt.id = ct.credit_transaction_type_id";
 
-    String selectQuery = "SELECT " + creditTransactionColumns + ", " + userColumns + ", " + roleColumns + ", " + specializationColumns + ", " + creditTransactionTypeColumns + " FROM credit_transactions ct " + joins;
+    private final String selectQuery = "SELECT " + creditTransactionColumns + ", " + userColumns + ", " + roleColumns + ", " + specializationColumns + ", " + creditTransactionTypeColumns + " FROM credit_transactions ct " + joins;
+    private final String insertQuery = "INSERT INTO credit_transactions (user_id, amount, credit_transaction_type_id) VALUES (?, ?, ?)";
 
     @Override
     public void loadFromCsv(File file) {
@@ -123,7 +124,6 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
 
                 String[] parts = line.split(",");
 
-                String insertQuery = "INSERT INTO credit_transactions (user_id, amount, credit_transaction_type_id) VALUES (?, ?, ?)";
                 try (PreparedStatement pstm = connection.prepareStatement(insertQuery)) {
                     pstm.setLong(1, Long.parseLong(parts[0]));
                     pstm.setFloat(2, Float.parseFloat(parts[1]));
@@ -148,8 +148,6 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
         if (creditTransaction.getId() != null) {
             throw new IllegalArgumentException("The credit transaction already has an id");
         }
-
-        String insertQuery = "INSERT INTO credit_transactions (user_id, amount, credit_transaction_type_id) VALUES (?, ?, ?)";
 
         try (PreparedStatement pstmt = connection.prepareStatement(insertQuery)) {
             pstmt.setLong(1, creditTransaction.getUser().getId());
