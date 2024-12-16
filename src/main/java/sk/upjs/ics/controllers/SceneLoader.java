@@ -30,7 +30,7 @@ public class SceneLoader {
      * @return                   the controller associated with the loaded FXML file, usually used to pass the stage to it after initialization
      * @throws IOException       if an error occurs during loading the FXML file
      */
-    public static <T> T loadScene(Stage currentStage, String fxmlPath, Locale locale, String currentStylesheet,  int minHeight, int minWidth) throws IOException {
+    public static <T> T loadScene(Stage currentStage, String fxmlPath, Locale locale, String currentStylesheet,  double minHeight, double minWidth) throws IOException {
 
         // load new resource bundle according the current locale
         ResourceBundle bundle = ResourceBundle.getBundle("sk.upjs.ics.MyResources.MyResources", LocaleManager.getLocale());

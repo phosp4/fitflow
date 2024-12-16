@@ -8,6 +8,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import lombok.Getter;
+import sk.upjs.ics.security.Auth;
+import sk.upjs.ics.security.Principal;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -38,6 +40,7 @@ public class WalletViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setCreditChoice(creditChoice);
+        Principal p = Auth.INSTANCE.getPrincipal();
     }
 
     /*

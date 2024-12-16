@@ -3,6 +3,8 @@ package sk.upjs.ics;
 import sk.upjs.ics.daos.interfaces.*;
 import sk.upjs.ics.daos.sql.*;
 import sk.upjs.ics.exceptions.CouldNotConnectToDatabaseException;
+import sk.upjs.ics.security.AuthDao;
+import sk.upjs.ics.security.SQLAuthDao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -20,6 +22,8 @@ public enum Factory {
     private volatile CreditTransactionDao creditTransactionDao;
     private volatile RoleDao roleDao;
     private volatile ReservationStatusDao reservationStatusDao;
+    private volatile VisitDao visitDao;
+    private volatile AuthDao authDao;
     private volatile SpecializationDao specializationDao;
     private volatile TrainerIntervalDao trainerIntervalDao;
 
@@ -105,6 +109,28 @@ public enum Factory {
             }
         }
         return reservationStatusDao;
+    }
+
+    public VisitDao getVisitDao() {
+        if (visitDao == null) {
+            synchronized (lock) {
+                if (visitDao == null) {
+                    visitDao = new SQLVisitDao(getConnection());
+                }
+            }
+        }
+        return visitDao;
+    }
+
+    public AuthDao getAuthDao() {
+        if (authDao == null) {
+            synchronized (lock) {
+                if (authDao == null) {
+                    authDao = new SQLAuthDao(getConnection());
+                }
+            }
+        }
+        return authDao;
     }
 
     public SpecializationDao getSpecializationDao() {
