@@ -1,6 +1,7 @@
 package sk.upjs.ics.daos.interfaces;
 
 import sk.upjs.ics.entities.Reservation;
+import sk.upjs.ics.entities.User;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -18,4 +19,6 @@ public interface ReservationDao {
     Reservation findById(Long id);
 
     ArrayList<Reservation> findAll();
+
+    ArrayList<Reservation> findAllOfOneUser(Long userId);
 }

@@ -259,4 +259,15 @@ public class SQLReservationDao implements ReservationDao {
              throw new CouldNotAccessDatabaseException("Database not accessible", e);
         }
     }
+
+    @Override
+    public ArrayList<Reservation> findAllOfOneUser(Long userId) {
+        try (PreparedStatement pstmt = connection.prepareStatement(selectQuery + " where r.customer_id = ?")) {
+            pstmt.setLong(1, userId);
+            ResultSet rs = pstmt.executeQuery();
+            return extractFromResultSet(rs);
+        } catch (SQLException e) {
+            throw new CouldNotAccessDatabaseException("Database not accessible", e);
+        }
+    }
 }
