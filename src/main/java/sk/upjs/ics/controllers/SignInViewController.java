@@ -18,14 +18,19 @@ import sk.upjs.ics.security.AuthDao;
 import sk.upjs.ics.security.Principal;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.util.ResourceBundle;
 
 public class SignInViewController {
 
     @FXML
     private MFXTextField emailTextField;
 
+//    @FXML
+//    private Label forgotPasswordLabel;
+
     @FXML
-    private Label forgotPasswordLabel;
+    private Label IncorrectLabel;
 
     @FXML
     private MFXPasswordField passwordField;
@@ -59,7 +64,10 @@ public class SignInViewController {
         try {
             principal = authDao.authenticate(email, password);
         } catch (AuthenticationException e) {
-//            incorrectPasswordLabel.setText(e.getMessage());
+            ResourceBundle bundle = ResourceBundle.getBundle("sk.upjs.ics.MyResources.MyResources", LocaleManager.getLocale());
+            String incorrectMessage = bundle.getString("auth.incorrect");
+            IncorrectLabel.setTextFill(javafx.scene.paint.Color.RED);
+            IncorrectLabel.setText(incorrectMessage);
             System.out.println("Incorrect password");
             return;
         }

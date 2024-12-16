@@ -26,8 +26,8 @@ public class UserModel {
         CreditTransaction creditTransaction = new CreditTransaction();
         creditTransaction.setUser(getCurrentUser());
         creditTransaction.setAmount(addBalance);
-        creditTransaction.setCreditTransactionType(Factory.INSTANCE.getTransactionTypeDao().findById(1L));
-        transactionDao.create(creditTransaction); // todo should be working when the creditTransactionType will be done
+        creditTransaction.setCreditTransactionType(Factory.INSTANCE.getTransactionTypeDao().findById(2L));
+        transactionDao.create(creditTransaction);
 
         // now update the balance
         User user = getCurrentUser();

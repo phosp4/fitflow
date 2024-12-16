@@ -28,10 +28,12 @@ public class TransactionModel {
         for (int i = 0; i < creditTransactions.size(); i++) {
             CreditTransaction creditTransaction = creditTransactions.get(i);
 
-            // ak to nie je prisluchajuci user alebo nie je purchase, tak ju odstran
+            // ak to nie je prisluchajuci user alebo nie je credit_purchase, tak ju odstran
             if (!creditTransaction.getUser().getId().equals(principal.getId()) ||
-                    !creditTransaction.getCreditTransactionType().getId().equals(1L)) {
+                    !creditTransaction.getCreditTransactionType().getId().equals(2L)) {
                 creditTransactions.remove(creditTransaction);
+            } else {
+                System.out.println("CreditTransaction: " + creditTransaction);
             }
         }
 
@@ -41,7 +43,7 @@ public class TransactionModel {
             double amount = creditTransaction.getAmount();
             LocalDateTime time = LocalDateTime.ofInstant(creditTransaction.getCreatedAt(), ZoneId.systemDefault());
             String formattedTime = time.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
-            transactionHistory.add(formattedTime + " | +" + amount + "€");
+            transactionHistory.add(formattedTime + " | " + amount + "€");
         }
 
         // Reverse the order of the transaction history
