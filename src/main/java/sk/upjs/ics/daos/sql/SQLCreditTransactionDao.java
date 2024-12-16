@@ -130,13 +130,12 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
                     pstm.setLong(3, Long.parseLong(parts[2]));
                     pstm.executeUpdate();
                 } catch (SQLException e) {
-                    throw new RuntimeException(e);
+                    throw new CouldNotAccessDatabaseException("Database not accessible", e);
                 }
             }
         } catch (FileNotFoundException e) {
             throw new CouldNotAccessFileException("Could not access file");
         }
-
     }
 
     @Override

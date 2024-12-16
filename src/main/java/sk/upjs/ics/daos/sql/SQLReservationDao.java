@@ -162,14 +162,14 @@ public class SQLReservationDao implements ReservationDao {
 
                 String[] parts = line.split(",");
 
-                try (PreparedStatement pstm = connection.prepareStatement(insertQuery)) {
-                    pstm.setLong(1, Long.parseLong(parts[0]));
-                    pstm.setLong(2, Long.parseLong(parts[1]));
-                    pstm.setString(3, parts[2]);
-                    pstm.setLong(4, Long.parseLong(parts[3]));
-                    pstm.executeUpdate();
+                try (PreparedStatement pstmt = connection.prepareStatement(insertQuery)) {
+                    pstmt.setLong(1, Long.parseLong(parts[0]));
+                    pstmt.setLong(2, Long.parseLong(parts[1]));
+                    pstmt.setString(3, parts[2]);
+                    pstmt.setLong(4, Long.parseLong(parts[3]));
+                    pstmt.executeUpdate();
                 } catch (SQLException e) {
-                    throw new RuntimeException(e);
+                    throw new CouldNotAccessDatabaseException("Database not accessible", e);
                 }
             }
         } catch (FileNotFoundException e) {
