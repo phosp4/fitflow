@@ -17,14 +17,30 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+/**
+ * SQLReservationDao is an implementation of the ReservationDao interface
+ * that provides methods to interact with the reservations in the database.
+ */
 public class SQLReservationDao implements ReservationDao {
 
     private final Connection connection;
 
+    /**
+     * Constructs a new SQLReservationDao with the specified database connection.
+     *
+     * @param connection the database connection
+     */
     public SQLReservationDao(Connection connection) {
         this.connection = connection;
     }
 
+    /**
+     * Extracts reservations from the given ResultSet.
+     *
+     * @param rs the ResultSet containing reservation data
+     * @return a list of reservations
+     * @throws SQLException if a database access error occurs
+     */
     private ArrayList<Reservation> extractFromResultSet(ResultSet rs) throws SQLException {
         ArrayList<Reservation> reservations = new ArrayList<>();
 
@@ -147,6 +163,13 @@ public class SQLReservationDao implements ReservationDao {
     private final String selectQuery = "SELECT " + reservationColumns + ", " + userColumns + ", " + roleColumns + ", " + specializationColumns + ", " + statusColumns + ", " + creditTransactionColumns + ", "+ creditTransactionTypeColumns + " FROM reservations r " + joins;
     private final String insertQuery = "INSERT INTO reservations (customer_id, status, note, credit_transaction_id) VALUES (?, ?, ?, ?)";
 
+    /**
+     * Loads reservations from a CSV file and inserts them into the database.
+     *
+     * @param file the CSV file containing reservation data
+     * @throws CouldNotAccessFileException if the file cannot be accessed
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public void loadFromCsv(File file) {
         try (Scanner scanner = new Scanner(file)) {
@@ -177,14 +200,45 @@ public class SQLReservationDao implements ReservationDao {
         }
     }
 
+    /**
+     * Creates a new reservation in the database.
+     *
+     * @param reservation the reservation to create
+     * @throws IllegalArgumentException if the reservation or any of its required fields are null
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public void create(Reservation reservation) {
         if (reservation == null) {
             throw new IllegalArgumentException("Reservation cannot be null");
         }
 
-        if (reservation.getId() != null) {
-            throw new IllegalArgumentException("The reservation already has an id");
+        if (reservation.getCustomer() == null) {
+            throw new IllegalArgumentException("Customer cannot be null");
+        }
+
+        if (reservation.getCustomer().getId() == null) {
+            throw new IllegalArgumentException("Customer ID cannot be null");
+        }
+
+        if (reservation.getReservationStatus() == null) {
+            throw new IllegalArgumentException("Reservation status cannot be null");
+        }
+
+        if (reservation.getReservationStatus().getId() == null) {
+            throw new IllegalArgumentException("Reservation status ID cannot be null");
+        }
+
+        if (reservation.getCreditTransaction() == null) {
+            throw new IllegalArgumentException("Credit transaction cannot be null");
+        }
+
+        if (reservation.getCreditTransaction().getId() == null) {
+            throw new IllegalArgumentException("Credit transaction ID cannot be null");
+        }
+
+        if (findById(reservation.getId()) != null) {
+            throw new IllegalArgumentException("Reservation with id " + reservation.getId() + " already exists");
         }
 
         try (PreparedStatement pstmt = connection.prepareStatement(insertQuery)) {
@@ -204,10 +258,26 @@ public class SQLReservationDao implements ReservationDao {
         }
     }
 
+    /**
+     * Deletes a reservation from the database.
+     *
+     * @param reservation the reservation to delete
+     * @throws IllegalArgumentException if the reservation or its ID is null
+     * @throws NotFoundException if the reservation with the specified ID is not found
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public void delete(Reservation reservation) {
         if (reservation == null) {
             throw new IllegalArgumentException("Reservation cannot be null");
+        }
+
+        if (reservation.getId() == null) {
+            throw new IllegalArgumentException("Reservation ID cannot be null");
+        }
+
+        if (findById(reservation.getId()) == null) {
+            throw new NotFoundException("Reservation with id " + reservation.getId() + " not found");
         }
 
         String deleteQuery = "DELETE FROM reservations WHERE id = ?";
@@ -219,10 +289,50 @@ public class SQLReservationDao implements ReservationDao {
         }
     }
 
+    /**
+     * Updates an existing reservation in the database.
+     *
+     * @param reservation the reservation to update
+     * @throws IllegalArgumentException if the reservation or any of its required fields are null
+     * @throws NotFoundException if the reservation with the specified ID is not found
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public void update(Reservation reservation) {
         if (reservation == null) {
             throw new IllegalArgumentException("Reservation cannot be null");
+        }
+
+        if (reservation.getId() == null) {
+            throw new IllegalArgumentException("Reservation ID cannot be null");
+        }
+
+        if (reservation.getCustomer() == null) {
+            throw new IllegalArgumentException("Customer cannot be null");
+        }
+
+        if (reservation.getCustomer().getId() == null) {
+            throw new IllegalArgumentException("Customer ID cannot be null");
+        }
+
+        if (reservation.getReservationStatus() == null) {
+            throw new IllegalArgumentException("Reservation status cannot be null");
+        }
+
+        if (reservation.getReservationStatus().getId() == null) {
+            throw new IllegalArgumentException("Reservation status ID cannot be null");
+        }
+
+        if (reservation.getCreditTransaction() == null) {
+            throw new IllegalArgumentException("Credit transaction cannot be null");
+        }
+
+        if (reservation.getCreditTransaction().getId() == null) {
+            throw new IllegalArgumentException("Credit transaction ID cannot be null");
+        }
+
+        if (findById(reservation.getId()) == null) {
+            throw new NotFoundException("Reservation with id " + reservation.getId() + " not found");
         }
 
         String updateQuery = "UPDATE reservations SET customer_id = ?, status = ?, note = ?, credit_transaction_id = ? WHERE id = ?";
@@ -239,8 +349,20 @@ public class SQLReservationDao implements ReservationDao {
         }
     }
 
+    /**
+     * Finds a reservation by its ID.
+     *
+     * @param id the ID of the reservation to find
+     * @return the reservation with the specified ID
+     * @throws IllegalArgumentException if the ID is null
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public Reservation findById(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID cannot be null");
+        }
+
         try (PreparedStatement pstmt = connection.prepareStatement(selectQuery + " WHERE r.id = ?")) {
             pstmt.setLong(1, id);
             ResultSet rs = pstmt.executeQuery();
@@ -250,6 +372,12 @@ public class SQLReservationDao implements ReservationDao {
         }
     }
 
+    /**
+     * Finds all reservations in the database.
+     *
+     * @return a list of all reservations
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public ArrayList<Reservation> findAll() {
         try (PreparedStatement pstmt = connection.prepareStatement(selectQuery);
@@ -260,6 +388,13 @@ public class SQLReservationDao implements ReservationDao {
         }
     }
 
+    /**
+     * Finds all reservations of a specific user.
+     *
+     * @param userId the ID of the user whose reservations to find
+     * @return a list of reservations of the specified user
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public ArrayList<Reservation> findAllOfOneUser(Long userId) {
         try (PreparedStatement pstmt = connection.prepareStatement(selectQuery + " where r.customer_id = ?")) {

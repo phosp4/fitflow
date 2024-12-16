@@ -10,6 +10,9 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Represents a user in the system.
+ */
 @Data
 public class User {
     private Long id;
@@ -25,10 +28,23 @@ public class User {
     private Instant updatedAt;
     private Set<Specialization> trainerSpecializationSet;
 
+    /**
+     * Creates a User object from the given ResultSet.
+     *
+     * @param rs the ResultSet containing user data
+     * @return a User object
+     */
     public static User fromResultSet(ResultSet rs) {
         return fromResultSet(rs, "");
     }
 
+    /**
+     * Creates a User object from the given ResultSet with a specified prefix.
+     *
+     * @param rs the ResultSet containing user data
+     * @param prefix the prefix for the column names in the ResultSet
+     * @return a User object
+     */
     public static User fromResultSet(ResultSet rs, String prefix) {
         User user = new User();
 
@@ -40,7 +56,6 @@ public class User {
             }
 
             user.setId(id);
-            //user.setRole(Factory.INSTANCE.getRoleDao().findById(rs.getLong("role_id")));
             user.setRole(null);
             user.setFirstName(rs.getString(prefix + "first_name"));
             user.setLastName(rs.getString(prefix + "last_name"));

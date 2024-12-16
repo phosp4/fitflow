@@ -6,15 +6,31 @@ import sk.upjs.ics.exceptions.CouldNotAccessResultSetException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Represents a type of credit transaction in the system.
+ */
 @Data
 public class CreditTransactionType {
     private Long id;
     private String name;
 
+    /**
+     * Creates a CreditTransactionType object from the given ResultSet.
+     *
+     * @param rs the ResultSet containing credit transaction type data
+     * @return a CreditTransactionType object
+     */
     public static CreditTransactionType fromResultSet(ResultSet rs) {
         return fromResultSet(rs, "");
     }
 
+    /**
+     * Creates a CreditTransactionType object from the given ResultSet with a specified prefix.
+     *
+     * @param rs the ResultSet containing credit transaction type data
+     * @param prefix the prefix for the column names in the ResultSet
+     * @return a CreditTransactionType object
+     */
     public static CreditTransactionType fromResultSet(ResultSet rs, String prefix) {
         CreditTransactionType creditTransactionType = new CreditTransactionType();
 

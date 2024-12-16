@@ -1,6 +1,5 @@
 package sk.upjs.ics.daos.sql;
 
-import sk.upjs.ics.Factory;
 import sk.upjs.ics.daos.interfaces.UserDao;
 import sk.upjs.ics.entities.*;
 import sk.upjs.ics.exceptions.CouldNotAccessDatabaseException;
@@ -123,16 +122,44 @@ public class SQLUserDao implements UserDao {
             throw new IllegalArgumentException("User cannot be null");
         }
 
-        if (user.getId() != null) {
-            throw new IllegalArgumentException("The user already has an id");
-        }
-
         if (salt == null) {
             throw new IllegalArgumentException("Salt cannot be null");
         }
 
         if (password_hash == null) {
             throw new IllegalArgumentException("Password hash cannot be null");
+        }
+
+        if (user.getRole() == null) {
+            throw new IllegalArgumentException("User role cannot be null");
+        }
+
+        if (user.getEmail() == null) {
+            throw new IllegalArgumentException("User email cannot be null");
+        }
+
+        if (user.getFirstName() == null) {
+            throw new IllegalArgumentException("User first name cannot be null");
+        }
+
+        if (user.getLastName() == null) {
+            throw new IllegalArgumentException("User last name cannot be null");
+        }
+
+        if (user.getCreditBalance() < 0) {
+            throw new IllegalArgumentException("Credit balance cannot be negative");
+        }
+
+        if (user.getPhone() == null) {
+            throw new IllegalArgumentException("User phone cannot be null");
+        }
+
+        if (user.getBirthDate() == null) {
+            throw new IllegalArgumentException("User birth date cannot be null");
+        }
+
+        if (findById(user.getId()) != null) {
+            throw new IllegalArgumentException("User with id " + user.getId() + " already exists");
         }
 
         try (PreparedStatement pstmt = connection.prepareStatement(insertQuery)) {
@@ -158,6 +185,42 @@ public class SQLUserDao implements UserDao {
             throw new IllegalArgumentException("User cannot be null");
         }
 
+        if (user.getId() == null) {
+            throw new IllegalArgumentException("User id cannot be null");
+        }
+
+        if (user.getRole() == null) {
+            throw new IllegalArgumentException("User role cannot be null");
+        }
+
+        if (user.getEmail() == null) {
+            throw new IllegalArgumentException("User email cannot be null");
+        }
+
+        if (user.getFirstName() == null) {
+            throw new IllegalArgumentException("User first name cannot be null");
+        }
+
+        if (user.getLastName() == null) {
+            throw new IllegalArgumentException("User last name cannot be null");
+        }
+
+        if (user.getCreditBalance() < 0) {
+            throw new IllegalArgumentException("Credit balance cannot be negative");
+        }
+
+        if (user.getPhone() == null) {
+            throw new IllegalArgumentException("User phone cannot be null");
+        }
+
+        if (user.getBirthDate() == null) {
+            throw new IllegalArgumentException("User birth date cannot be null");
+        }
+
+        if (findById(user.getId()) == null) {
+            throw new NotFoundException("User with id " + user.getId() + " not found");
+        }
+
         String updateQuery = "UPDATE users SET role_id = ?, email = ?, first_name = ?, last_name = ?, " +
                 "credit_balance = ?, phone = ?, birth_date = ?, active = ? WHERE id = ?";
 
@@ -179,6 +242,46 @@ public class SQLUserDao implements UserDao {
 
     @Override
     public void updateBalance(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
+
+        if (user.getId() == null) {
+            throw new IllegalArgumentException("User id cannot be null");
+        }
+
+        if (user.getRole() != null) {
+            throw new IllegalArgumentException("User role cannot be set");
+        }
+
+        if (user.getEmail() != null) {
+            throw new IllegalArgumentException("User email cannot be set");
+        }
+
+        if (user.getFirstName() != null) {
+            throw new IllegalArgumentException("User first name cannot be set");
+        }
+
+        if (user.getLastName() != null) {
+            throw new IllegalArgumentException("User last name cannot be set");
+        }
+
+        if (user.getPhone() != null) {
+            throw new IllegalArgumentException("User phone cannot be set");
+        }
+
+        if (user.getBirthDate() != null) {
+            throw new IllegalArgumentException("User birth date cannot be set");
+        }
+
+        if (user.getCreditBalance() < 0) {
+            throw new IllegalArgumentException("Credit balance cannot be negative");
+        }
+
+        if (findById(user.getId()) == null) {
+            throw new NotFoundException("User with id " + user.getId() + " not found");
+        }
+
         String updateQuery = "UPDATE users SET credit_balance = ? WHERE id = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(updateQuery)) {
             pstmt.setLong(1, user.getCreditBalance());
@@ -199,12 +302,44 @@ public class SQLUserDao implements UserDao {
             throw new IllegalArgumentException("User id cannot be null");
         }
 
+        if (user.getRole() == null) {
+            throw new IllegalArgumentException("User role cannot be null");
+        }
+
+        if (user.getEmail() == null) {
+            throw new IllegalArgumentException("User email cannot be null");
+        }
+
+        if (user.getFirstName() == null) {
+            throw new IllegalArgumentException("User first name cannot be null");
+        }
+
+        if (user.getLastName() == null) {
+            throw new IllegalArgumentException("User last name cannot be null");
+        }
+
+        if (user.getCreditBalance() < 0) {
+            throw new IllegalArgumentException("Credit balance cannot be negative");
+        }
+
+        if (user.getPhone() == null) {
+            throw new IllegalArgumentException("User phone cannot be null");
+        }
+
+        if (user.getBirthDate() == null) {
+            throw new IllegalArgumentException("User birth date cannot be null");
+        }
+
         if (salt == null) {
             throw new IllegalArgumentException("Salt cannot be null");
         }
 
         if (password_hash == null) {
             throw new IllegalArgumentException("Password hash cannot be null");
+        }
+
+        if (findById(user.getId()) == null) {
+            throw new NotFoundException("User with id " + user.getId() + " not found");
         }
 
         String updateString = "UPDATE users SET salt = ?, password_hash = ? WHERE id = ?";
@@ -225,6 +360,14 @@ public class SQLUserDao implements UserDao {
             throw  new IllegalArgumentException("User cannot be null");
         }
 
+        if (user.getId() == null) {
+            throw new IllegalArgumentException("User id cannot be null");
+        }
+
+        if (findById(user.getId()) == null) {
+            throw new NotFoundException("User with id " + user.getId() + " not found");
+        }
+
         String deleteQuery = "DELETE FROM users WHERE id = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(deleteQuery)) {
@@ -237,6 +380,10 @@ public class SQLUserDao implements UserDao {
 
     @Override
     public User findById(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID cannot be null");
+        }
+
         try (PreparedStatement pstmt = connection.prepareStatement(selectQuery + " WHERE u.id = ?")) {
             pstmt.setLong(1, id);
             ResultSet rs = pstmt.executeQuery();
@@ -254,10 +401,5 @@ public class SQLUserDao implements UserDao {
         } catch (SQLException e) {
             throw new CouldNotAccessDatabaseException("Database not accessible", e);
         }
-    }
-
-    public static void main(String[] args) {
-       User user =Factory.INSTANCE.getUserDao().findById(1L);
-       System.out.println(user);
     }
 }

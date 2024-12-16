@@ -8,6 +8,9 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+/**
+ * Represents a time interval for a trainer in the system.
+ */
 @Data
 public class TrainerInterval {
     private Long id;
@@ -17,10 +20,23 @@ public class TrainerInterval {
     private LocalTime endTime;
     private Reservation reservation;
 
+    /**
+     * Creates a TrainerInterval object from the given ResultSet.
+     *
+     * @param rs the ResultSet containing trainer interval data
+     * @return a TrainerInterval object
+     */
     public static TrainerInterval fromResultSet(ResultSet rs) {
         return fromResultSet(rs, "");
     }
 
+    /**
+     * Creates a TrainerInterval object from the given ResultSet with a specified prefix.
+     *
+     * @param rs the ResultSet containing trainer interval data
+     * @param prefix the prefix for the column names in the ResultSet
+     * @return a TrainerInterval object
+     */
     public static TrainerInterval fromResultSet(ResultSet rs, String prefix) {
         TrainerInterval trainerInterval = new TrainerInterval();
 
