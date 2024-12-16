@@ -22,10 +22,21 @@ public class LocaleManager {
             new Locale("de")
     );
 
+    /**
+     * Saves the specified locale to the preferences.
+     *
+     * @param locale the locale to be saved
+     */
     public static void saveLocale(Locale locale) {
         prefs.put(LOCALE_KEY, locale.toLanguageTag());
     }
 
+    /**
+     * Retrieves the current locale from the preferences.
+     * If no locale is set, the default locale is returned.
+     *
+     * @return the current locale
+     */
     public static Locale getLocale() {
         String localeTag = prefs.get(LOCALE_KEY, Locale.getDefault().toLanguageTag());
         return Locale.forLanguageTag(localeTag);

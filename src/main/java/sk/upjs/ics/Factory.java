@@ -10,9 +10,16 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+
+/**
+ * Factory class to provide singleton instances of DAOs and manage database connections.
+ */
 public enum Factory {
     INSTANCE;
 
+    /**
+     * The URL of the database.
+     */
     public static final String DB_URL = "jdbc:sqlite:fitflow.db";
 
     private volatile Connection connection;
@@ -29,6 +36,12 @@ public enum Factory {
 
     private final Object lock = new Object();
 
+    /**
+     * Returns a singleton instance of the database connection.
+     *
+     * @return the database connection
+     * @throws CouldNotConnectToDatabaseException if a database access error occurs
+     */
     public Connection getConnection() {
         if (connection == null) {
             synchronized (lock) {
@@ -45,6 +58,11 @@ public enum Factory {
         return connection;
     }
 
+    /**
+     * Returns a singleton instance of the ReservationDao.
+     *
+     * @return the ReservationDao
+     */
     public ReservationDao getReservationDao() {
         if (reservationDao == null) {
             synchronized (lock) {
@@ -56,6 +74,11 @@ public enum Factory {
         return reservationDao;
     }
 
+    /**
+     * Returns a singleton instance of the UserDao.
+     *
+     * @return the UserDao
+     */
     public UserDao getUserDao() {
         if (userDao == null) {
             synchronized (lock) {
@@ -67,6 +90,11 @@ public enum Factory {
         return userDao;
     }
 
+    /**
+     * Returns a singleton instance of the TransactionTypeDao.
+     *
+     * @return the TransactionTypeDao
+     */
     public TransactionTypeDao getTransactionTypeDao() {
         if (transactionTypeDao == null) {
             synchronized (lock) {
@@ -78,6 +106,11 @@ public enum Factory {
         return transactionTypeDao;
     }
 
+    /**
+     * Returns a singleton instance of the CreditTransactionDao.
+     *
+     * @return the CreditTransactionDao
+     */
     public CreditTransactionDao getCreditTransactionDao() {
         if (creditTransactionDao == null) {
             synchronized (lock) {
@@ -89,6 +122,11 @@ public enum Factory {
         return creditTransactionDao;
     }
 
+    /**
+     * Returns a singleton instance of the RoleDao.
+     *
+     * @return the RoleDao
+     */
     public RoleDao getRoleDao() {
         if (roleDao == null) {
             synchronized (lock) {
@@ -100,6 +138,11 @@ public enum Factory {
         return roleDao;
     }
 
+    /**
+     * Returns a singleton instance of the ReservationStatusDao.
+     *
+     * @return the ReservationStatusDao
+     */
     public ReservationStatusDao getReservationStatusDao() {
         if (reservationStatusDao == null) {
             synchronized (lock) {
@@ -111,6 +154,11 @@ public enum Factory {
         return reservationStatusDao;
     }
 
+    /**
+     * Returns a singleton instance of the VisitDao.
+     *
+     * @return the VisitDao
+     */
     public VisitDao getVisitDao() {
         if (visitDao == null) {
             synchronized (lock) {
@@ -122,6 +170,11 @@ public enum Factory {
         return visitDao;
     }
 
+    /**
+     * Returns a singleton instance of the AuthDao.
+     *
+     * @return the AuthDao
+     */
     public AuthDao getAuthDao() {
         if (authDao == null) {
             synchronized (lock) {
@@ -133,6 +186,11 @@ public enum Factory {
         return authDao;
     }
 
+    /**
+     * Returns a singleton instance of the SpecializationDao.
+     *
+     * @return the SpecializationDao
+     */
     public SpecializationDao getSpecializationDao() {
         if (specializationDao == null) {
             synchronized (lock) {
@@ -144,6 +202,11 @@ public enum Factory {
         return specializationDao;
     }
 
+    /**
+     * Returns a singleton instance of the TrainerIntervalDao.
+     *
+     * @return the TrainerIntervalDao
+     */
     public TrainerIntervalDao getTrainerIntervalDao() {
         if (trainerIntervalDao == null) {
             synchronized (lock) {
@@ -154,5 +217,4 @@ public enum Factory {
         }
         return trainerIntervalDao;
     }
-
 }
