@@ -16,17 +16,17 @@ public class SQLTransactionTypeDao implements TransactionTypeDao {
 
 
     @Override
-    public void create(String transactionType) {
+    public void create(CreditTransactionType transactionType) {
 
     }
 
     @Override
-    public void delete(String transactionType) {
+    public void delete(CreditTransactionType transactionType) {
 
     }
 
     @Override
-    public void update(String transactionType) {
+    public void update(CreditTransactionType transactionType) {
 
     }
 

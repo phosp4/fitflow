@@ -6,11 +6,11 @@ import java.util.ArrayList;
 
 public interface TransactionTypeDao {
 
-     void create(String transactionType);
+     void create(CreditTransactionType transactionType);
 
-     void delete(String transactionType);
+     void delete(CreditTransactionType transactionType);
 
-     void update(String transactionType);
+     void update(CreditTransactionType transactionType);
 
      CreditTransactionType findById(Long id);
 
