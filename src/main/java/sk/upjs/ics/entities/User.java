@@ -1,7 +1,6 @@
 package sk.upjs.ics.entities;
 
 import lombok.Data;
-import sk.upjs.ics.Factory;
 import sk.upjs.ics.exceptions.CouldNotAccessResultSetException;
 
 import java.sql.ResultSet;

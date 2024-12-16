@@ -30,7 +30,6 @@ public class Role {
 
             return role;
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new CouldNotAccessResultSetException("Could not access ResultSet", e);
         }
     }
