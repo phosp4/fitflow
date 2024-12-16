@@ -14,9 +14,9 @@ import java.util.Set;
 public class User {
     private Long id;
     private Role role;
+    private String email;
     private String firstName;
     private String lastName;
-    private String email;
     private Long creditBalance;
     private String phone;
     private LocalDate birthDate;

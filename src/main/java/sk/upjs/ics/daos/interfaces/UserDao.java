@@ -9,11 +9,13 @@ public interface UserDao {
 
     void loadFromCsv(File file);
 
+    void create(User user, String salt, String password_hash);
+
     void delete(User user);
 
     void update(User user);
 
-    void updatePassword(User user, String password_hash);
+    void updatePassword(User user, String salt, String password_hash);
 
     User findById(Long id);
 

@@ -119,7 +119,7 @@ public class SQLReservationDao implements ReservationDao {
         }
 
         if (reservations.isEmpty()) {
-            throw new NotFoundException("No credit transactions found");
+            throw new NotFoundException("No reservations found");
         }
 
         return reservations;
