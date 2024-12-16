@@ -12,6 +12,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import lombok.Setter;
 import sk.upjs.ics.LocaleManager;
+import sk.upjs.ics.security.Auth;
 
 import java.io.IOException;
 import java.net.URL;
@@ -58,6 +59,8 @@ public class MainLayoutController implements Initializable {
         if (showLogoutAlert()) {
             return;
         }
+
+        Auth.INSTANCE.setPrincipal(null);
 
         SignInViewController controller = SceneLoader.loadScene(
                 stage,

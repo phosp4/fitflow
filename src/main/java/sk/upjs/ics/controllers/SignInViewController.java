@@ -13,7 +13,12 @@ import javafx.scene.input.TouchEvent;
 import javafx.stage.Stage;
 import javafx.scene.control.Hyperlink;
 import lombok.Setter;
+import sk.upjs.ics.Factory;
 import sk.upjs.ics.LocaleManager;
+import sk.upjs.ics.exceptions.AuthenticationException;
+import sk.upjs.ics.security.Auth;
+import sk.upjs.ics.security.AuthDao;
+import sk.upjs.ics.security.Principal;
 
 import java.io.IOException;
 import java.util.ResourceBundle;
@@ -41,6 +46,8 @@ public class SignInViewController {
     @Setter
     private Stage stage;
 
+    private final AuthDao authDao = Factory.INSTANCE.getAuthDao();
+
     @FXML
     void showForgotPasswordView(ActionEvent event) {
 
@@ -48,6 +55,22 @@ public class SignInViewController {
 
     @FXML
     void signIn(ActionEvent event) throws IOException {
+
+        var email = emailTextField.getText();
+        var password = passwordField.getText();
+
+        Principal principal;
+        try {
+            principal = authDao.authenticate(email, password);
+        } catch (AuthenticationException e) {
+//            incorrectPasswordLabel.setText(e.getMessage());
+            System.out.println("Incorrect password");
+            return;
+        }
+
+        Auth.INSTANCE.setPrincipal(principal);
+//        incorrectPasswordLabel.getScene().getWindow().hide();
+
 
         MainLayoutController controller = SceneLoader.loadScene(
                 stage,
