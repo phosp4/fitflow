@@ -23,6 +23,7 @@ public class SQLReservationStatusDao implements ReservationStatusDao {
         this.connection = connection;
     }
 
+
     private final String selectQuery = "SELECT id, name FROM reservation_statuses";
     private final String insertQuery = "INSERT INTO reservation_statuses (name) VALUES (?)";
 

@@ -40,7 +40,8 @@ public class User {
             }
 
             user.setId(id);
-            user.setRole(null);  // todo
+            //user.setRole(Factory.INSTANCE.getRoleDao().findById(rs.getLong("role_id")));
+            user.setRole(null);
             user.setFirstName(rs.getString(prefix + "first_name"));
             user.setLastName(rs.getString(prefix + "last_name"));
             user.setEmail(rs.getString(prefix + "email"));

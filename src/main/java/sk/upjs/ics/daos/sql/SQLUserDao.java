@@ -178,6 +178,18 @@ public class SQLUserDao implements UserDao {
     }
 
     @Override
+    public void updateBalance(User user) {
+        String updateQuery = "UPDATE users SET credit_balance = ? WHERE id = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(updateQuery)) {
+            pstmt.setLong(1, user.getCreditBalance());
+            pstmt.setLong(2, user.getId());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException();
+        }
+    }
+
+    @Override
     public void updatePassword(User user, String salt, String password_hash) {
         if (user == null) {
             throw new IllegalArgumentException("User cannot be null");

@@ -117,7 +117,7 @@ public class SettingsViewController implements Initializable {
         MainLayoutController controller = null;
 
         try {
-            controller = SceneLoader.loadScene(
+            controller = SceneUtils.loadScene(
                     stage,
                     "../views/MainLayout.fxml",
                     LocaleManager.getLocale(),

@@ -6,6 +6,7 @@ import sk.upjs.ics.exceptions.CouldNotAccessDatabaseException;
 import sk.upjs.ics.exceptions.CouldNotAccessFileException;
 import sk.upjs.ics.exceptions.NotFoundException;
 
+import java.sql.Connection;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.*;

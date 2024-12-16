@@ -14,6 +14,7 @@ public interface UserDao {
     void delete(User user);
 
     void update(User user);
+    void updateBalance(User user);
 
     void updatePassword(User user, String salt, String password_hash);
 
