@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 public interface TrainerIntervalDao {
 
+    void loadFromCsv(String file);
+
     void create(TrainerInterval interval);
 
     void delete(TrainerInterval interval);

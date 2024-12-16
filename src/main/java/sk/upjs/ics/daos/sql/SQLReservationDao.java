@@ -252,9 +252,9 @@ public class SQLReservationDao implements ReservationDao {
 
     @Override
     public ArrayList<Reservation> findAll() {
-        try (PreparedStatement pstmt = connection.prepareStatement(selectQuery);
-             ResultSet rs = pstmt.executeQuery()) {
-             return extractFromResultSet(rs);
+        try (PreparedStatement pstmt = connection.prepareStatement(selectQuery)) {
+            ResultSet rs = pstmt.executeQuery();
+            return extractFromResultSet(rs);
         } catch (SQLException e) {
              throw new CouldNotAccessDatabaseException("Database not accessible", e);
         }
