@@ -40,7 +40,7 @@ public class SQLReservationStatusDao implements ReservationStatusDao {
                 }
 
                 try (PreparedStatement pstmt = connection.prepareStatement(insertQuery)) {
-                    pstmt.setString(1, line);
+                    pstmt.setString(1, line.trim()); // can set the whole line since it only cotains the names
                     pstmt.executeUpdate();
                 } catch (SQLException e) {
                     throw new CouldNotAccessDatabaseException("Database not accessible", e);
@@ -49,13 +49,16 @@ public class SQLReservationStatusDao implements ReservationStatusDao {
         } catch (FileNotFoundException e) {
             throw new CouldNotAccessFileException("Could not access file");
         }
-
     }
 
     @Override
     public void create(ReservationStatus status) {
         if (status == null) {
             throw new IllegalArgumentException("Status cannot be null");
+        }
+
+        if (status.getId() != null) {
+            throw new IllegalArgumentException("The status already has an id");
         }
 
         try (PreparedStatement pstmt = connection.prepareStatement(insertQuery)) {
