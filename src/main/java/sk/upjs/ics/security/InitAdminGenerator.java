@@ -4,12 +4,10 @@ import sk.upjs.ics.Factory;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import sk.upjs.ics.entities.User;
-import sk.upjs.ics.exceptions.NotFoundException;
+import sk.upjs.ics.exceptions.CouldNotAccessDatabaseException;
 
 public class InitAdminGenerator {
     public static void main(String[] args) {
@@ -59,8 +57,7 @@ public class InitAdminGenerator {
             pstm.setString(10, salt);
             pstm.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new CouldNotAccessDatabaseException("Database not accessible", e);
         }
 
         System.out.printf("Admin created with username `%s`, email `%s` password: `%s`%n", adminName, adminEmail, adminPassword);

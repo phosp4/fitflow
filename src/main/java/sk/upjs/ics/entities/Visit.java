@@ -6,24 +6,27 @@ import sk.upjs.ics.exceptions.CouldNotAccessResultSetException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
-import java.time.LocalDateTime;
 
 @Data
 public class Visit {
     private Long id;
     private User user;
-    private LocalDateTime checkInTime;
-    private LocalDateTime checkOutTime;
+    private Instant checkInTime;
+    private Instant checkOutTime;
     private String visitSecret;
     private CreditTransaction creditTransaction;
     private Instant createdAt;
     private Instant updatedAt;
 
     public static Visit fromResultSet(ResultSet rs) {
+        return fromResultSet(rs, "");
+    }
+
+    public static Visit fromResultSet(ResultSet rs, String prefix) {
         Visit visit = new Visit();
 
         try {
-            Long id = rs.getLong("id");
+            Long id = rs.getLong(prefix + "id");
 
             if (rs.wasNull()) {
                 return null;
@@ -31,9 +34,9 @@ public class Visit {
 
             visit.setId(id);
             visit.setUser(null);
-            visit.setCheckInTime(rs.getTimestamp("check_in_time").toLocalDateTime());
-            visit.setCheckOutTime(rs.getTimestamp("check_out_time").toLocalDateTime());
-            visit.setVisitSecret(rs.getString("visit_secret"));
+            visit.setCheckInTime(rs.getTimestamp(prefix + "check_in_time").toInstant());
+            visit.setCheckOutTime(rs.getTimestamp(prefix + "check_out_time").toInstant());
+            visit.setVisitSecret(rs.getString(prefix + "visit_secret"));
             visit.setCreditTransaction(null);
 
             return visit;

@@ -2,15 +2,18 @@ package sk.upjs.ics.daos.interfaces;
 
 import sk.upjs.ics.entities.CreditTransactionType;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public interface TransactionTypeDao {
 
-     void create(String transactionType);
+     void loadFromCsv(File file);
 
-     void delete(String transactionType);
+     void create(CreditTransactionType transactionType);
 
-     void update(String transactionType);
+     void delete(CreditTransactionType transactionType);
+
+     void update(CreditTransactionType transactionType);
 
      CreditTransactionType findById(Long id);
 

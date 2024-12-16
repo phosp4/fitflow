@@ -55,8 +55,8 @@ CREATE TABLE IF NOT EXISTS visits
 (
     id             INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id        INTEGER   NOT NULL,
-    check_in_time  DATETIME NOT NULL DEFAULT (CURRENT_TIMESTAMP),
-    check_out_time DATETIME,
+    check_in_time  TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP),
+    check_out_time TIMESTAMP,
     visit_secret   TEXT      NOT NULL,
     credit_transaction_id INTEGER   NOT NULL,
     created_at     TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP),
@@ -151,7 +151,7 @@ INSERT INTO credit_transactions (id, user_id, amount, credit_transaction_type_id
 (200, 20, 20.00, 2, '2023-11-24 10:00:00'),
 (300, 10, 30.00, 1, '2023-11-25 14:00:00');
 
-INSERT INTO visits (id, user_id, check_in_time, check_out_time, visit_secret, credit_transaction_id) VALUES
-(1, 10, '2023-11-23 12:34:56', '2023-11-23 13:45:00', 'secret123', 100),
-(2, 20, '2023-11-24 10:00:00', '2023-11-24 11:30:00', 'secret456', 200),
-(3, 10, '2023-11-25 14:00:00', '2023-11-25 15:15:00', 'secret789', 300);
+INSERT INTO visits (id, user_id, visit_secret, credit_transaction_id) VALUES
+(1, 10, 'secret123', 100),
+(2, 20, 'secret456', 200),
+(3, 10, 'secret789', 300);

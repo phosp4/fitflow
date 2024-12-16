@@ -59,7 +59,6 @@ public class SQLUserDao implements UserDao {
             if (user != null && specialization != null) {
                 user.getTrainerSpecializationSet().add(specialization);
             }
-
         }
 
         if (users.isEmpty()) {

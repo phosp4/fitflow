@@ -18,10 +18,14 @@ public class TrainerInterval {
     private Reservation reservation;
 
     public static TrainerInterval fromResultSet(ResultSet rs) {
+        return fromResultSet(rs, "");
+    }
+
+    public static TrainerInterval fromResultSet(ResultSet rs, String prefix) {
         TrainerInterval trainerInterval = new TrainerInterval();
 
         try {
-            Long id = rs.getLong("id");
+            Long id = rs.getLong(prefix + "id");
 
             if (rs.wasNull()) {
                 return null;
@@ -29,9 +33,9 @@ public class TrainerInterval {
 
             trainerInterval.setId(id);
             trainerInterval.setTrainer(null);
-            trainerInterval.setDay(rs.getDate("day").toLocalDate());
-            trainerInterval.setStartTime(rs.getTime("start_time").toLocalTime());
-            trainerInterval.setEndTime(rs.getTime("end_time").toLocalTime());
+            trainerInterval.setDay(LocalDate.parse(rs.getString(prefix + "day")));
+            trainerInterval.setStartTime(LocalTime.parse(rs.getString(prefix + "start_time")));
+            trainerInterval.setEndTime(LocalTime.parse(rs.getString(prefix + "end_time")));
             trainerInterval.setReservation(null);
 
             return trainerInterval;
