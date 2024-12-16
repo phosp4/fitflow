@@ -22,11 +22,13 @@ public class TrainerInterval {
         TrainerInterval trainerInterval = new TrainerInterval();
 
         try {
+
+            var id = rs.getLong("id");
             if (rs.wasNull()) {
                 return null;
             }
 
-            trainerInterval.setId(rs.getLong("id"));
+            trainerInterval.setId(id);
 
             User user = Factory.INSTANCE.getUserDao().findById(rs.getLong("trainer_id"));
             trainerInterval.setTrainer(user);

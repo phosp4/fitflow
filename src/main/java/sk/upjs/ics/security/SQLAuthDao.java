@@ -32,6 +32,7 @@ public class SQLAuthDao implements AuthDao {
             ArrayList<PrincipalWithPassword> principals = new ArrayList<>();
 
             while (rs.next()) {
+                System.out.println(rs.getString("email"));
                 User user = User.fromResultSet(rs);
 
                 PrincipalWithPassword principalWithPassword = new PrincipalWithPassword();

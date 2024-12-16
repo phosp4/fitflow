@@ -15,11 +15,12 @@ public class ReservationStatus {
         ReservationStatus reservationStatus = new ReservationStatus();
 
         try {
+            var id = rs.getInt("id");
             if (rs.wasNull()) {
                 return null;
             }
 
-            reservationStatus.setId(rs.getInt("id"));
+            reservationStatus.setId(id);
             reservationStatus.setName(rs.getString("name"));
 
             return reservationStatus;

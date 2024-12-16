@@ -19,11 +19,12 @@ public class Specialization {
         Specialization specialization = new Specialization();
 
         try {
+            var id = rs.getLong(prefix + "id");
             if (rs.wasNull()) {
                 return null;
             }
 
-            specialization.setId(rs.getLong(prefix + "id"));
+            specialization.setId(id);
             specialization.setName(rs.getString(prefix + "name"));
 
             return specialization;

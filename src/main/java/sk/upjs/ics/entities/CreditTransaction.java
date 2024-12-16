@@ -24,11 +24,13 @@ public class CreditTransaction {
         CreditTransaction creditTransaction = new CreditTransaction();
 
         try {
+            var id = rs.getLong(prefix + "id");
+
             if (rs.wasNull()) {
                 return null;
             }
 
-            creditTransaction.setId(rs.getLong(prefix + "id"));
+            creditTransaction.setId(id);
             creditTransaction.setUser(null);
             creditTransaction.setCreditTransactionType(null);
             creditTransaction.setAmount(rs.getDouble(prefix + "amount"));

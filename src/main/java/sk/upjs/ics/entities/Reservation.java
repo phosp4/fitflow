@@ -22,11 +22,12 @@ public class Reservation {
         Reservation reservation = new Reservation();
 
         try {
+            var id = rs.getLong("id");
             if (rs.wasNull()) {
                 return null;
             }
 
-            reservation.setId(rs.getLong("id"));
+            reservation.setId(id);
 
             User customer = Factory.INSTANCE.getUserDao().findById(rs.getLong("customer_id"));
             reservation.setCustomer(customer);

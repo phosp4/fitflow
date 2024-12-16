@@ -45,7 +45,7 @@ public class InitAdminGenerator {
 //            throw new RuntimeException(e);
 //        }
 
-        String insertQuery = "INSERT INTO users(role, email, password_hash, first_name, last_name, credit_balance, birth_date, active, id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String insertQuery = "INSERT INTO users(role_id, email, password_hash, first_name, last_name, credit_balance, birth_date, active, id, salt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement pstm = connection.prepareStatement(insertQuery)) {
             pstm.setLong(1, 1); // todo ako to urobit lepsie? treba citat z ciselnika...
             pstm.setString(2, adminEmail);
@@ -56,8 +56,10 @@ public class InitAdminGenerator {
             pstm.setDate(7, new Date(1990, 1, 1));
             pstm.setBoolean(8, true);
             pstm.setLong(9, id);
+            pstm.setString(10, salt);
             pstm.executeUpdate();
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
         }
 

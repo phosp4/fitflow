@@ -24,11 +24,13 @@ public class Visit {
         Visit visit = new Visit();
 
         try {
+
+            var id = rs.getLong("id");
             if (rs.wasNull()) {
                 return null;
             }
 
-            visit.setId(rs.getLong("id"));
+            visit.setId(id);
 
             User user = Factory.INSTANCE.getUserDao().findById(rs.getLong("user_id"));
             visit.setUser(user);

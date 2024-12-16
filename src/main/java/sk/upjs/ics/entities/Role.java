@@ -19,11 +19,13 @@ public class Role {
         Role role = new Role();
 
         try {
+            var id = rs.getLong(prefix + "id");
+
             if (rs.wasNull()) {
                 return null;
             }
 
-            role.setId(rs.getLong(prefix + "id"));
+            role.setId(id);
             role.setName(rs.getString(prefix + "name"));
 
             return role;

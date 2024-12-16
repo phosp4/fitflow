@@ -34,12 +34,13 @@ public class User {
         User user = new User();
 
         try {
+            var id = rs.getLong(prefix + "id");
 
             if (rs.wasNull()) {
                 return null;
             }
-            
-            user.setId(rs.getLong(prefix + "id"));
+
+            user.setId(id);
             user.setRole(null);  // todo
             user.setFirstName(rs.getString(prefix + "first_name"));
             user.setLastName(rs.getString(prefix + "last_name"));

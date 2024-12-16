@@ -19,11 +19,13 @@ public class CreditTransactionType {
         CreditTransactionType creditTransactionType = new CreditTransactionType();
 
         try {
+            var id = rs.getLong(prefix + "id");
+
             if (rs.wasNull()) {
                 return null;
             }
 
-            creditTransactionType.setId(rs.getLong(prefix + "id"));
+            creditTransactionType.setId(id);
             creditTransactionType.setName(rs.getString(prefix + "name"));
 
             return creditTransactionType;
