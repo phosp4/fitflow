@@ -7,6 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
 
+/**
+ * Represents a reservation in the system.
+ */
 @Data
 public class Reservation {
     private Long id;
@@ -17,10 +20,23 @@ public class Reservation {
     private Instant updatedAt;
     private CreditTransaction creditTransaction;
 
+    /**
+     * Creates a Reservation object from the given ResultSet.
+     *
+     * @param rs the ResultSet containing reservation data
+     * @return a Reservation object
+     */
     public static Reservation fromResultSet(ResultSet rs) {
         return fromResultSet(rs, "");
     }
 
+    /**
+     * Creates a Reservation object from the given ResultSet with a specified prefix.
+     *
+     * @param rs the ResultSet containing reservation data
+     * @param prefix the prefix for the column names in the ResultSet
+     * @return a Reservation object
+     */
     public static Reservation fromResultSet(ResultSet rs, String prefix) {
         Reservation reservation = new Reservation();
 
