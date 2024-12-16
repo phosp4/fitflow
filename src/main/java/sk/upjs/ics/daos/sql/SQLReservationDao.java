@@ -197,7 +197,7 @@ public class SQLReservationDao implements ReservationDao {
             pstmt.setLong(4, reservation.getCreditTransaction().getId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible");
+            throw new CouldNotAccessDatabaseException("Database not accessible", e);
         }
     }
 
@@ -212,7 +212,7 @@ public class SQLReservationDao implements ReservationDao {
             pstmt.setLong(1, reservation.getId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible");
+            throw new CouldNotAccessDatabaseException("Database not accessible", e);
         }
     }
 
@@ -232,7 +232,7 @@ public class SQLReservationDao implements ReservationDao {
             pstmt.setLong(5, reservation.getId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible");
+            throw new CouldNotAccessDatabaseException("Database not accessible", e);
         }
     }
 
@@ -243,7 +243,7 @@ public class SQLReservationDao implements ReservationDao {
             ResultSet rs = pstmt.executeQuery();
             return extractFromResultSet(rs).getFirst();
         } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible");
+            throw new CouldNotAccessDatabaseException("Database not accessible", e);
         }
     }
 
@@ -253,7 +253,7 @@ public class SQLReservationDao implements ReservationDao {
              ResultSet rs = pstmt.executeQuery()) {
              return extractFromResultSet(rs);
         } catch (SQLException e) {
-             throw new CouldNotAccessDatabaseException("Database not accessible");
+             throw new CouldNotAccessDatabaseException("Database not accessible", e);
         }
     }
 }

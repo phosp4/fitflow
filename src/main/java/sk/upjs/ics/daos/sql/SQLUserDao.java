@@ -1,6 +1,7 @@
 package sk.upjs.ics.daos.sql;
 
 import sk.upjs.ics.daos.interfaces.UserDao;
+import sk.upjs.ics.exceptions.CouldNotAccessDatabaseException;
 import sk.upjs.ics.exceptions.CouldNotAccessFileException;
 import sk.upjs.ics.exceptions.NotFoundException;
 import sk.upjs.ics.entities.User;
@@ -73,7 +74,7 @@ public class SQLUserDao implements UserDao {
            pstmt.setLong(9, user.getId());
            pstmt.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new CouldNotAccessDatabaseException("Database not accessible", e);
         }
     }
 
@@ -85,7 +86,7 @@ public class SQLUserDao implements UserDao {
             pstmt.setLong(2, user.getId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new CouldNotAccessDatabaseException("Database not accessible", e);
         }
     }
 
@@ -96,7 +97,7 @@ public class SQLUserDao implements UserDao {
             pstmt.setLong(1, user.getId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new CouldNotAccessDatabaseException("Database not accessible", e);
         }
     }
 
@@ -113,7 +114,7 @@ public class SQLUserDao implements UserDao {
             return User.fromResultSet(rs);
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new CouldNotAccessDatabaseException("Database not accessible", e);
         }
     }
 
@@ -133,7 +134,7 @@ public class SQLUserDao implements UserDao {
 
             return users;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new CouldNotAccessDatabaseException("Database not accessible", e);
         }
     }
 

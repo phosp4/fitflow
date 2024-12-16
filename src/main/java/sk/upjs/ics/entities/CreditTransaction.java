@@ -24,7 +24,7 @@ public class CreditTransaction {
         CreditTransaction creditTransaction = new CreditTransaction();
 
         try {
-            var id = rs.getLong(prefix + "id");
+            Long id = rs.getLong(prefix + "id");
 
             if (rs.wasNull()) {
                 return null;
@@ -39,7 +39,7 @@ public class CreditTransaction {
 
             return creditTransaction;
         } catch (SQLException e) {
-            throw new CouldNotAccessResultSetException("Could not access ResultSet");
+            throw new CouldNotAccessResultSetException("Could not access ResultSet", e);
         }
     }
 }

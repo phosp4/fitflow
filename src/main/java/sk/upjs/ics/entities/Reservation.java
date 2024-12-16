@@ -27,6 +27,7 @@ public class Reservation {
 
         try {
             Long id = rs.getLong("id");
+
             if (rs.wasNull()) {
                 return null;
             }
@@ -41,7 +42,7 @@ public class Reservation {
 
             return reservation;
         } catch (SQLException e) {
-            throw new CouldNotAccessResultSetException("Could not access ResultSet");
+            throw new CouldNotAccessResultSetException("Could not access ResultSet", e);
         }
 
     }

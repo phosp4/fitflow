@@ -19,17 +19,17 @@ public class ReservationStatus {
         ReservationStatus reservationStatus = new ReservationStatus();
 
         try {
-            Long id = rs.getLong("id");
+            Long id = rs.getLong(prefix + "id");
             if (rs.wasNull()) {
                 return null;
             }
 
-            reservationStatus.setId(rs.getInt(prefix + "id"));
+            reservationStatus.setId(id);
             reservationStatus.setName(rs.getString(prefix + "name"));
 
             return reservationStatus;
         } catch (SQLException e) {
-            throw new CouldNotAccessResultSetException("Could not access ResultSet");
+            throw new CouldNotAccessResultSetException("Could not access ResultSet", e);
         }
 
     }

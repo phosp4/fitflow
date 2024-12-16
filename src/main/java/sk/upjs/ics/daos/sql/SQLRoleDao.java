@@ -25,7 +25,7 @@ public class SQLRoleDao implements RoleDao {
             pstmt.setString(1, role);
             pstmt.executeUpdate();
         } catch (SQLException e) {
-           throw new CouldNotAccessDatabaseException("Database not accessible");
+           throw new CouldNotAccessDatabaseException("Database not accessible", e);
         }
     }
 
@@ -36,7 +36,7 @@ public class SQLRoleDao implements RoleDao {
             pstmt.setLong(1, role.getId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible");
+            throw new CouldNotAccessDatabaseException("Database not accessible", e);
         }
     }
 
@@ -48,7 +48,7 @@ public class SQLRoleDao implements RoleDao {
             pstmt.setLong(2, role.getId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible");
+            throw new CouldNotAccessDatabaseException("Database not accessible", e);
         }
     }
 
@@ -66,7 +66,7 @@ public class SQLRoleDao implements RoleDao {
             return Role.fromResultSet(rs);
 
         } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible");
+            throw new CouldNotAccessDatabaseException("Database not accessible", e);
         }
     }
 
@@ -86,7 +86,7 @@ public class SQLRoleDao implements RoleDao {
 
             return roles;
         } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible");
+            throw new CouldNotAccessDatabaseException("Database not accessible", e);
         }
     }
 }
