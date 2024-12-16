@@ -21,17 +21,17 @@ public class UserModel {
         return userDao.findById(principal.getId());
     }
 
-    public void updateCurrentUserCreditBalance(long newBalance) {
+    public void updateCurrentUserCreditBalance(long addBalance) {
         // create a transaction first
         CreditTransaction creditTransaction = new CreditTransaction();
         creditTransaction.setUser(getCurrentUser());
-        creditTransaction.setAmount(newBalance);
+        creditTransaction.setAmount(addBalance);
         creditTransaction.setCreditTransactionType(Factory.INSTANCE.getTransactionTypeDao().findById(1L));
         transactionDao.create(creditTransaction); // todo should be working when the creditTransactionType will be done
 
         // now update the balance
         User user = getCurrentUser();
-        user.setCreditBalance(newBalance);
+        user.setCreditBalance(getCurrentUser().getCreditBalance() + addBalance);
         userDao.updateBalance(user);
 
     }

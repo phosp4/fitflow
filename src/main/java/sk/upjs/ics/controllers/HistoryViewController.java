@@ -14,6 +14,7 @@ import sk.upjs.ics.daos.interfaces.VisitDao;
 import sk.upjs.ics.entities.CreditTransaction;
 import sk.upjs.ics.entities.Reservation;
 import sk.upjs.ics.entities.Visit;
+import sk.upjs.ics.models.TransactionModel;
 import sk.upjs.ics.security.Auth;
 import sk.upjs.ics.security.Principal;
 
@@ -25,13 +26,10 @@ import java.util.ResourceBundle;
 public class HistoryViewController implements Initializable {
 
     @FXML
-    private MFXListView<Visit> historyEntriesList;
+    private MFXListView<String> historyEntriesList;
 
     @FXML
-    private MFXListView<String> historyReservationsList;
-
-    @FXML
-    private MFXListView<CreditTransaction> historyTransactionsList;
+    private MFXListView<String> historyTransactionsList;
 
     private final VisitDao visitDao = Factory.INSTANCE.getVisitDao();
     private final CreditTransactionDao creditTransactionDao = Factory.INSTANCE.getCreditTransactionDao();
@@ -44,31 +42,35 @@ public class HistoryViewController implements Initializable {
     }
 
     public void loadHistory() {
-//        List<User> users = userDao.findAll();
-//        historyListView.setItems(FXCollections.observableArrayList(userDao.findAll()));
-        //List<String> a = new ArrayList<>();
-        //a.add("platba 1");
-        //historyTransactionsList.setItems(FXCollections.observableArrayList(a));
+        TransactionModel transactionModel = new TransactionModel();
+        ArrayList<String> transactionHistory = transactionModel.loadTransactionsHistory();
+        historyTransactionsList.setItems(FXCollections.observableArrayList(transactionHistory));
+        //// nacitaj tranzakcie
+        // nacitaj arraylist tranzakcii prisluchajucich userovi
+        // vyfiltruj len tie, ktore su purchases
+        // spracuj ich do spravnej textovej podoby
+        // nahod ich to mfxListu
+        //// to iste s entries, ak uz maju aj vystup
 
-        // load entries
-        ArrayList<Visit> visitHistory = visitDao.findAll();
-
-        // load transactions
-        //ArrayList<CreditTransaction> creditTransactionsHistory = creditTransactionDao.findAll();
-
-        // load reservations which are not active
-        ArrayList<Reservation> reservationsHistory = reservationDao.findAllOfOneUser(principal.getId());
-
-        if (visitHistory != null) {
-            ObservableList<Visit> visitHistoryObservable = FXCollections.observableArrayList(visitHistory);
-            historyEntriesList.setItems(visitHistoryObservable);
-        }
-
-        List<String> reservationHistoryString = new ArrayList<>();
-        for (Reservation reservation : reservationsHistory) {
-            reservationHistoryString.add(reservation.getNoteToTrainer());
-        }
-        // todo
-        historyReservationsList.setItems(FXCollections.observableArrayList(reservationHistoryString));
+//        // load transactions
+//        //ArrayList<CreditTransaction> creditTransactionsHistory = creditTransactionDao.findAll();
+//
+//        // load reservations which are not active
+//        ArrayList<Reservation> reservationsHistory = reservationDao.findAllOfOneUser(principal.getId());
+//
+//        if (reservationsHistory != null) {
+//
+//        }
+//
+////        if (visitHistory != null) {
+////            ObservableList<Visit> visitHistoryObservable = FXCollections.observableArrayList(visitHistory);
+////            historyEntriesList.setItems(visitHistoryObservable);
+////        }
+//
+//        List<String> reservationHistoryString = new ArrayList<>();
+//        for (Reservation reservation : reservationsHistory) {
+//            reservationHistoryString.add(reservation.getNoteToTrainer());
+//        }
+//        historyReservationsList.setItems(FXCollections.observableArrayList(reservationHistoryString));
     }
 }

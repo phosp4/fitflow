@@ -94,7 +94,7 @@ public class WalletViewController implements Initializable {
         Long newBalance = Long.valueOf(userModel.getCurrentUser().getCreditBalance() + creditChoice);
 
         // update credit
-        userModel.updateCurrentUserCreditBalance(newBalance);
+        userModel.updateCurrentUserCreditBalance(creditChoice);
 
         // update credit choice
         setCreditChoice(0);
