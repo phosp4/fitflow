@@ -19,7 +19,8 @@ public class Specialization {
         Specialization specialization = new Specialization();
 
         try {
-            var id = rs.getLong(prefix + "id");
+            Long id = rs.getLong(prefix + "id");
+
             if (rs.wasNull()) {
                 return null;
             }
@@ -29,7 +30,7 @@ public class Specialization {
 
             return specialization;
         } catch (SQLException e) {
-            throw new CouldNotAccessResultSetException("Could not access ResultSet");
+            throw new CouldNotAccessResultSetException("Could not access ResultSet", e);
         }
     }
 }

@@ -24,27 +24,22 @@ public class Visit {
         Visit visit = new Visit();
 
         try {
+            Long id = rs.getLong("id");
 
-            var id = rs.getLong("id");
             if (rs.wasNull()) {
                 return null;
             }
 
             visit.setId(id);
-
-            User user = Factory.INSTANCE.getUserDao().findById(rs.getLong("user_id"));
-            visit.setUser(user);
-
+            visit.setUser(null);
             visit.setCheckInTime(rs.getTimestamp("check_in_time").toLocalDateTime());
             visit.setCheckOutTime(rs.getTimestamp("check_out_time").toLocalDateTime());
             visit.setVisitSecret(rs.getString("visit_secret"));
-
-            CreditTransaction creditTransaction = Factory.INSTANCE.getCreditTransactionDao().findById(rs.getLong("credit_transaction_id"));
-            visit.setCreditTransaction(creditTransaction);
+            visit.setCreditTransaction(null);
 
             return visit;
         } catch (SQLException e) {
-            throw new CouldNotAccessResultSetException("Could not access ResultSet");
+            throw new CouldNotAccessResultSetException("Could not access ResultSet", e);
         }
     }
 }

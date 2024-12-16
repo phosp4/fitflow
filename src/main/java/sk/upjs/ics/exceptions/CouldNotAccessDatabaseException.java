@@ -4,4 +4,8 @@ public class CouldNotAccessDatabaseException extends RuntimeException {
     public CouldNotAccessDatabaseException(String message) {
         super(message);
     }
+
+    public CouldNotAccessDatabaseException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

@@ -157,7 +157,7 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
             pstmt.setLong(3, creditTransaction.getCreditTransactionType().getId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible");
+            throw new CouldNotAccessDatabaseException("Database not accessible", e);
         }
 
     }
@@ -174,7 +174,7 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
             pstmt.setLong(1, creditTransaction.getId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible");
+            throw new CouldNotAccessDatabaseException("Database not accessible", e);
         }
     }
 
@@ -193,7 +193,7 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
             pstmt.setLong(4, creditTransaction.getId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible");
+            throw new CouldNotAccessDatabaseException("Database not accessible", e);
         }
     }
 
@@ -204,7 +204,7 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
             ResultSet rs = pstmt.executeQuery();
             return extractFromResultSet(rs).getFirst();
         } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible");
+            throw new CouldNotAccessDatabaseException("Database not accessible", e);
         }
     }
 
@@ -214,7 +214,7 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
            ResultSet rs = stmt.executeQuery(selectQuery);
            return extractFromResultSet(rs);
        } catch (SQLException e) {
-           throw new CouldNotAccessDatabaseException("Database not accessible");
+           throw new CouldNotAccessDatabaseException("Database not accessible", e);
        }
     }
 }
