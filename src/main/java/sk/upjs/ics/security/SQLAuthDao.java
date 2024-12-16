@@ -3,7 +3,7 @@ package sk.upjs.ics.security;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import sk.upjs.ics.entities.User;
 import sk.upjs.ics.exceptions.AuthenticationException;
-import sk.upjs.ics.exceptions.NotFoundException;
+import sk.upjs.ics.exceptions.CouldNotAccessDatabaseException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -72,7 +72,7 @@ public class SQLAuthDao implements AuthDao {
             return principal.getPrincipal();
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new CouldNotAccessDatabaseException("Database not accessible", e);
         }
     }
 }

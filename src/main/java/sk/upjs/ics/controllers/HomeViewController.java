@@ -11,18 +11,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 import sk.upjs.ics.Factory;
-import sk.upjs.ics.daos.interfaces.UserDao;
 import sk.upjs.ics.daos.interfaces.VisitDao;
 import sk.upjs.ics.entities.User;
 import sk.upjs.ics.entities.Visit;
-import com.google.gson.Gson;
-import java.util.Base64;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.UUID;
 
 public class HomeViewController {
 
@@ -61,7 +56,7 @@ public class HomeViewController {
         Visit visit = new Visit();
         visit.setUser(new User()/*current user*/); // todo zistit usera
         visit.setVisitSecret(visitSecret);
-        visit.setCheckInTime(startTime.toLocalDateTime()); // mozno sa da jednoduchsie
+        visit.setCheckInTime(startTime.toInstant()); // mozno sa da jednoduchsie
 
         // poslat do databazy
 //        visitDao.create(visit); // todo mal by nastavit aj timestamp, alebo stiahnut timestamp z db
