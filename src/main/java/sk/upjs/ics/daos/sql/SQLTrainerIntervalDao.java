@@ -189,11 +189,6 @@ public class SQLTrainerIntervalDao implements TrainerIntervalDao {
     }
 
     @Override
-    public void loadFromCsv(String file) {
-
-    }
-
-    @Override
     public void create(TrainerInterval interval) {
         if (interval == null) {
             throw new IllegalArgumentException("Interval cannot be null");
