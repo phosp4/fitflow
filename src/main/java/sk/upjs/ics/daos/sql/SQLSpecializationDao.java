@@ -23,7 +23,7 @@ public class SQLSpecializationDao implements SpecializationDao {
         this.connection = connection;
     }
 
-    private final String selectQuery = "SELECT id, name FROM roles";
+    private final String selectQuery = "SELECT id, name FROM trainer_specializations";
     private final String insertQuery = "INSERT INTO trainer_specializations (name) VALUES (?)";
 
     @Override
