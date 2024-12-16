@@ -4,11 +4,13 @@ import sk.upjs.ics.daos.interfaces.ReservationStatusDao;
 import sk.upjs.ics.entities.ReservationStatus;
 import sk.upjs.ics.exceptions.CouldNotAccessDatabaseException;
 import sk.upjs.ics.exceptions.CouldNotAccessFileException;
+import sk.upjs.ics.exceptions.NotFoundException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -21,6 +23,7 @@ public class SQLReservationStatusDao implements ReservationStatusDao {
         this.connection = connection;
     }
 
+    private final String selectQuery = "SELECT id, name FROM reservation_statuses";
     private final String insertQuery = "INSERT INTO reservation_statuses (name) VALUES (?)";
 
     @Override
@@ -50,27 +53,84 @@ public class SQLReservationStatusDao implements ReservationStatusDao {
     }
 
     @Override
-    public void create(String status) {
+    public void create(ReservationStatus status) {
+        if (status == null) {
+            throw new IllegalArgumentException("Status cannot be null");
+        }
 
+        try (PreparedStatement pstmt = connection.prepareStatement(insertQuery)) {
+            pstmt.setString(1, status.getName());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new CouldNotAccessDatabaseException("Database not accessible", e);
+        }
     }
 
     @Override
-    public void delete(String status) {
+    public void delete(ReservationStatus status) {
+        if (status == null) {
+            throw new IllegalArgumentException("Status cannot be null");
+        }
 
+        String deleteQuery = "DELETE FROM reservation_statuses WHERE id = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(deleteQuery)) {
+            pstmt.setLong(1, status.getId());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new CouldNotAccessDatabaseException("Database not accessible", e);
+        }
     }
 
     @Override
-    public void update(String status) {
+    public void update(ReservationStatus status) {
+        if (status == null) {
+            throw new IllegalArgumentException("Status cannot be null");
+        }
 
+        String updateQuery = "UPDATE reservation_statuses SET name = ? WHERE id = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(updateQuery)) {
+            pstmt.setString(1, status.getName());
+            pstmt.setLong(2, status.getId());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new CouldNotAccessDatabaseException("Database not accessible", e);
+        }
     }
 
     @Override
     public ReservationStatus findById(Long id) {
-        return null;
+        try(PreparedStatement pstmt = connection.prepareStatement(selectQuery + " WHERE id = ?")) {
+            pstmt.setLong(1, id);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (!rs.next()) {
+                throw new NotFoundException("Reservation status with id " + id + " not found");
+            }
+
+            return ReservationStatus.fromResultSet(rs);
+        } catch (SQLException e) {
+            throw new CouldNotAccessDatabaseException("Database not accessible", e);
+        }
     }
 
     @Override
     public ArrayList<ReservationStatus> findAll() {
-        return null;
+        ArrayList<ReservationStatus> reservationStatuses = new ArrayList<>();
+
+        try(PreparedStatement pstmt = connection.prepareStatement(selectQuery)) {
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                reservationStatuses.add(ReservationStatus.fromResultSet(rs));
+            }
+
+            if (reservationStatuses.isEmpty()) {
+                throw new NotFoundException("No reservation statuses found");
+            }
+
+            return reservationStatuses;
+        } catch (SQLException e) {
+            throw new CouldNotAccessDatabaseException("Database not accessible", e);
+        }
     }
 }

@@ -9,11 +9,11 @@ public interface ReservationStatusDao {
 
     void loadFromCsv(File file);
 
-    void create(String status);
+    void create(ReservationStatus status);
 
-    void delete(String status);
+    void delete(ReservationStatus status);
 
-    void update(String status);
+    void update(ReservationStatus status);
 
     ReservationStatus findById(Long id);
 
