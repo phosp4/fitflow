@@ -1,7 +1,6 @@
 package sk.upjs.ics.entities;
 
 import lombok.Data;
-import sk.upjs.ics.Factory;
 import sk.upjs.ics.exceptions.CouldNotAccessResultSetException;
 
 import java.sql.ResultSet;
@@ -22,27 +21,22 @@ public class TrainerInterval {
         TrainerInterval trainerInterval = new TrainerInterval();
 
         try {
+            Long id = rs.getLong("id");
 
-            var id = rs.getLong("id");
             if (rs.wasNull()) {
                 return null;
             }
 
             trainerInterval.setId(id);
-
-            User user = Factory.INSTANCE.getUserDao().findById(rs.getLong("trainer_id"));
-            trainerInterval.setTrainer(user);
-
+            trainerInterval.setTrainer(null);
             trainerInterval.setDay(rs.getDate("day").toLocalDate());
             trainerInterval.setStartTime(rs.getTime("start_time").toLocalTime());
             trainerInterval.setEndTime(rs.getTime("end_time").toLocalTime());
-
-            Reservation reservation = Factory.INSTANCE.getReservationDao().findById(rs.getLong("reservation_id"));
-            trainerInterval.setReservation(reservation);
+            trainerInterval.setReservation(null);
 
             return trainerInterval;
         } catch (SQLException e) {
-            throw new CouldNotAccessResultSetException("Could not access ResultSet");
+            throw new CouldNotAccessResultSetException("Could not access ResultSet", e);
         }
     }
 }

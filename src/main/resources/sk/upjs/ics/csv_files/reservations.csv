@@ -1,4 +1,4 @@
-id,customer_id,status,note_to_trainer,created_at,updated_at,credit_transaction_id
-1,10,pending,Please focus on core strength exercises.,2023-11-23 12:34:56,2023-11-23 12:34:56,100
-2,20,confirmed,No special requests.,2023-11-24 10:00:00,2023-11-24 10:00:00,200
-3,10,canceled,Canceled due to illness.,2023-11-25 14:00:00,2023-11-25 14:00:00,300
+customer_id,status,note_to_trainer,created_at,updated_at,credit_transaction_id
+10,pending,Please focus on core strength exercises.,2023-11-23 12:34:56,2023-11-23 12:34:56,100
+20,confirmed,No special requests.,2023-11-24 10:00:00,2023-11-24 10:00:00,200
+10,canceled,Canceled due to illness.,2023-11-25 14:00:00,2023-11-25 14:00:00,300

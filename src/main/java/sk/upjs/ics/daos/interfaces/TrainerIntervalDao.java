@@ -2,6 +2,8 @@ package sk.upjs.ics.daos.interfaces;
 
 import sk.upjs.ics.entities.TrainerInterval;
 
+import java.util.ArrayList;
+
 public interface TrainerIntervalDao {
 
     void create(TrainerInterval interval);
@@ -12,5 +14,5 @@ public interface TrainerIntervalDao {
 
     TrainerInterval findById(Long id);
 
-    Iterable<TrainerInterval> findAll();
+    ArrayList<TrainerInterval> findAll();
 }

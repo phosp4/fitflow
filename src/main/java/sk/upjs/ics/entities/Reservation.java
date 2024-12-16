@@ -1,7 +1,6 @@
 package sk.upjs.ics.entities;
 
 import lombok.Data;
-import sk.upjs.ics.Factory;
 import sk.upjs.ics.exceptions.CouldNotAccessResultSetException;
 
 import java.sql.ResultSet;
@@ -19,32 +18,31 @@ public class Reservation {
     private CreditTransaction creditTransaction;
 
     public static Reservation fromResultSet(ResultSet rs) {
+        return fromResultSet(rs, "");
+    }
+
+    public static Reservation fromResultSet(ResultSet rs, String prefix) {
         Reservation reservation = new Reservation();
 
         try {
-            var id = rs.getLong("id");
+            Long id = rs.getLong("id");
+
             if (rs.wasNull()) {
                 return null;
             }
 
             reservation.setId(id);
-
-            User customer = Factory.INSTANCE.getUserDao().findById(rs.getLong("customer_id"));
-            reservation.setCustomer(customer);
-
-            ReservationStatus reservationStatus = Factory.INSTANCE.getReservationStatusDao().findById(rs.getLong("reservation_status_id"));
-            reservation.setReservationStatus(reservationStatus);
-
-            reservation.setNoteToTrainer(rs.getString("note_to_trainer"));
-            reservation.setCreatedAt(rs.getTimestamp("created_at").toInstant());
-            reservation.setUpdatedAt(rs.getTimestamp("updated_at").toInstant());
-
-            CreditTransaction creditTransaction = Factory.INSTANCE.getCreditTransactionDao().findById(rs.getLong("credit_transaction_id"));
-            reservation.setCreditTransaction(creditTransaction);
+            reservation.setCustomer(null);
+            reservation.setReservationStatus(null);
+            reservation.setNoteToTrainer(rs.getString(prefix + "note"));
+            reservation.setCreatedAt(rs.getTimestamp(prefix + "created_at").toInstant());
+            reservation.setUpdatedAt(rs.getTimestamp(prefix + "updated_at").toInstant());
+            reservation.setCreditTransaction(null);
 
             return reservation;
         } catch (SQLException e) {
-            throw new CouldNotAccessResultSetException("Could not access ResultSet");
+            throw new CouldNotAccessResultSetException("Could not access ResultSet", e);
         }
+
     }
 }

@@ -19,7 +19,7 @@ public class Role {
         Role role = new Role();
 
         try {
-            var id = rs.getLong(prefix + "id");
+            Long id = rs.getLong(prefix + "id");
 
             if (rs.wasNull()) {
                 return null;
@@ -30,8 +30,7 @@ public class Role {
 
             return role;
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new CouldNotAccessResultSetException("Could not access ResultSet");
+            throw new CouldNotAccessResultSetException("Could not access ResultSet", e);
         }
     }
 

@@ -3,6 +3,7 @@ package sk.upjs.ics.daos.interfaces;
 import sk.upjs.ics.entities.Reservation;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public interface ReservationDao {
 
@@ -16,5 +17,5 @@ public interface ReservationDao {
 
     Reservation findById(Long id);
 
-    Iterable<Reservation> findAll();
+    ArrayList<Reservation> findAll();
 }

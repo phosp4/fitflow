@@ -2,6 +2,8 @@ package sk.upjs.ics.daos.interfaces;
 
 import sk.upjs.ics.entities.Role;
 
+import java.util.ArrayList;
+
 public interface RoleDao {
 
     void create(String role);
@@ -12,5 +14,5 @@ public interface RoleDao {
 
     Role findById(Long id);
 
-    Iterable<Role> findAll();
+    ArrayList<Role> findAll();
 }

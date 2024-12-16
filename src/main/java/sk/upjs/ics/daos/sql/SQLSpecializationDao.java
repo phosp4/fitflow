@@ -4,6 +4,7 @@ import sk.upjs.ics.daos.interfaces.SpecializationDao;
 import sk.upjs.ics.entities.Specialization;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 
 public class SQLSpecializationDao implements SpecializationDao {
 
@@ -34,7 +35,7 @@ public class SQLSpecializationDao implements SpecializationDao {
     }
 
     @Override
-    public Iterable<Specialization> findAll() {
+    public ArrayList<Specialization> findAll() {
         return null;
     }
 }
