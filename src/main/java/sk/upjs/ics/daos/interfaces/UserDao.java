@@ -3,6 +3,7 @@ package sk.upjs.ics.daos.interfaces;
 import sk.upjs.ics.entities.User;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public interface UserDao {
 
@@ -16,5 +17,5 @@ public interface UserDao {
 
     User findById(Long id);
 
-    Iterable<User> findAll();
+    ArrayList<User> findAll();
 }

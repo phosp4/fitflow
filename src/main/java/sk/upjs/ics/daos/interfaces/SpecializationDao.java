@@ -2,6 +2,8 @@ package sk.upjs.ics.daos.interfaces;
 
 import sk.upjs.ics.entities.Specialization;
 
+import java.util.ArrayList;
+
 public interface SpecializationDao {
 
     void create(Specialization specialization);
@@ -12,5 +14,5 @@ public interface SpecializationDao {
 
     Specialization findById(Long id);
 
-    Iterable<Specialization> findAll();
+    ArrayList<Specialization> findAll();
 }

@@ -4,6 +4,7 @@ import sk.upjs.ics.daos.interfaces.TrainerIntervalDao;
 import sk.upjs.ics.entities.TrainerInterval;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 
 public class SQLTrainerIntervalDao implements TrainerIntervalDao {
 
@@ -34,7 +35,7 @@ public class SQLTrainerIntervalDao implements TrainerIntervalDao {
     }
 
     @Override
-    public Iterable<TrainerInterval> findAll() {
+    public ArrayList<TrainerInterval> findAll() {
         return null;
     }
 }

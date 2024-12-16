@@ -3,6 +3,7 @@ package sk.upjs.ics.daos.interfaces;
 import sk.upjs.ics.entities.CreditTransaction;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public interface CreditTransactionDao {
 
@@ -16,5 +17,5 @@ public interface CreditTransactionDao {
 
     CreditTransaction findById(Long id);
 
-    Iterable<CreditTransaction> findAll();
+    ArrayList<CreditTransaction> findAll();
 }

@@ -2,6 +2,8 @@ package sk.upjs.ics.daos.interfaces;
 
 import sk.upjs.ics.entities.Visit;
 
+import java.util.ArrayList;
+
 public interface VisitDao {
 
     void create(Visit visit);
@@ -12,5 +14,5 @@ public interface VisitDao {
 
     Visit findById(Long id);
 
-    Iterable<Visit> findAll();
+    ArrayList<Visit> findAll();
 }
