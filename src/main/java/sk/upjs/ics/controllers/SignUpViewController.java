@@ -6,17 +6,12 @@ import io.github.palexdev.materialfx.controls.MFXPasswordField;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import lombok.Setter;
 import javafx.scene.control.Hyperlink;
 import sk.upjs.ics.LocaleManager;
 
 import java.io.IOException;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 public class SignUpViewController {
 
@@ -53,7 +48,7 @@ public class SignUpViewController {
     @FXML
     void openSignInView(ActionEvent event) throws IOException {
 
-        SignInViewController controller = SceneLoader.loadScene(
+        SignInViewController controller = SceneUtils.loadScene(
                 stage,
                 "../views/SignInView.fxml",
                 LocaleManager.getLocale(),

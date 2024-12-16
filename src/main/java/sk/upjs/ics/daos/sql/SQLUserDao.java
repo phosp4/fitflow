@@ -19,7 +19,7 @@ public class SQLUserDao implements UserDao {
         this.connection = connection;
     }
 
-    private final String selectQuery = "SELECT role, email, first_name, last_name, credit_balance, phone, birth_date, active FROM users";
+    private final String selectQuery = "SELECT id, role_id, email, first_name, last_name, credit_balance, phone, birth_date, active FROM users";
 
     @Override
     public void loadFromCsv(File file) {
@@ -36,7 +36,7 @@ public class SQLUserDao implements UserDao {
 
                 String[] parts = line.split(",");
 
-                String insertQuery = "INSERT INTO users(role, email, password_hash, first_name, last_name, credit_balance, phone, birth_date, active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                String insertQuery = "INSERT INTO users(role_id, email, password_hash, first_name, last_name, credit_balance, phone, birth_date, active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 try (PreparedStatement pstm = connection.prepareStatement(insertQuery)) {
                     pstm.setLong(1, Long.parseLong(parts[0]));
                     pstm.setString(2, parts[1]);
@@ -59,7 +59,7 @@ public class SQLUserDao implements UserDao {
     @Override
     public void update(User user) {
         String updateQuery = "UPDATE users SET " +
-                "role = ?, email = ?, first_name = ?, last_name = ?, credit_balance = ?, phone = ?, birth_date = ?, active = ?" +
+                "role_id = ?, email = ?, first_name = ?, last_name = ?, credit_balance = ?, phone = ?, birth_date = ?, active = ?" +
                 "WHERE id = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(updateQuery)) {
            pstmt.setLong(1, user.getRole().getId());
@@ -74,6 +74,18 @@ public class SQLUserDao implements UserDao {
            pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void updateBalance(User user) {
+        String updateQuery = "UPDATE users SET credit_balance = ? WHERE id = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(updateQuery)) {
+            pstmt.setLong(1, user.getCreditBalance());
+            pstmt.setLong(2, user.getId());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException();
         }
     }
 
@@ -104,12 +116,15 @@ public class SQLUserDao implements UserDao {
     public User findById(Long id) {
         try (PreparedStatement pstmt = connection.prepareStatement(selectQuery + " WHERE id = ?")) {
             pstmt.setLong(1, id);
+
+            System.out.println("statement set");
             ResultSet rs = pstmt.executeQuery();
 
+            System.out.println("executed");
             if (!rs.next()) {
                 throw new NotFoundException("User with id " + id + " not found");
             }
-
+            System.out.println("checked");
             return User.fromResultSet(rs);
 
         } catch (SQLException e) {

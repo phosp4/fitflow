@@ -5,9 +5,6 @@ import io.github.palexdev.materialfx.controls.MFXPasswordField;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.TouchEvent;
 import javafx.stage.Stage;
@@ -21,7 +18,6 @@ import sk.upjs.ics.security.AuthDao;
 import sk.upjs.ics.security.Principal;
 
 import java.io.IOException;
-import java.util.ResourceBundle;
 
 public class SignInViewController {
 
@@ -72,7 +68,7 @@ public class SignInViewController {
 //        incorrectPasswordLabel.getScene().getWindow().hide();
 
 
-        MainLayoutController controller = SceneLoader.loadScene(
+        MainLayoutController controller = SceneUtils.loadScene(
                 stage,
                 "../views/MainLayout.fxml",
                 LocaleManager.getLocale(),
@@ -90,7 +86,7 @@ public class SignInViewController {
 
     @FXML
     void openSignUpView(ActionEvent event) throws IOException {
-        SignUpViewController controller = SceneLoader.loadScene(
+        SignUpViewController controller = SceneUtils.loadScene(
                 stage,
                 "../views/SignUpView.fxml",
                 LocaleManager.getLocale(),
