@@ -1,6 +1,7 @@
 package sk.upjs.ics.daos.sql;
 
 import sk.upjs.ics.daos.interfaces.UserDao;
+import sk.upjs.ics.exceptions.CouldNotAccessFileException;
 import sk.upjs.ics.exceptions.NotFoundException;
 import sk.upjs.ics.entities.User;
 
@@ -53,7 +54,7 @@ public class SQLUserDao implements UserDao {
                 }
             }
         } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            throw new CouldNotAccessFileException("Could not access file");
         }
     }
     @Override
