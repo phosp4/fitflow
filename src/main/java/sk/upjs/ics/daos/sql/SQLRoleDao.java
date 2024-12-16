@@ -12,10 +12,19 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * SQLRoleDao is an implementation of the RoleDao interface
+ * that provides methods to interact with the roles in the database.
+ */
 public class SQLRoleDao implements RoleDao {
 
     private final Connection connection;
 
+    /**
+     * Constructs a new SQLRoleDao with the specified database connection.
+     *
+     * @param connection the database connection
+     */
     public SQLRoleDao(Connection connection) {
         this.connection = connection;
     }
@@ -23,6 +32,13 @@ public class SQLRoleDao implements RoleDao {
     private final String selectQuery = "SELECT id, name FROM roles";
     private final String insertQuery = "INSERT INTO roles (name) VALUES (?)";
 
+    /**
+     * Loads roles from a CSV file and inserts them into the database.
+     *
+     * @param file the CSV file containing role data
+     * @throws CouldNotAccessFileException if the file cannot be accessed
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public void loadFromCsv(File file) {
         try (Scanner scanner = new Scanner(file)) {
@@ -48,14 +64,25 @@ public class SQLRoleDao implements RoleDao {
         }
     }
 
+    /**
+     * Creates a new role in the database.
+     *
+     * @param role the role to create
+     * @throws IllegalArgumentException if the role or its name is null
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public void create(Role role) {
         if (role == null) {
             throw new IllegalArgumentException("Role cannot be null");
         }
 
-        if (role.getId() != null) {
-            throw new IllegalArgumentException("The role already has an id");
+        if (role.getName() == null) {
+            throw new IllegalArgumentException("Role name cannot be null");
+        }
+
+        if (findById(role.getId()) != null) {
+            throw new IllegalArgumentException("Role with id " + role.getId() + " already exists");
         }
 
         try(PreparedStatement pstmt = connection.prepareStatement(insertQuery)) {
@@ -66,10 +93,26 @@ public class SQLRoleDao implements RoleDao {
         }
     }
 
+    /**
+     * Deletes a role from the database.
+     *
+     * @param role the role to delete
+     * @throws IllegalArgumentException if the role or its ID is null
+     * @throws NotFoundException if the role with the specified ID is not found
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public void delete(Role role) {
         if (role == null) {
             throw new IllegalArgumentException("Role cannot be null");
+        }
+
+        if (role.getId() == null) {
+            throw new IllegalArgumentException("Role id cannot be null");
+        }
+
+        if (findById(role.getId()) == null) {
+            throw new NotFoundException("Role with id " + role.getId() + " not found");
         }
 
         String deleteQuery = "DELETE FROM roles WHERE id = ?";
@@ -82,10 +125,30 @@ public class SQLRoleDao implements RoleDao {
         }
     }
 
+    /**
+     * Updates an existing role in the database.
+     *
+     * @param role the role to update
+     * @throws IllegalArgumentException if the role or its ID is null
+     * @throws NotFoundException if the role with the specified ID is not found
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public void update(Role role) {
         if (role == null) {
             throw new IllegalArgumentException("Role cannot be null");
+        }
+
+        if (role.getId() == null) {
+            throw new IllegalArgumentException("Role id cannot be null");
+        }
+
+        if (role.getName() == null) {
+            throw new IllegalArgumentException("Role name cannot be null");
+        }
+
+        if (findById(role.getId()) == null) {
+            throw new NotFoundException("Role with id " + role.getId() + " not found");
         }
 
         String updateQuery = "UPDATE roles SET name = ? WHERE id = ?";
@@ -99,8 +162,21 @@ public class SQLRoleDao implements RoleDao {
         }
     }
 
+    /**
+     * Finds a role by its ID.
+     *
+     * @param id the ID of the role to find
+     * @return the role with the specified ID
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     * @throws IllegalArgumentException if the ID is null
+     * @throws NotFoundException if the role with the specified ID is not found
+     */
     @Override
     public Role findById(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID cannot be null");
+        }
+
         try (PreparedStatement pstmt = connection.prepareStatement(selectQuery + " WHERE id = ?")) {
             pstmt.setLong(1, id);
 
@@ -117,6 +193,13 @@ public class SQLRoleDao implements RoleDao {
         }
     }
 
+    /**
+     * Finds all roles in the database.
+     *
+     * @return a list of all roles
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     * @throws NotFoundException if no roles are found
+     */
     @Override
     public ArrayList<Role> findAll() {
         ArrayList<Role> roles = new ArrayList<>();

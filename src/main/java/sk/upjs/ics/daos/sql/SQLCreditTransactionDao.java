@@ -13,14 +13,30 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+/**
+ * SQL implementation of the CreditTransactionDao interface.
+ */
 public class SQLCreditTransactionDao implements CreditTransactionDao {
 
     private final Connection connection;
 
+    /**
+     * Constructs a new SQLCreditTransactionDao with the specified database connection.
+     *
+     * @param connection the database connection
+     */
     public SQLCreditTransactionDao(Connection connection) {
         this.connection = connection;
     }
-    
+
+
+    /**
+     * Extracts a list of CreditTransaction objects from the given ResultSet.
+     *
+     * @param rs the ResultSet to extract data from
+     * @return a list of CreditTransaction objects
+     * @throws SQLException if a database access error occurs
+     */
     private ArrayList<CreditTransaction> extractFromResultSet(ResultSet rs) throws SQLException {
         ArrayList<CreditTransaction> creditTransactions = new ArrayList<>();
 
@@ -109,6 +125,13 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
     private final String selectQuery = "SELECT " + creditTransactionColumns + ", " + userColumns + ", " + roleColumns + ", " + specializationColumns + ", " + creditTransactionTypeColumns + " FROM credit_transactions ct " + joins;
     private final String insertQuery = "INSERT INTO credit_transactions (user_id, amount, credit_transaction_type_id) VALUES (?, ?, ?)";
 
+    /**
+     * Loads credit transactions from a CSV file and inserts them into the database.
+     *
+     * @param file the CSV file to load data from
+     * @throws CouldNotAccessFileException if the file cannot be accessed
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public void loadFromCsv(File file) {
         try (Scanner scanner = new Scanner(file)) {
@@ -138,14 +161,33 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
         }
     }
 
+    /**
+     * Creates a new credit transaction in the database.
+     *
+     * @param creditTransaction the credit transaction to create
+     * @throws IllegalArgumentException if the credit transaction or its user or type is null, or if the user or type does not have an ID
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public void create(CreditTransaction creditTransaction) {
         if (creditTransaction == null) {
             throw new IllegalArgumentException("Attendance cannot be null");
         }
-        
-        if (creditTransaction.getId() != null) {
-            throw new IllegalArgumentException("The credit transaction already has an id");
+
+        if (creditTransaction.getUser() == null) {
+            throw new IllegalArgumentException("The user cannot be null");
+        }
+
+        if (creditTransaction.getUser().getId() == null) {
+            throw new IllegalArgumentException("The user does not have an id");
+        }
+
+        if (creditTransaction.getCreditTransactionType().getId() == null) {
+            throw new IllegalArgumentException("The credit transaction type does not have an id");
+        }
+
+        if (findById(creditTransaction.getId()) != null) {
+            throw new IllegalArgumentException("Credit transaction with id " + creditTransaction.getId() + " already exists");
         }
 
         try (PreparedStatement pstmt = connection.prepareStatement(insertQuery)) {
@@ -156,13 +198,28 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
         } catch (SQLException e) {
             throw new CouldNotAccessDatabaseException("Database not accessible", e);
         }
-
     }
 
+    /**
+     * Deletes a credit transaction from the database.
+     *
+     * @param creditTransaction the credit transaction to delete
+     * @throws IllegalArgumentException if the credit transaction or its ID is null
+     * @throws NotFoundException if the credit transaction does not exist
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public void delete(CreditTransaction creditTransaction) {
         if (creditTransaction == null) {
             throw new IllegalArgumentException("Attendance cannot be null");
+        }
+
+        if (creditTransaction.getId() == null) {
+            throw new IllegalArgumentException("The credit transaction does not have an id");
+        }
+
+        if (findById(creditTransaction.getId()) == null) {
+            throw new NotFoundException("The credit transaction does not exist");
         }
 
         String deleteQuery = "DELETE FROM credit_transactions WHERE id = ?";
@@ -175,10 +232,38 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
         }
     }
 
+    /**
+     * Updates an existing credit transaction in the database.
+     *
+     * @param creditTransaction the credit transaction to update
+     * @throws IllegalArgumentException if the credit transaction or its ID, user, or type is null, or if the user or type does not have an ID
+     * @throws NotFoundException if the credit transaction does not exist
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public void update(CreditTransaction creditTransaction) {
         if (creditTransaction == null) {
             throw new IllegalArgumentException("Attendance cannot be null");
+        }
+
+        if (creditTransaction.getId() == null) {
+            throw new IllegalArgumentException("The credit transaction does not have an id");
+        }
+
+        if (findById(creditTransaction.getId()) == null) {
+            throw new NotFoundException("The credit transaction does not exist");
+        }
+
+        if (creditTransaction.getUser() == null) {
+            throw new IllegalArgumentException("The user cannot be null");
+        }
+
+        if (creditTransaction.getUser().getId() == null) {
+            throw new IllegalArgumentException("The user does not have an id");
+        }
+
+        if (creditTransaction.getCreditTransactionType().getId() == null) {
+            throw new IllegalArgumentException("The credit transaction type does not have an id");
         }
 
         String updateQuery = "UPDATE credit_transactions SET user_id = ?, amount = ?, credit_transaction_type_id = ? WHERE id = ?";
@@ -194,8 +279,20 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
         }
     }
 
+    /**
+     * Finds a credit transaction by its ID.
+     *
+     * @param id the ID of the credit transaction to find
+     * @return the found credit transaction, or null if not found
+     * @throws IllegalArgumentException if the ID is null
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public CreditTransaction findById(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID cannot be null");
+        }
+
         try (PreparedStatement pstmt = connection.prepareStatement(selectQuery + " WHERE ct_id = ?")) {
             pstmt.setLong(1, id);
             ResultSet rs = pstmt.executeQuery();
@@ -205,6 +302,12 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
         }
     }
 
+    /**
+     * Finds all credit transactions in the database.
+     *
+     * @return a list of all credit transactions
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public ArrayList<CreditTransaction> findAll() {
        try (Statement stmt = connection.createStatement()) {

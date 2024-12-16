@@ -14,14 +14,30 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+/**
+ * SQLTrainerIntervalDao is an implementation of the TrainerIntervalDao interface
+ * that provides methods to interact with the trainer intervals in the database.
+ */
 public class SQLTrainerIntervalDao implements TrainerIntervalDao {
 
     private final Connection connection;
 
+    /**
+     * Constructs a new SQLTrainerIntervalDao with the specified database connection.
+     *
+     * @param connection the database connection
+     */
     public SQLTrainerIntervalDao(Connection connection) {
         this.connection = connection;
     }
 
+    /**
+     * Extracts trainer intervals from the given ResultSet.
+     *
+     * @param rs the ResultSet containing trainer interval data
+     * @return a list of trainer intervals
+     * @throws SQLException if a database access error occurs
+     */
     private ArrayList<TrainerInterval> extractFromResultSet(ResultSet rs) throws SQLException {
         ArrayList<TrainerInterval> intervals = new ArrayList<>();
 
@@ -159,6 +175,13 @@ public class SQLTrainerIntervalDao implements TrainerIntervalDao {
     private final String selectQuery = "SELECT " + intervalColumns + ", " + userColumns + ", " + roleColumns + ", " + specializationColumns + reservationColumns + ", " + statusColumns + ", " + creditTransactionColumns + ", " + creditTransactionTypeColumns + " FROM trainers_intervals ti " + joins;
     private final String insertQuery = "INSERT INTO trainers_intervals (trainer_id, day, start_time, end_time, reservation_id) VALUES (?, ?, ?, ?, ?)";
 
+    /**
+     * Loads trainer intervals from a CSV file and inserts them into the database.
+     *
+     * @param file the CSV file containing trainer interval data
+     * @throws CouldNotAccessFileException if the file cannot be accessed
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public void loadFromCsv(File file) {
         try (Scanner scanner = new Scanner(file)) {
@@ -189,14 +212,45 @@ public class SQLTrainerIntervalDao implements TrainerIntervalDao {
         }
     }
 
+    /**
+     * Creates a new trainer interval in the database.
+     *
+     * @param interval the trainer interval to create
+     * @throws IllegalArgumentException if the interval or any of its required fields are null
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public void create(TrainerInterval interval) {
         if (interval == null) {
             throw new IllegalArgumentException("Interval cannot be null");
         }
 
-        if (interval.getId() != null) {
-            throw new IllegalArgumentException("The interval already has an id");
+        if (interval.getTrainer() == null) {
+            throw new IllegalArgumentException("Trainer cannot be null");
+        }
+
+        if (interval.getTrainer().getId() == null) {
+            throw new IllegalArgumentException("Trainer id cannot be null");
+        }
+
+        if (interval.getDay() == null) {
+            throw new IllegalArgumentException("Day cannot be null");
+        }
+
+        if (interval.getStartTime() == null) {
+            throw new IllegalArgumentException("Start time cannot be null");
+        }
+
+        if (interval.getReservation() == null) {
+            throw new IllegalArgumentException("Reservation cannot be null");
+        }
+
+        if (interval.getReservation().getId() == null) {
+            throw new IllegalArgumentException("Reservation id cannot be null");
+        }
+
+        if (findById(interval.getId()) != null) {
+            throw new IllegalArgumentException("Interval with id " + interval.getId() + " already exists");
         }
 
         try (PreparedStatement pstmt = connection.prepareStatement(insertQuery)) {
@@ -211,6 +265,13 @@ public class SQLTrainerIntervalDao implements TrainerIntervalDao {
         }
     }
 
+    /**
+     * Deletes a trainer interval from the database.
+     *
+     * @param interval the trainer interval to delete
+     * @throws IllegalArgumentException if the interval or its ID is null
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public void delete(TrainerInterval interval) {
         if (interval == null) {
@@ -219,6 +280,10 @@ public class SQLTrainerIntervalDao implements TrainerIntervalDao {
 
         if (interval.getId() == null) {
             throw new IllegalArgumentException("Interval id cannot be null");
+        }
+
+        if (findById(interval.getId()) == null) {
+            throw new NotFoundException("Interval with id " + interval.getId() + " not found");
         }
 
         String deleteQuery = "DELETE FROM trainers_intervals WHERE id = ?";
@@ -231,6 +296,13 @@ public class SQLTrainerIntervalDao implements TrainerIntervalDao {
         }
     }
 
+    /**
+     * Updates an existing trainer interval in the database.
+     *
+     * @param interval the trainer interval to update
+     * @throws IllegalArgumentException if the interval or any of its required fields are null
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public void update(TrainerInterval interval) {
         if (interval == null) {
@@ -239,6 +311,34 @@ public class SQLTrainerIntervalDao implements TrainerIntervalDao {
 
         if (interval.getId() == null) {
             throw new IllegalArgumentException("Interval id cannot be null");
+        }
+
+        if (interval.getTrainer() == null) {
+            throw new IllegalArgumentException("Trainer cannot be null");
+        }
+
+        if (interval.getTrainer().getId() == null) {
+            throw new IllegalArgumentException("Trainer id cannot be null");
+        }
+
+        if (interval.getDay() == null) {
+            throw new IllegalArgumentException("Day cannot be null");
+        }
+
+        if (interval.getStartTime() == null) {
+            throw new IllegalArgumentException("Start time cannot be null");
+        }
+
+        if (interval.getReservation() == null) {
+            throw new IllegalArgumentException("Reservation cannot be null");
+        }
+
+        if (interval.getReservation().getId() == null) {
+            throw new IllegalArgumentException("Reservation id cannot be null");
+        }
+
+        if (findById(interval.getId()) == null) {
+            throw new NotFoundException("Interval with id " + interval.getId() + " not found");
         }
 
         String updateQuery = "UPDATE trainers_intervals SET trainer_id = ?, day = ?, start_time = ?, end_time = ?, reservation_id = ? WHERE id = ?";
@@ -256,8 +356,20 @@ public class SQLTrainerIntervalDao implements TrainerIntervalDao {
         }
     }
 
+    /**
+     * Finds a trainer interval by its ID.
+     *
+     * @param id the ID of the trainer interval to find
+     * @return the trainer interval with the specified ID
+     * @throws IllegalArgumentException if the ID is null
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public TrainerInterval findById(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID cannot be null");
+        }
+
         try (PreparedStatement pstmt = connection.prepareStatement(selectQuery + " WHERE ti.id = ?")) {
             pstmt.setLong(1, id);
             ResultSet rs = pstmt.executeQuery();
@@ -267,6 +379,12 @@ public class SQLTrainerIntervalDao implements TrainerIntervalDao {
         }
     }
 
+    /**
+     * Finds all trainer intervals in the database.
+     *
+     * @return a list of all trainer intervals
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public ArrayList<TrainerInterval> findAll() {
         try (PreparedStatement pstmt = connection.prepareStatement(selectQuery)) {

@@ -13,14 +13,30 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+/**
+ * SQLVisitDao is an implementation of the VisitDao interface
+ * that provides methods to interact with the visits in the database.
+ */
 public class SQLVisitDao implements VisitDao {
 
     private final Connection connection;
 
+    /**
+     * Constructs a new SQLVisitDao with the specified database connection.
+     *
+     * @param connection the database connection
+     */
     public SQLVisitDao(Connection connection) {
         this.connection = connection;
     }
 
+    /**
+     * Extracts visits from the given ResultSet.
+     *
+     * @param rs the ResultSet containing visit data
+     * @return a list of visits
+     * @throws SQLException if a database access error occurs
+     */
     private ArrayList<Visit> extractFromResultSet(ResultSet rs) throws SQLException {
         ArrayList<Visit> visits = new ArrayList<>();
 
@@ -107,7 +123,6 @@ public class SQLVisitDao implements VisitDao {
         return visits;
     }
 
-
     private final String visitColumns = "v.id AS v_id, v.check_in_time AS v_check_in_time, v.check_out_time AS v_check_out_time, v.visit_secret AS v_visit_secret";
     private final String userColumns = "u.id AS u_id, u.email AS u_email,  u.first_name AS u_first_name, " +
             "u.last_name AS u_last_name, u.credit_balance AS u_credit_balance, u.phone AS u_phone, " +
@@ -131,6 +146,13 @@ public class SQLVisitDao implements VisitDao {
             " FROM visits v " + joins;
     private final String insertQuery = "INSERT INTO visits(user_id, check_in_time, check_out_time, visit_secret, credit_transaction_id) VALUES (?, ?, ?, ?, ?)";
 
+    /**
+     * Loads visits from a CSV file and inserts them into the database.
+     *
+     * @param file the CSV file containing visit data
+     * @throws CouldNotAccessFileException if the file cannot be accessed
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public void loadFromCsv(File file) {
         try (Scanner scanner = new Scanner(file)) {
@@ -163,14 +185,46 @@ public class SQLVisitDao implements VisitDao {
 
     }
 
+    /**
+     * Creates a new visit in the database.
+     *
+     * @param visit the visit to create
+     * @throws IllegalArgumentException if the visit or any of its required fields are null
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public void create(Visit visit) {
         if (visit == null) {
             throw new IllegalArgumentException("Visit cannot be null");
         }
 
-        if (visit.getId() != null) {
-            throw new IllegalArgumentException("The visit already has an id");
+        if (visit.getUser() == null) {
+            throw new IllegalArgumentException("Visit user cannot be null");
+        }
+
+        if (visit.getUser().getId() == null) {
+            throw new IllegalArgumentException("Visit user id cannot be null");
+        }
+
+
+        if (visit.getCheckInTime() == null) {
+            throw new IllegalArgumentException("Visit check-in time cannot be null");
+        }
+
+        if (visit.getCreditTransaction() == null) {
+            throw new IllegalArgumentException("Visit credit transaction cannot be null");
+        }
+
+        if (visit.getCreditTransaction().getId() == null) {
+            throw new IllegalArgumentException("Visit credit transaction id cannot be null");
+        }
+
+        if (visit.getVisitSecret() == null) {
+            throw new IllegalArgumentException("Visit secret cannot be null");
+        }
+
+        if (findById(visit.getId()) != null) {
+            throw new IllegalArgumentException("Visit with id " + visit.getId() + " already exists");
         }
 
         try ( PreparedStatement pstmt = connection.prepareStatement(insertQuery)) {
@@ -185,21 +239,43 @@ public class SQLVisitDao implements VisitDao {
         }
     }
 
+    /**
+     * Deletes a visit from the database.
+     *
+     * @param visit the visit to delete
+     * @throws IllegalArgumentException if the visit or its ID is null
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
-    public void delete(Long id) {
-        if (id == null) {
+    public void delete(Visit visit) {
+        if (visit == null) {
             throw new IllegalArgumentException("Id cannot be null");
+        }
+
+        if (visit.getId() == null) {
+            throw new IllegalArgumentException("Visit id cannot be null");
+        }
+
+        if (findById(visit.getId()) == null) {
+            throw new NotFoundException("Visit with id " + visit.getId() + " not found");
         }
 
         String deleteQuery = "DELETE FROM visits WHERE id = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(deleteQuery)) {
-            pstmt.setLong(1, id);
+            pstmt.setLong(1, visit.getId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new CouldNotAccessDatabaseException("Database not accessible", e);
         }
     }
 
+    /**
+     * Updates an existing visit in the database.
+     *
+     * @param visit the visit to update
+     * @throws IllegalArgumentException if the visit or any of its required fields are null
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public void update(Visit visit) {
         if (visit == null) {
@@ -208,6 +284,34 @@ public class SQLVisitDao implements VisitDao {
 
         if (visit.getId() == null) {
             throw new IllegalArgumentException("The visit does not have an id");
+        }
+
+        if (visit.getUser() == null) {
+            throw new IllegalArgumentException("Visit user cannot be null");
+        }
+
+        if (visit.getUser().getId() == null) {
+            throw new IllegalArgumentException("Visit user id cannot be null");
+        }
+
+        if (visit.getCheckInTime() == null) {
+            throw new IllegalArgumentException("Visit check-in time cannot be null");
+        }
+
+        if (visit.getCreditTransaction() == null) {
+            throw new IllegalArgumentException("Visit credit transaction cannot be null");
+        }
+
+        if (visit.getCreditTransaction().getId() == null) {
+            throw new IllegalArgumentException("Visit credit transaction id cannot be null");
+        }
+
+        if (visit.getVisitSecret() == null) {
+            throw new IllegalArgumentException("Visit secret cannot be null");
+        }
+
+        if (findById(visit.getId()) == null) {
+            throw new NotFoundException("Visit with id " + visit.getId() + " not found");
         }
 
         String updateQuery = "UPDATE visits SET user_id = ?, check_in_time = ?, check_out_time = ?, visit_secret = ?, credit_transaction_id = ? WHERE id = ?";
@@ -225,6 +329,14 @@ public class SQLVisitDao implements VisitDao {
         }
     }
 
+    /**
+     * Finds a visit by its ID.
+     *
+     * @param id the ID of the visit to find
+     * @return the visit with the specified ID
+     * @throws IllegalArgumentException if the ID is null
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public Visit findById(Long id) {
         if (id == null) {
@@ -242,6 +354,12 @@ public class SQLVisitDao implements VisitDao {
         }
     }
 
+    /**
+     * Finds all visits in the database.
+     *
+     * @return a list of all visits
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public ArrayList<Visit> findAll() {
         try (PreparedStatement pstmt = connection.prepareStatement(selectQuery)) {

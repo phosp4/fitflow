@@ -30,7 +30,7 @@ public interface VisitDao {
      *
      * @param id the ID of the visit to delete
      */
-    void delete(Long id);
+    void delete(Visit id);
 
     /**
      * Updates an existing visit.

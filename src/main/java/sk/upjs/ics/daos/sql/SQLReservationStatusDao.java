@@ -15,18 +15,33 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * SQLReservationStatusDao is an implementation of the ReservationStatusDao interface
+ * that provides methods to interact with the reservation statuses in the database.
+ */
 public class SQLReservationStatusDao implements ReservationStatusDao {
 
     private final Connection connection;
 
+    /**
+     * Constructs a new SQLReservationStatusDao with the specified database connection.
+     *
+     * @param connection the database connection
+     */
     public SQLReservationStatusDao(Connection connection) {
         this.connection = connection;
     }
 
-
     private final String selectQuery = "SELECT id, name FROM reservation_statuses";
     private final String insertQuery = "INSERT INTO reservation_statuses (name) VALUES (?)";
 
+    /**
+     * Loads reservation statuses from a CSV file and inserts them into the database.
+     *
+     * @param file the CSV file containing reservation status data
+     * @throws CouldNotAccessFileException if the file cannot be accessed
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public void loadFromCsv(File file) {
         try (Scanner scanner = new Scanner(file)) {
@@ -52,14 +67,25 @@ public class SQLReservationStatusDao implements ReservationStatusDao {
         }
     }
 
+    /**
+     * Creates a new reservation status in the database.
+     *
+     * @param status the reservation status to create
+     * @throws IllegalArgumentException if the status or its name is null
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public void create(ReservationStatus status) {
         if (status == null) {
             throw new IllegalArgumentException("Status cannot be null");
         }
 
-        if (status.getId() != null) {
-            throw new IllegalArgumentException("The status already has an id");
+        if (status.getName() == null) {
+            throw new IllegalArgumentException("Status name cannot be null");
+        }
+
+        if (findById(status.getId()) != null) {
+            throw new IllegalArgumentException("Reservation status with id " + status.getId() + " already exists");
         }
 
         try (PreparedStatement pstmt = connection.prepareStatement(insertQuery)) {
@@ -70,10 +96,26 @@ public class SQLReservationStatusDao implements ReservationStatusDao {
         }
     }
 
+    /**
+     * Deletes a reservation status from the database.
+     *
+     * @param status the reservation status to delete
+     * @throws IllegalArgumentException if the status or its ID is null
+     * @throws NotFoundException if the reservation status with the specified ID is not found
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public void delete(ReservationStatus status) {
         if (status == null) {
             throw new IllegalArgumentException("Status cannot be null");
+        }
+
+        if (status.getId() == null) {
+            throw new IllegalArgumentException("Status id cannot be null");
+        }
+
+        if (findById(status.getId()) == null) {
+            throw new NotFoundException("Reservation status with id " + status.getId() + " not found");
         }
 
         String deleteQuery = "DELETE FROM reservation_statuses WHERE id = ?";
@@ -85,10 +127,30 @@ public class SQLReservationStatusDao implements ReservationStatusDao {
         }
     }
 
+    /**
+     * Updates an existing reservation status in the database.
+     *
+     * @param status the reservation status to update
+     * @throws IllegalArgumentException if the status or its ID is null or its name is null
+     * @throws NotFoundException if the reservation status with the specified ID is not found
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public void update(ReservationStatus status) {
         if (status == null) {
             throw new IllegalArgumentException("Status cannot be null");
+        }
+
+        if (status.getId() == null) {
+            throw new IllegalArgumentException("Status id cannot be null");
+        }
+
+        if (status.getName() == null) {
+            throw new IllegalArgumentException("Status name cannot be null");
+        }
+
+        if (findById(status.getId()) == null) {
+            throw new NotFoundException("Reservation status with id " + status.getId() + " not found");
         }
 
         String updateQuery = "UPDATE reservation_statuses SET name = ? WHERE id = ?";
@@ -101,8 +163,21 @@ public class SQLReservationStatusDao implements ReservationStatusDao {
         }
     }
 
+    /**
+     * Finds a reservation status by its ID.
+     *
+     * @param id the ID of the reservation status to find
+     * @return the reservation status with the specified ID
+     * @throws IllegalArgumentException if the ID is null
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     * @throws NotFoundException if the reservation status with the specified ID is not found
+     */
     @Override
     public ReservationStatus findById(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("ID cannot be null");
+        }
+
         try(PreparedStatement pstmt = connection.prepareStatement(selectQuery + " WHERE id = ?")) {
             pstmt.setLong(1, id);
             ResultSet rs = pstmt.executeQuery();
@@ -117,6 +192,13 @@ public class SQLReservationStatusDao implements ReservationStatusDao {
         }
     }
 
+    /**
+     * Finds all reservation statuses in the database.
+     *
+     * @return a list of all reservation statuses
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     * @throws NotFoundException if no reservation statuses are found
+     */
     @Override
     public ArrayList<ReservationStatus> findAll() {
         ArrayList<ReservationStatus> reservationStatuses = new ArrayList<>();
