@@ -134,7 +134,7 @@ public class SQLUserDao implements UserDao {
     }
 
     @Override
-    public List<User> findAll() {
+    public ArrayList<User> findAll() {
         try (Statement stmt = connection.createStatement()) {
             ResultSet rs = stmt.executeQuery(selectQuery);
             ArrayList<User> users = new ArrayList<>();

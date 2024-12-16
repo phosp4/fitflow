@@ -205,8 +205,7 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
             ResultSet rs = pstmt.executeQuery();
             return extractFromResultSet(rs).getFirst();
         } catch (SQLException e) {
-            // throw new CouldNotAccessDatabaseException("Database not accessible");
-            throw new RuntimeException(e);
+            throw new CouldNotAccessDatabaseException("Database not accessible");
         }
     }
 
@@ -218,10 +217,5 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
        } catch (SQLException e) {
            throw new CouldNotAccessDatabaseException("Database not accessible");
        }
-    }
-
-    public static void main(String[] args) {
-        CreditTransaction creditTransaction = Factory.INSTANCE.getCreditTransactionDao().findById(100L);
-        System.out.println(creditTransaction);
     }
 }
