@@ -77,9 +77,15 @@ public class SceneUtils {
         ResourceBundle bundle = ResourceBundle.getBundle("sk.upjs.ics.MyResources.MyResources", LocaleManager.getLocale());
         String okButtonText = bundle.getString("alert.okButton");
         String cancelButtonText = bundle.getString("alert.cancelButton");
-        String contextText = bundle.getString(contextTextFromBundle);
         String titleText = bundle.getString(headerTextFromBundle);
         String headerText = bundle.getString(headerTextFromBundle);
+
+        String contextText;
+        try {
+            contextText = bundle.getString(contextTextFromBundle);
+        } catch (Exception e) {
+            contextText = contextTextFromBundle;
+        }
 
         // Create the custom dialog
         Dialog<Boolean> dialog = new Dialog<>();
