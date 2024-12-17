@@ -147,8 +147,3 @@ INSERT INTO trainers_intervals (id, trainer_id, day, start_time, end_time, reser
 (100, 1, '2023-11-23', '12:34:56', '13:45:00', 1),
 (200, 2, '2023-11-24', '10:00:00', '11:30:00', 2),
 (300, 1, '2023-11-25', '14:00:00', '15:15:00', 3);
-
--- INSERT INTO visits (id, user_id, visit_secret, credit_transaction_id) VALUES
--- (1, 1, 'secret123', 100),
--- (2, 2, 'secret456', 200),
--- (3, 1, 'secret789', 300);
