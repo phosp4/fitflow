@@ -164,6 +164,7 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
     /**
      * Creates a new credit transaction in the database.
      *
+     * @return the ID of the created credit transaction
      * @param creditTransaction the credit transaction to create
      * @throws IllegalArgumentException if the credit transaction or its user or type is null, or if the user or type does not have an ID
      * @throws CouldNotAccessDatabaseException if the database cannot be accessed

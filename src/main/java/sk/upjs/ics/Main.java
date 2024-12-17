@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import sk.upjs.ics.controllers.SignInViewController;
 import sk.upjs.ics.security.InitAdminGenerator;
+import sk.upjs.ics.utilities.DatabaseUtil;
 import sk.upjs.ics.utilities.LocaleManager;
 
 import java.io.IOException;
