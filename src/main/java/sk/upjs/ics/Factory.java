@@ -20,7 +20,7 @@ public enum Factory {
     /**
      * The URL of the database.
      */
-    public static final String DB_URL = "jdbc:sqlite:fitflow.db";
+    public static final String DB_URL = System.getProperty("DB_URL", "jdbc:sqlite:fitflow.db");
 
     private volatile Connection connection;
     private volatile ReservationDao reservationDao;
