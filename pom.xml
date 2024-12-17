@@ -53,6 +53,19 @@
             <artifactId>spring-security-core</artifactId>
             <version>6.3.0</version>
         </dependency>
+        <!-- ZXing core library -->
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>3.4.1</version>
+        </dependency>
+
+        <!-- ZXing Java SE extensions -->
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>javase</artifactId>
+            <version>3.4.1</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

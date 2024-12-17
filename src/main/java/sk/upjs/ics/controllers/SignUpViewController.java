@@ -9,7 +9,7 @@ import javafx.fxml.FXML;
 import javafx.stage.Stage;
 import lombok.Setter;
 import javafx.scene.control.Hyperlink;
-import sk.upjs.ics.LocaleManager;
+import sk.upjs.ics.utilities.LocaleManager;
 
 import java.io.IOException;
 

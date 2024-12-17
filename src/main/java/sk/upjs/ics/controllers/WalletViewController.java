@@ -91,7 +91,7 @@ public class WalletViewController implements Initializable {
         }
 
         // load credit from dbs
-        Long newBalance = Long.valueOf(userModel.getCurrentUser().getCreditBalance() + creditChoice);
+        Float newBalance = userModel.getCurrentUser().getCreditBalance() + creditChoice;
 
         // update credit
         userModel.updateCurrentUserCreditBalance(creditChoice);

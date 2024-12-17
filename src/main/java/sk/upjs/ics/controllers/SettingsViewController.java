@@ -11,7 +11,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.Scene;
 import javafx.event.ActionEvent;
 import javafx.stage.Stage;
-import sk.upjs.ics.LocaleManager;
+import sk.upjs.ics.utilities.LocaleManager;
 
 import java.io.IOException;
 import java.util.List;

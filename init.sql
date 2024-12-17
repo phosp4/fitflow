@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS visits
     check_in_time  TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP),
     check_out_time TIMESTAMP,
     visit_secret   TEXT      NOT NULL,
-    credit_transaction_id INTEGER   NOT NULL,
+    credit_transaction_id INTEGER, -- can be null, if the visit has not ended yet
     created_at     TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP),
     updated_at     TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP),
     FOREIGN KEY (user_id) REFERENCES users (id),
@@ -117,9 +117,10 @@ VALUES ('admin'),
        ('user'),
        ('trainer');
 
-INSERT INTO credit_transaction_types (name)
-VALUES ('purchase'),
-       ('refund');
+INSERT INTO credit_transaction_types (id, name)
+VALUES (3, 'refund'),
+       (1, 'visit'),
+       (2, 'credit_purchase');
 
 INSERT INTO reservation_statuses (name)
 VALUES ('pending'),

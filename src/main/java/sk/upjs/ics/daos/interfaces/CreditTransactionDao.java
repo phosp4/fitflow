@@ -18,6 +18,7 @@ public interface CreditTransactionDao {
      */
     void loadFromCsv(File file);
 
+    Long create(CreditTransaction creditTransaction);
     /**
      * Creates a new credit transaction.
      *

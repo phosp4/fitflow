@@ -6,8 +6,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import sk.upjs.ics.controllers.SignInViewController;
+import sk.upjs.ics.utilities.LocaleManager;
 
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class Main extends Application {
