@@ -1,18 +1,22 @@
 package sk.upjs.ics.models;
 
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import sk.upjs.ics.Factory;
 import sk.upjs.ics.daos.interfaces.CreditTransactionDao;
+import sk.upjs.ics.daos.interfaces.RoleDao;
 import sk.upjs.ics.daos.interfaces.UserDao;
 import sk.upjs.ics.entities.CreditTransaction;
 import sk.upjs.ics.entities.User;
 import sk.upjs.ics.security.Auth;
 import sk.upjs.ics.security.Principal;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class UserModel {
     private final UserDao userDao = Factory.INSTANCE.getUserDao();
     private final CreditTransactionDao transactionDao = Factory.INSTANCE.getCreditTransactionDao();
+    private final RoleDao roleDao = Factory.INSTANCE.getRoleDao();
     private final Principal principal = Auth.INSTANCE.getPrincipal();
 
     public User getCurrentUser() {
@@ -56,7 +60,42 @@ public class UserModel {
         }
         return null;
     }
+
     public User getUserById(long id) {
         return userDao.findById(id);
+    }
+
+    public User findByEmail(String email) {
+        ArrayList<User> users = userDao.findAll();
+        for (User user : users) {
+            if (user.getEmail().equals(email)) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+    public void registerUser(String email, String password1, String password2, String firstName, String lastName, String phone, LocalDate birthDate) {
+        if (findByEmail(email) != null) {
+            throw new IllegalArgumentException("User with this email already exists");
+        }
+
+        if (!password1.equals(password2)) {
+            throw new IllegalArgumentException("Passwords do not match");
+        }
+
+        var salt = BCrypt.gensalt();
+        var passwordHash = BCrypt.hashpw(password1, salt); // both password1 and password2 are the same
+
+        User user = new User();
+        user.setEmail(email);
+        user.setFirstName(firstName);
+        user.setRole(roleDao.findById(2L));
+        user.setLastName(lastName);
+        user.setCreditBalance(0.0f);
+        user.setPhone(phone);
+        user.setBirthDate(birthDate);
+        user.setRole(Factory.INSTANCE.getRoleDao().findById(1L));
+        userDao.create(user, salt, passwordHash);
     }
 }

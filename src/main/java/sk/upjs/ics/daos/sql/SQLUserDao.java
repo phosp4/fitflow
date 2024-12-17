@@ -189,10 +189,6 @@ public class SQLUserDao implements UserDao {
             throw new IllegalArgumentException("User birth date cannot be null");
         }
 
-        if (findById(user.getId()) != null) {
-            throw new IllegalArgumentException("User with id " + user.getId() + " already exists");
-        }
-
         try (PreparedStatement pstmt = connection.prepareStatement(insertQuery)) {
             pstmt.setLong(1, user.getRole().getId());
             pstmt.setString(2, user.getEmail());

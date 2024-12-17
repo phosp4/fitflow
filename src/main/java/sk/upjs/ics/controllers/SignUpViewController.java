@@ -9,11 +9,14 @@ import javafx.fxml.FXML;
 import javafx.stage.Stage;
 import lombok.Setter;
 import javafx.scene.control.Hyperlink;
+import sk.upjs.ics.models.UserModel;
 import sk.upjs.ics.utilities.LocaleManager;
 
 import java.io.IOException;
 
 public class SignUpViewController {
+
+    UserModel userModel = new UserModel();
 
     @FXML
     private Hyperlink SignInHereHyperlink;
@@ -60,7 +63,26 @@ public class SignUpViewController {
     }
 
     @FXML
-    void registerUser(ActionEvent event) {
+    void registerUser(ActionEvent event) throws IOException {
+        userModel.registerUser(
+                emailField.getText(),
+                passwordField1.getText(),
+                passwordField2.getText(),
+                firstNameField.getText(),
+                lastNameField.getText(),
+                phoneField.getText(),
+                birthDateField.getValue()
+        );
+
+        SignInViewController controller = SceneUtils.loadScene(
+                stage,
+                "../views/SignInView.fxml",
+                LocaleManager.getLocale(),
+                emailField.getScene().getStylesheets().toString(),
+                480,
+                400
+        );
+        controller.setStage(stage);
 
     }
 
