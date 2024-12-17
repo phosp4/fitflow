@@ -18,4 +18,6 @@ public interface VisitDao {
     Visit findById(Long id);
 
     ArrayList<Visit> findAll();
+
+    Visit findByVisitSecret(String uid);
 }

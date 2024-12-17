@@ -1,4 +1,6 @@
-package sk.upjs.ics;
+package sk.upjs.ics.utilities;
+
+import sk.upjs.ics.Factory;
 
 import java.io.IOException;
 import java.nio.file.Files;

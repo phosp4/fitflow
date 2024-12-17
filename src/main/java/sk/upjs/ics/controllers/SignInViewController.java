@@ -11,14 +11,13 @@ import javafx.stage.Stage;
 import javafx.scene.control.Hyperlink;
 import lombok.Setter;
 import sk.upjs.ics.Factory;
-import sk.upjs.ics.LocaleManager;
+import sk.upjs.ics.utilities.LocaleManager;
 import sk.upjs.ics.exceptions.AuthenticationException;
 import sk.upjs.ics.security.Auth;
 import sk.upjs.ics.security.AuthDao;
 import sk.upjs.ics.security.Principal;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.util.ResourceBundle;
 
 public class SignInViewController {

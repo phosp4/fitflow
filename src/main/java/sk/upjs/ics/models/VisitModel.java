@@ -27,9 +27,9 @@ public class VisitModel {
             for (int i = 0; i < visits.size(); i++) {
                 Visit visit = visits.get(i);
 
-                // ak to nie je prisluchajuci user alebo nie je credit_purchase, tak ju odstran
+                // ak to nie je prisluchajuci user alebo nie je visit, tak ju odstran
                 if (!visit.getUser().getId().equals(principal.getId()) ||
-                        !visit.getCreditTransaction().getCreditTransactionType().getId().equals(2L)) {
+                        !visit.getCreditTransaction().getCreditTransactionType().getId().equals(1L)) {
                     visits.remove(visit);
                 } else {
                     System.out.println("Visit: " + visit);

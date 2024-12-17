@@ -9,7 +9,7 @@ public interface CreditTransactionDao {
 
     void loadFromCsv(File file);
 
-    void create(CreditTransaction creditTransaction);
+    Long create(CreditTransaction creditTransaction);
 
     void delete(CreditTransaction creditTransaction);
 

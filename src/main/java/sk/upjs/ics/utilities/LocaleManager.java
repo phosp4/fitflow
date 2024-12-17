@@ -1,4 +1,4 @@
-package sk.upjs.ics;
+package sk.upjs.ics.utilities;
 
 import lombok.Getter;
 

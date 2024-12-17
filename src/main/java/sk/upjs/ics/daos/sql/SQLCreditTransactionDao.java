@@ -85,9 +85,9 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
             }
         }
 
-        if (creditTransactions.isEmpty()) {
-            throw new NotFoundException("No credit transactions found");
-        }
+//        if (creditTransactions.isEmpty()) {
+//            throw new NotFoundException("No credit transactions found");
+//        }
         
         return creditTransactions;
     }
@@ -139,24 +139,31 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
     }
 
     @Override
-    public void create(CreditTransaction creditTransaction) {
+    public Long create(CreditTransaction creditTransaction) {
         if (creditTransaction == null) {
-            throw new IllegalArgumentException("Attendance cannot be null");
+            throw new IllegalArgumentException("CreditTransaction cannot be null");
         }
-        
+
         if (creditTransaction.getId() != null) {
             throw new IllegalArgumentException("The credit transaction already has an id");
         }
 
-        try (PreparedStatement pstmt = connection.prepareStatement(insertQuery)) {
+        try (PreparedStatement pstmt = connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setLong(1, creditTransaction.getUser().getId());
             pstmt.setDouble(2, creditTransaction.getAmount());
             pstmt.setLong(3, creditTransaction.getCreditTransactionType().getId());
             pstmt.executeUpdate();
+
+            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getLong(1);
+                } else {
+                    throw new SQLException("Creating credit transaction failed, no ID obtained.");
+                }
+            }
         } catch (SQLException e) {
             throw new CouldNotAccessDatabaseException("Database not accessible", e);
         }
-
     }
 
     @Override

@@ -35,9 +35,14 @@ public class Visit {
             visit.setId(id);
             visit.setUser(null);
             visit.setCheckInTime(rs.getTimestamp(prefix + "check_in_time").toInstant());
-            visit.setCheckOutTime(rs.getTimestamp(prefix + "check_out_time").toInstant());
             visit.setVisitSecret(rs.getString(prefix + "visit_secret"));
             visit.setCreditTransaction(null);
+
+            if (rs.getTimestamp(prefix + "check_out_time") != null) {
+                visit.setCheckOutTime(rs.getTimestamp(prefix + "check_out_time").toInstant());
+            } else {
+                visit.setCheckOutTime(null);
+            }
 
             return visit;
         } catch (SQLException e) {

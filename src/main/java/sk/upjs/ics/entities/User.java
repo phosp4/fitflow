@@ -17,7 +17,7 @@ public class User {
     private String email;
     private String firstName;
     private String lastName;
-    private Long creditBalance;
+    private Float creditBalance;
     private String phone;
     private LocalDate birthDate;
     private boolean active;
@@ -45,7 +45,7 @@ public class User {
             user.setFirstName(rs.getString(prefix + "first_name"));
             user.setLastName(rs.getString(prefix + "last_name"));
             user.setEmail(rs.getString(prefix + "email"));
-            user.setCreditBalance(rs.getLong(prefix + "credit_balance"));
+            user.setCreditBalance(rs.getFloat(prefix + "credit_balance"));
             user.setPhone(rs.getString(prefix + "phone"));
 //            user.setBirthDate(rs.getDate(prefix + "birth_date").toLocalDate());
             user.setActive(rs.getBoolean(prefix + "active"));

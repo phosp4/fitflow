@@ -58,26 +58,5 @@ public class HistoryViewController implements Initializable {
         // spracuj ich do spravnej textovej podoby
         // nahod ich to mfxListu
         //// to iste s entries, ak uz maju aj vystup
-
-//        // load transactions
-//        //ArrayList<CreditTransaction> creditTransactionsHistory = creditTransactionDao.findAll();
-//
-//        // load reservations which are not active
-//        ArrayList<Reservation> reservationsHistory = reservationDao.findAllOfOneUser(principal.getId());
-//
-//        if (reservationsHistory != null) {
-//
-//        }
-//
-////        if (visitHistory != null) {
-////            ObservableList<Visit> visitHistoryObservable = FXCollections.observableArrayList(visitHistory);
-////            historyEntriesList.setItems(visitHistoryObservable);
-////        }
-//
-//        List<String> reservationHistoryString = new ArrayList<>();
-//        for (Reservation reservation : reservationsHistory) {
-//            reservationHistoryString.add(reservation.getNoteToTrainer());
-//        }
-//        historyReservationsList.setItems(FXCollections.observableArrayList(reservationHistoryString));
     }
 }
