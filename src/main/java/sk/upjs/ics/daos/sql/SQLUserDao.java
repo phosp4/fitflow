@@ -284,7 +284,7 @@ public class SQLUserDao implements UserDao {
 
         String updateQuery = "UPDATE users SET credit_balance = ? WHERE id = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(updateQuery)) {
-            pstmt.setLong(1, user.getCreditBalance());
+            pstmt.setFloat(1, user.getCreditBalance());
             pstmt.setLong(2, user.getId());
             pstmt.executeUpdate();
         } catch (SQLException e) {

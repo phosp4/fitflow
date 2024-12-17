@@ -116,9 +116,9 @@ public class SQLVisitDao implements VisitDao {
             }
         }
 
-        if (visits.isEmpty()) {
-            throw new NotFoundException("No visits found");
-        }
+//        if (visits.isEmpty()) {
+//            throw new NotFoundException("No visits found");
+//        }
 
         return visits;
     }
@@ -230,9 +230,11 @@ public class SQLVisitDao implements VisitDao {
         try ( PreparedStatement pstmt = connection.prepareStatement(insertQuery)) {
             pstmt.setLong(1, visit.getUser().getId());
             pstmt.setTimestamp(2, Timestamp.from(visit.getCheckInTime()));
-            pstmt.setTimestamp(3, Timestamp.from(visit.getCheckOutTime()));
+//            pstmt.setTimestamp(3, Timestamp.from(visit.getCheckOutTime())); // we don' know the check out time yet
+            pstmt.setTimestamp(3, null);
             pstmt.setString(4, visit.getVisitSecret());
-            pstmt.setLong(5, visit.getCreditTransaction().getId());
+//            pstmt.setLong(5, visit.getCreditTransaction().getId());
+            pstmt.setString(5, null);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new CouldNotAccessDatabaseException("Database not accessible", e);
@@ -360,6 +362,23 @@ public class SQLVisitDao implements VisitDao {
      * @return a list of all visits
      * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      */
+    @Override
+    public Visit findByVisitSecret(String uid) {
+        if (uid == null) {
+            throw new IllegalArgumentException("Visit secret cannot be null");
+        }
+
+        String selectQueryByVisitSecret = selectQuery + " WHERE v_visit_secret = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(selectQueryByVisitSecret)) {
+            pstmt.setString(1, uid);
+
+            ResultSet rs = pstmt.executeQuery();
+            return extractFromResultSet(rs).getFirst();
+        } catch (SQLException e) {
+            throw new CouldNotAccessDatabaseException("Database not accessible", e);
+        }
+    }
+
     @Override
     public ArrayList<Visit> findAll() {
         try (PreparedStatement pstmt = connection.prepareStatement(selectQuery)) {

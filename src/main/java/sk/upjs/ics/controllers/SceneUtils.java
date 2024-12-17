@@ -11,7 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import sk.upjs.ics.LocaleManager;
+import sk.upjs.ics.utilities.LocaleManager;
 
 import java.io.IOException;
 import java.util.Locale;

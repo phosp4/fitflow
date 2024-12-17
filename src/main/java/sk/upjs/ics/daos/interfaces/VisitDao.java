@@ -53,4 +53,6 @@ public interface VisitDao {
      * @return a list of all visits
      */
     ArrayList<Visit> findAll();
+
+    Visit findByVisitSecret(String uid);
 }

@@ -10,7 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import lombok.Setter;
-import sk.upjs.ics.LocaleManager;
+import sk.upjs.ics.utilities.LocaleManager;
 import sk.upjs.ics.security.Auth;
 
 import java.io.IOException;
