@@ -96,8 +96,8 @@ public class HomeViewController implements Initializable {
         visitDao.create(visit);
 
         // zobraz qr kod
-        QRCodeUitl.generateQRCode(uniqueID, "src/main/resources/sk/upjs/ics/qr_codes/qrcode.png", 500, 500);
-        qrImageView.setImage(new Image("sk/upjs/ics/qr_codes/qrcode.png"));
+        QRCodeUitl.generateQRCode(uniqueID, "src/main/resources/sk/upjs/ics/qrcode.png", 500, 500);
+        qrImageView.setImage(new Image("file:src/main/resources/sk/upjs/ics/qrcode.png"));
 
         // schovaj generate a zobraz tlacidlo scan
         enterButton.setVisible(false);
@@ -112,9 +112,10 @@ public class HomeViewController implements Initializable {
         infoGrid.setVisible(true);
 
         // skontroluj qr kod - len ako demo samozrejme
-        String uid = QRCodeUitl.readQRCode("src/main/resources/sk/upjs/ics/qr_codes/qrcode.png");
-        Visit visit = visitDao.findByVisitSecret(uid);
-        System.out.println("User identified in the database: " + visit.getUser().getEmail());
+        String uid = QRCodeUitl.readQRCode("src/main/resources/sk/upjs/ics/qrcode.png");
+        System.out.println("QR code read: " + uid);
+        // Visit visit = visitDao.findByVisitSecret(uid);
+        // System.out.println("User identified in the database: " + visit.getUser().getEmail());
 
         // zapni timer a pocitaj estimated price
         timeLabel.setText("00:00:00");
@@ -131,8 +132,8 @@ public class HomeViewController implements Initializable {
         }
 
         // posli cas vystupu do databazy
-        Visit visit = visitDao.findByVisitSecret(QRCodeUitl.readQRCode("src/main/resources/sk/upjs/ics/qr_codes/qrcode.png"));
-        //System.out.println("found visit" + visit);
+        Visit visit = visitDao.findByVisitSecret(QRCodeUitl.readQRCode("src/main/resources/sk/upjs/ics/qrcode.png"));
+        System.out.println("found visit" + visit);
         visit.setCheckOutTime(new Timestamp(System.currentTimeMillis()).toInstant());
 
         // vypocitaj cenu a updatni ju
