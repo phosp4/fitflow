@@ -203,12 +203,13 @@ public class SQLReservationDao implements ReservationDao {
     /**
      * Creates a new reservation in the database.
      *
+     * @return the ID of the created reservation
      * @param reservation the reservation to create
      * @throws IllegalArgumentException if the reservation or any of its required fields are null
      * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      */
     @Override
-    public void create(Reservation reservation) {
+    public Long create(Reservation reservation) {
         if (reservation == null) {
             throw new IllegalArgumentException("Reservation cannot be null");
         }
@@ -237,9 +238,9 @@ public class SQLReservationDao implements ReservationDao {
             throw new IllegalArgumentException("Credit transaction ID cannot be null");
         }
 
-        if (findById(reservation.getId()) != null) {
-            throw new IllegalArgumentException("Reservation with id " + reservation.getId() + " already exists");
-        }
+//        if (findById(reservation.getId()) != null) {
+//            throw new IllegalArgumentException("Reservation with id " + reservation.getId() + " already exists");
+//        }
 
         try (PreparedStatement pstmt = connection.prepareStatement(insertQuery)) {
             pstmt.setLong(1, reservation.getId());
@@ -253,6 +254,14 @@ public class SQLReservationDao implements ReservationDao {
 
             pstmt.setLong(4, reservation.getCreditTransaction().getId());
             pstmt.executeUpdate();
+
+            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getLong(1);
+                } else {
+                    throw new SQLException("Creating reservation failed, no ID obtained.");
+                }
+            }
         } catch (SQLException e) {
             throw new CouldNotAccessDatabaseException("Database not accessible", e);
         }

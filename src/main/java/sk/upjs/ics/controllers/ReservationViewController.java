@@ -6,27 +6,25 @@ import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.controls.MFXToggleButton;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import sk.upjs.ics.Factory;
-import sk.upjs.ics.daos.interfaces.ReservationDao;
-import sk.upjs.ics.daos.interfaces.TrainerIntervalDao;
-import sk.upjs.ics.daos.interfaces.UserDao;
 import sk.upjs.ics.entities.User;
+import sk.upjs.ics.models.ReservationModel;
+import sk.upjs.ics.models.UserModel;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class ReservationViewController implements Initializable {
 
+    ReservationModel reservationModel = new ReservationModel();
+    UserModel userModel = new UserModel();
+
 //    @FXML
 //    private MFXToggleButton TestToggle;
-    private final UserDao userDao = Factory.INSTANCE.getUserDao();
-    private final TrainerIntervalDao trainerIntervalDao = Factory.INSTANCE.getTrainerIntervalDao();
-    private final ReservationDao reservationDao = Factory.INSTANCE.getReservationDao();
-
-    private User selectedTrainer;
 
     @FXML
     private MFXToggleButton TestToggle;
@@ -58,12 +56,27 @@ public class ReservationViewController implements Initializable {
             return;
         }
 
+        User user = userModel.getUserByName(selectedTrainer);
+        if (user == null) {
+            System.out.println("No user found with the name " + selectedTrainer);
+            return;
+        }
+
+        reservationModel.createReservation(user, selectedDate, selectedTime, note);
+        
         System.out.println("The user has selected " + selectedTrainer + " on " + selectedDate + " at " + selectedTime);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        reserveTrainerComboBox.getItems().addAll("Trainer 1", "Trainer 2", "Trainer 3", "Trainer 4", "Trainer 5");
+        ArrayList<String> trainers = userModel.getTrainers();
+        Platform.runLater(() -> reserveTrainerComboBox.setItems(FXCollections.observableArrayList(trainers)));
+
+        // Select the first trainer if the list is not empty
+        if (!trainers.isEmpty()) {
+            System.out.println(trainers.getFirst());
+            Platform.runLater(() -> reserveTrainerComboBox.setValue(trainers.get(0)));
+        }
 
         // demo
         reserveTimeComboBox.getItems().addAll("10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00");
