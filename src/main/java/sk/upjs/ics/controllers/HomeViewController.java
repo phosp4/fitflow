@@ -113,7 +113,6 @@ public class HomeViewController implements Initializable {
 
         // skontroluj qr kod - len ako demo samozrejme
         String uid = QRCodeUitl.readQRCode("src/main/resources/sk/upjs/ics/qrcode.png");
-        System.out.println("QR code read: " + uid);
         // Visit visit = visitDao.findByVisitSecret(uid);
         // System.out.println("User identified in the database: " + visit.getUser().getEmail());
 
