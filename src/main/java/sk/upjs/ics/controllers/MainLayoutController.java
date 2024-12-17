@@ -45,6 +45,7 @@ public class MainLayoutController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+//        menuReservationsButton.setVisible(false);
         loadView("../views/HomeView.fxml");
     }
 
