@@ -135,7 +135,8 @@ VALUES ('Yoga'),
 INSERT INTO users (id, role_id, email, salt, password_hash, first_name, last_name, credit_balance, phone, birth_date, active, created_at, updated_at) VALUES
 (1, 1, 'user1@example.com', '123456', '$2b$10$xY/j5.25h8xL0t5c.jR7Bu.5x74j9.2gV9/0/j109.4e1Z9.3160', 'John', 'Doe', 100.00, '123-456-7890', '1990-01-01', 1, '2023-11-23 12:34:56', '2023-11-23 12:34:56'),
 (2, 2, 'user2@example.com', '123456', '$2b$10$xY/j5.25h8xL0t5c.jR7Bu.5x74j9.2gV9/0/j109.4e1Z9.3160', 'Jane', 'Smith', 50.50, '987-654-3210', '1995-02-15', 1, '2023-11-23 12:34:56', '2023-11-23 12:34:56'),
-(3, 3, 'adminAlice@example.com', '123456', '$2b$10$xY/j5.25h8xL0t5c.jR7Bu.5x74j9.2gV9/0/j109.4e1Z9.3160', 'Alice', 'Johnson', 0.00, '555-555-5555', '2000-03-30', 1, '2023-11-23 12:34:56', '2023-11-23 12:34:56');
+(3, 3, 'adminAlice@example.com', '123456', '$2b$10$xY/j5.25h8xL0t5c.jR7Bu.5x74j9.2gV9/0/j109.4e1Z9.3160', 'Alice', 'Johnson', 0.00, '555-555-5555', '2000-03-30', 1, '2023-11-23 12:34:56', '2023-11-23 12:34:56'),
+(4, 3, 'user3@example.com', '123456', '$2b$10$xY/j5.25h8xL0t5c.jR7Bu.5x74j9.2gV9/0/j109.4e1Z9.3160', 'Bob', 'Brown', 0.00, '555-555-5555', '2000-03-30', 1, '2023-11-23 12:34:56', '2023-11-23 12:34:56');
 
 INSERT INTO reservations (id, customer_id, status, note, created_at, updated_at, credit_transaction_id) VALUES
 (1, 10, 'pending', 'Please focus on core strength exercises.', '2023-11-23 12:34:56', '2023-11-23 12:34:56', 100),
@@ -147,13 +148,7 @@ INSERT INTO trainers_intervals (id, trainer_id, day, start_time, end_time, reser
 (200, 2, '2023-11-24', '10:00:00', '11:30:00', 2),
 (300, 1, '2023-11-25', '14:00:00', '15:15:00', 3);
 
--- these make problems because of generic user ids
--- INSERT INTO credit_transactions (id, user_id, amount, credit_transaction_type_id, created_at) VALUES
--- (100, 10, 10.00, 1, '2023-11-23 12:34:56'),
--- (200, 20, 20.00, 2, '2023-11-24 10:00:00'),
--- (300, 10, 30.00, 1, '2023-11-25 14:00:00');
-
 INSERT INTO visits (id, user_id, visit_secret, credit_transaction_id) VALUES
-(1, 10, 'secret123', 100),
-(2, 20, 'secret456', 200),
-(3, 10, 'secret789', 300);
+(1, 1, 'secret123', 100),
+(2, 2, 'secret456', 200),
+(3, 1, 'secret789', 300);

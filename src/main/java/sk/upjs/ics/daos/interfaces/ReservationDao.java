@@ -21,9 +21,10 @@ public interface ReservationDao {
     /**
      * Creates a new reservation.
      *
+     * @return the ID of the created reservation
      * @param reservation the reservation to create
      */
-    void create(Reservation reservation);
+    Long create(Reservation reservation);
 
     /**
      * Deletes an existing reservation.

@@ -54,5 +54,11 @@ public interface VisitDao {
      */
     ArrayList<Visit> findAll();
 
+    /**
+     * Finds a visit by its secret.
+     *
+     * @param uid the secret of the visit to find
+     * @return the found visit, or null if not found
+     */
     Visit findByVisitSecret(String uid);
 }

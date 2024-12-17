@@ -164,6 +164,7 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
     /**
      * Creates a new credit transaction in the database.
      *
+     * @return the ID of the created credit transaction
      * @param creditTransaction the credit transaction to create
      * @throws IllegalArgumentException if the credit transaction or its user or type is null, or if the user or type does not have an ID
      * @throws CouldNotAccessDatabaseException if the database cannot be accessed
@@ -186,9 +187,9 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
             throw new IllegalArgumentException("The credit transaction type does not have an id");
         }
 
-        if (findById(creditTransaction.getId()) != null) {
-            throw new IllegalArgumentException("Credit transaction with id " + creditTransaction.getId() + " already exists");
-        }
+//        if (findById(creditTransaction.getId()) != null) {
+//            throw new IllegalArgumentException("Credit transaction with id " + creditTransaction.getId() + " already exists");
+//        }
 
         try (PreparedStatement pstmt = connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setLong(1, creditTransaction.getUser().getId());

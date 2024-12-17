@@ -18,13 +18,13 @@ public interface CreditTransactionDao {
      */
     void loadFromCsv(File file);
 
-    Long create(CreditTransaction creditTransaction);
     /**
      * Creates a new credit transaction.
      *
+     * @return the ID of the created credit transaction
      * @param creditTransaction the credit transaction to create
      */
-    void create(CreditTransaction creditTransaction);
+    Long create(CreditTransaction creditTransaction);
 
     /**
      * Deletes an existing credit transaction.

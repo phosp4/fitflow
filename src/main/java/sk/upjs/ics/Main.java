@@ -6,8 +6,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import sk.upjs.ics.controllers.SignInViewController;
+import sk.upjs.ics.security.InitAdminGenerator;
+import sk.upjs.ics.utilities.DatabaseUtil;
 import sk.upjs.ics.utilities.LocaleManager;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class Main extends Application {
@@ -17,6 +24,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        initializeDatabase();
+        initializeAdminUser();
 
         // for internationalization
         ResourceBundle bundle = ResourceBundle.getBundle("sk.upjs.ics.MyResources.MyResources", LocaleManager.getLocale());
@@ -36,4 +45,23 @@ public class Main extends Application {
         stage.setScene(scene);
         stage.show();
         }
+
+    private void initializeDatabase() {
+        Path path = Paths.get("fitflow.db");
+        if (Files.exists(path)) {
+            System.out.println("Database exists.");
+        } else {
+            System.out.println("Database does not exist. Initializing...");
+            try {
+                DatabaseUtil.initializeDatabase();
+            } catch (SQLException | IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    private void initializeAdminUser() {
+        System.out.println("Initializing admin user...");
+        InitAdminGenerator.main(new String[0]);
+    }
     }

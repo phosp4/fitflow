@@ -13,14 +13,29 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+/**
+ * SQLUserDao is an implementation of the UserDao interface that interacts with a SQL database.
+ */
 public class SQLUserDao implements UserDao {
 
     private final Connection connection;
 
+    /**
+     * Constructs a new SQLUserDao with the specified database connection.
+     *
+     * @param connection the database connection
+     */
     public SQLUserDao(Connection connection) {
         this.connection = connection;
     }
 
+    /**
+     * Extracts a list of User objects from the given ResultSet.
+     *
+     * @param rs the ResultSet to extract users from
+     * @return a list of User objects
+     * @throws SQLException if a database access error occurs
+     */
     private ArrayList<User> extractFromResultSet(ResultSet rs) throws SQLException {
         ArrayList<User> users = new ArrayList<>();
 
@@ -80,6 +95,13 @@ public class SQLUserDao implements UserDao {
     private final String selectQuery = "SELECT " + userColumns + ", " + roleColumns + "," + specializationsColumns + " FROM users u " + joins;
     private final String insertQuery = "INSERT INTO users(role_id, email, salt, password_hash, first_name, last_name, credit_balance, phone, birth_date, active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
+    /**
+     * Loads users from a CSV file and inserts them into the database.
+     *
+     * @param file the CSV file to load users from
+     * @throws CouldNotAccessFileException if the file cannot be accessed
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public void loadFromCsv(File file) {
         try (Scanner scanner = new Scanner(file)) {
@@ -116,6 +138,15 @@ public class SQLUserDao implements UserDao {
         }
     }
 
+    /**
+     * Creates a new user in the database.
+     *
+     * @param user the user to create
+     * @param salt the salt for the user's password
+     * @param password_hash the hashed password
+     * @throws IllegalArgumentException if any of the parameters are null or invalid
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public void create(User user, String salt, String password_hash) {
         if (user == null) {
@@ -179,6 +210,13 @@ public class SQLUserDao implements UserDao {
         }
     }
 
+    /**
+     * Updates an existing user in the database.
+     *
+     * @param user the user to update
+     * @throws IllegalArgumentException if any of the parameters are null or invalid
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public void update(User user) {
         if (user == null) {
@@ -240,6 +278,14 @@ public class SQLUserDao implements UserDao {
         }
     }
 
+
+    /**
+     * Updates the credit balance of an existing user in the database.
+     *
+     * @param user the user to update
+     * @throws IllegalArgumentException if any of the parameters are null or invalid
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public void updateBalance(User user) {
         if (user == null) {
@@ -292,6 +338,15 @@ public class SQLUserDao implements UserDao {
         }
     }
 
+    /**
+     * Updates the password of an existing user in the database.
+     *
+     * @param user the user to update
+     * @param salt the new salt for the user's password
+     * @param password_hash the new hashed password
+     * @throws IllegalArgumentException if any of the parameters are null or invalid
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public void updatePassword(User user, String salt, String password_hash) {
         if (user == null) {
@@ -354,6 +409,14 @@ public class SQLUserDao implements UserDao {
         }
     }
 
+    /**
+     * Deletes an existing user from the database.
+     *
+     * @param user the user to delete
+     * @throws IllegalArgumentException if any of the parameters are null or invalid
+     * @throws NotFoundException if the user is not found
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public void delete(User user) {
         if (user == null) {
@@ -378,6 +441,15 @@ public class SQLUserDao implements UserDao {
         }
     }
 
+    /**
+     * Finds a user by their ID.
+     *
+     * @param id the ID of the user to find
+     * @return the found user
+     * @throws IllegalArgumentException if the ID is null
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     * @throws NotFoundException if the user is not found
+     */
     @Override
     public User findById(Long id) {
         if (id == null) {
@@ -393,6 +465,12 @@ public class SQLUserDao implements UserDao {
         }
     }
 
+    /**
+     * Finds all users in the database.
+     *
+     * @return a list of all users
+     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     */
     @Override
     public ArrayList<User> findAll() {
         try (Statement stmt = connection.createStatement()) {

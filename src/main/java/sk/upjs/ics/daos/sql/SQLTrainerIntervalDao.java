@@ -245,13 +245,13 @@ public class SQLTrainerIntervalDao implements TrainerIntervalDao {
             throw new IllegalArgumentException("Reservation cannot be null");
         }
 
-        if (interval.getReservation().getId() == null) {
-            throw new IllegalArgumentException("Reservation id cannot be null");
-        }
+//        if (interval.getReservation().getId() == null) {
+//            throw new IllegalArgumentException("Reservation id cannot be null");
+//        }
 
-        if (findById(interval.getId()) != null) {
-            throw new IllegalArgumentException("Interval with id " + interval.getId() + " already exists");
-        }
+//        if (findById(interval.getId()) != null) {
+//            throw new IllegalArgumentException("Interval with id " + interval.getId() + " already exists");
+//        }
 
         try (PreparedStatement pstmt = connection.prepareStatement(insertQuery)) {
             pstmt.setLong(1, interval.getTrainer().getId());

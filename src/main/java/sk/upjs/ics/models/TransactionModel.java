@@ -2,8 +2,6 @@ package sk.upjs.ics.models;
 
 import sk.upjs.ics.Factory;
 import sk.upjs.ics.daos.interfaces.CreditTransactionDao;
-import sk.upjs.ics.daos.interfaces.ReservationDao;
-import sk.upjs.ics.daos.interfaces.VisitDao;
 import sk.upjs.ics.entities.CreditTransaction;
 import sk.upjs.ics.security.Auth;
 import sk.upjs.ics.security.Principal;
@@ -13,7 +11,6 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Objects;
 
 public class TransactionModel {
 
