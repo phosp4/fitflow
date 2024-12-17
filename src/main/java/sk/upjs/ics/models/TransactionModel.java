@@ -27,7 +27,7 @@ public class TransactionModel {
 
             // ak to nie je prisluchajuci user alebo nie je credit_purchase, tak ju odstran
             if (!creditTransaction.getUser().getId().equals(principal.getId()) ||
-                    !creditTransaction.getCreditTransactionType().getId().equals(2L)) {
+                    !(creditTransaction.getCreditTransactionType().getId().equals(2L))) {
                 creditTransactions.remove(creditTransaction);
             } else {
                 System.out.println("CreditTransaction: " + creditTransaction);
@@ -37,6 +37,12 @@ public class TransactionModel {
         // spracuj ich do spravnej textovej podoby
         ArrayList<String> transactionHistory = new ArrayList<>();
         for (CreditTransaction creditTransaction : creditTransactions) {
+
+            // todo not sure why it has to be also here but now it is working
+            if (creditTransaction.getCreditTransactionType().getId() != 2L) {
+                continue;
+            }
+
             double amount = creditTransaction.getAmount();
             LocalDateTime time = LocalDateTime.ofInstant(creditTransaction.getCreatedAt(), ZoneId.systemDefault());
             String formattedTime = time.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));

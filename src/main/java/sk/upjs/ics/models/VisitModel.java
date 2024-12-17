@@ -29,6 +29,7 @@ public class VisitModel {
 
                 // ak to nie je prisluchajuci user alebo nie je visit, tak ju odstran
                 if (!visit.getUser().getId().equals(principal.getId()) ||
+                        visit.getCreditTransaction() == null ||
                         !visit.getCreditTransaction().getCreditTransactionType().getId().equals(1L)) {
                     visits.remove(visit);
                 } else {

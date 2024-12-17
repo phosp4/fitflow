@@ -62,10 +62,10 @@ public class User {
             user.setEmail(rs.getString(prefix + "email"));
             user.setCreditBalance(rs.getFloat(prefix + "credit_balance"));
             user.setPhone(rs.getString(prefix + "phone"));
-//            user.setBirthDate(rs.getDate(prefix + "birth_date").toLocalDate());
+//            user.setBirthDate(rs.getDate(prefix + "birth_date").toLocalDate()); // todo
             user.setActive(rs.getBoolean(prefix + "active"));
-//            user.setCreatedAt(rs.getTimestamp(prefix + "created_at").toInstant()); // todo toto robi problemy pri auth
-//            user.setUpdatedAt(rs.getTimestamp(prefix + "updated_at").toInstant());
+            user.setCreatedAt(rs.getTimestamp(prefix + "created_at").toInstant()); // todo toto robi problemy pri auth
+            user.setUpdatedAt(rs.getTimestamp(prefix + "updated_at").toInstant()); // todo
             user.setTrainerSpecializationSet(new HashSet<>());
 
             return user;

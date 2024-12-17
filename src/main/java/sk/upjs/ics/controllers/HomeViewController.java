@@ -91,6 +91,7 @@ public class HomeViewController implements Initializable {
         Visit visit = new Visit();
         visit.setVisitSecret(uniqueID);
         visit.setUser(userDao.findById(principal.getId()));
+        System.out.println("user added to visit:" + userDao.findById(principal.getId()));
         visit.setCheckInTime(new Timestamp(System.currentTimeMillis()).toInstant());
         visitDao.create(visit);
 
@@ -131,6 +132,7 @@ public class HomeViewController implements Initializable {
 
         // posli cas vystupu do databazy
         Visit visit = visitDao.findByVisitSecret(QRCodeUitl.readQRCode("src/main/resources/sk/upjs/ics/qr_codes/qrcode.png"));
+        //System.out.println("found visit" + visit);
         visit.setCheckOutTime(new Timestamp(System.currentTimeMillis()).toInstant());
 
         // vypocitaj cenu a updatni ju
