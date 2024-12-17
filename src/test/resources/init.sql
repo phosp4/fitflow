@@ -1,97 +1,14 @@
-Here's a comprehensive README based on the codebase:
+DROP TABLE IF EXISTS trainers_have_specializations;
+DROP TABLE IF EXISTS trainer_specializations;
+DROP TABLE IF EXISTS trainers_intervals;
+DROP TABLE IF EXISTS reservations;
+DROP TABLE IF EXISTS reservation_statuses;
+DROP TABLE IF EXISTS visits;
+DROP TABLE IF EXISTS credit_transactions;
+DROP TABLE IF EXISTS credit_transaction_types;
+DROP TABLE IF EXISTS roles;
+DROP TABLE IF EXISTS users;
 
-# FitFlow
-
-FitFlow is a comprehensive fitness center management system built with JavaFX that integrates the management of members, trainers, equipment, and activities into a unified solution.
-
-## Features
-
-- **User Authentication & Authorization**
-  - Secure login/signup system
-  - Role-based access control (Admin, User, Trainer)
-  - Password encryption using BCrypt
-
-- **Member Management**
-  - Member profiles with personal information
-  - Credit balance system
-  - Visit tracking with QR code generation
-  - Reservation management
-
-- **Trainer Management**
-  - Trainer profiles and specializations
-  - Availability scheduling
-  - Reservation handling
-
-- **Financial Management**
-  - Credit transaction system
-  - Payment processing
-  - Transaction history tracking
-
-- **Internationalization**
-  - Support for multiple languages (English, German, Slovak)
-  - Easy language switching in settings
-
-## Technology Stack
-
-- **Frontend**: JavaFX with MaterialFX components
-- **Backend**: Java
-- **Database**: SQLite
-- **Build Tool**: Maven
-- **Additional Libraries**:
-  - Spring Security (Password encryption)
-  - ZXing (QR code generation)
-  - Lombok (Boilerplate reduction)
-  - JUnit (Testing)
-
-## Getting Started
-
-### Prerequisites
-
-- Java 22 or higher
-- Maven
-
-### Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/fitflow.git
-```
-
-2. Navigate to project directory:
-```bash
-cd fitflow
-```
-
-3. Build the project:
-```bash
-mvn clean install
-```
-
-4. Run the application:
-```bash
-mvn javafx:run
-```
-
-### Default Admin Account
-
-The system automatically creates a default admin account on first run:
-- Username: admin
-- Password: admin
-
-## Database Schema
-
-The application uses SQLite with the following main tables:
-- users
-- roles
-- credit_transactions
-- visits
-- reservations
-- trainers_intervals
-- trainer_specializations
-
-Reference to schema:
-
-```12:113:src/test/resources/init.sql
 CREATE TABLE IF NOT EXISTS roles
 (
     id   INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -194,35 +111,44 @@ CREATE TABLE IF NOT EXISTS trainers_have_specializations
     FOREIGN KEY (trainer_id) REFERENCES users (id),
     FOREIGN KEY (specialization_id) REFERENCES trainer_specializations (id)
 );
-```
 
+INSERT INTO roles (name)
+VALUES ('admin'),
+       ('user'),
+       ('trainer');
 
-## Internationalization
+INSERT INTO credit_transaction_types (id, name)
+VALUES (3, 'refund'),
+       (1, 'visit'),
+       (2, 'credit_purchase');
 
-The application supports multiple languages through resource bundles. Language files are located in:
-```
-src/main/resources/sk/upjs/ics/MyResources/
-```
+INSERT INTO reservation_statuses (name)
+VALUES ('pending'),
+       ('confirmed'),
+       ('cancelled');
 
-Supported languages:
-- English (MyResources_en.properties)
-- German (MyResources_de.properties)
-- Slovak (MyResources_sk.properties)
+INSERT INTO trainer_specializations (name)
+VALUES ('Yoga'),
+       ('Pilates'),
+       ('CrossFit');
 
-## Contributing
+INSERT INTO users (id, role_id, email, salt, password_hash, first_name, last_name, credit_balance, phone, birth_date, active, created_at, updated_at) VALUES
+(1, 1, 'user1@example.com', '123456', '$2b$10$xY/j5.25h8xL0t5c.jR7Bu.5x74j9.2gV9/0/j109.4e1Z9.3160', 'John', 'Doe', 100.00, '123-456-7890', '1990-01-01', 1, '2023-11-23 12:34:56', '2023-11-23 12:34:56'),
+(2, 2, 'user2@example.com', '123456', '$2b$10$xY/j5.25h8xL0t5c.jR7Bu.5x74j9.2gV9/0/j109.4e1Z9.3160', 'Jane', 'Smith', 50.50, '987-654-3210', '1995-02-15', 1, '2023-11-23 12:34:56', '2023-11-23 12:34:56'),
+(3, 3, 'adminAlice@example.com', '123456', '$2b$10$xY/j5.25h8xL0t5c.jR7Bu.5x74j9.2gV9/0/j109.4e1Z9.3160', 'Alice', 'Johnson', 0.00, '555-555-5555', '2000-03-30', 1, '2023-11-23 12:34:56', '2023-11-23 12:34:56'),
+(4, 3, 'user3@example.com', '123456', '$2b$10$xY/j5.25h8xL0t5c.jR7Bu.5x74j9.2gV9/0/j109.4e1Z9.3160', 'Bob', 'Brown', 0.00, '555-555-5555', '2000-03-30', 1, '2023-11-23 12:34:56', '2023-11-23 12:34:56');
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+INSERT INTO reservations (id, customer_id, status, note, created_at, updated_at, credit_transaction_id) VALUES
+(1, 10, 'pending', 'Please focus on core strength exercises.', '2023-11-23 12:34:56', '2023-11-23 12:34:56', 100),
+(2, 20, 'confirmed', 'No special requests.', '2023-11-24 10:00:00', '2023-11-24 10:00:00', 200),
+(3, 10, 'canceled', 'Canceled due to illness.', '2023-11-25 14:00:00', '2023-11-25 14:00:00', 300);
 
-## License
+INSERT INTO trainers_intervals (id, trainer_id, day, start_time, end_time, reservation_id) VALUES
+(100, 1, '2023-11-23', '12:34:56', '13:45:00', 1),
+(200, 2, '2023-11-24', '10:00:00', '11:30:00', 2),
+(300, 1, '2023-11-25', '14:00:00', '15:15:00', 3);
 
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- MaterialFX for the modern UI components
-- Spring Security for authentication handling
-- ZXing for QR code functionality
+INSERT INTO visits (id, user_id, visit_secret, credit_transaction_id) VALUES
+(1, 1, 'secret123', 100),
+(2, 2, 'secret456', 200),
+(3, 1, 'secret789', 300);
