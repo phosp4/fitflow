@@ -1,5 +1,3 @@
-Here's a comprehensive README based on the codebase:
-
 # FitFlow
 
 FitFlow is a comprehensive fitness center management system built with JavaFX that integrates the management of members, trainers, equipment, and activities into a unified solution.

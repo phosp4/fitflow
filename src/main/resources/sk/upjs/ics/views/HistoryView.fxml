@@ -10,81 +10,74 @@
 
 <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sk.upjs.ics.controllers.HistoryViewController">
    <VBox alignment="CENTER_LEFT" maxHeight="220.0" prefHeight="130.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
-      <children>
-         <Label prefHeight="46.0" prefWidth="607.0" text="%history.title" VBox.vgrow="ALWAYS">
-            <font>
-               <Font size="37.0" />
-            </font>
-            <padding>
-               <Insets left="30.0" />
-            </padding>
-         </Label>
-         <Separator maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
-            <VBox.margin>
-               <Insets right="30.0" top="10.0" />
-            </VBox.margin>
-            <padding>
-               <Insets left="30.0" />
-            </padding>
-         </Separator>
-      </children>
+      <Label prefHeight="46.0" prefWidth="607.0" text="%history.title" VBox.vgrow="ALWAYS">
+         <font>
+            <Font size="37.0"/>
+         </font>
+         <padding>
+            <Insets left="30.0"/>
+         </padding>
+      </Label>
+      <Separator maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+         <VBox.margin>
+            <Insets right="30.0" top="10.0"/>
+         </VBox.margin>
+         <padding>
+            <Insets left="30.0"/>
+         </padding>
+      </Separator>
    </VBox>
    <HBox alignment="CENTER" prefHeight="264.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
-      <children>
-         <VBox layoutX="355.0" layoutY="10.0" HBox.hgrow="ALWAYS">
-            <children>
-               <Label text="%history.entries">
-                  <font>
-                     <Font size="16.0" />
-                  </font>
-                  <VBox.margin>
-                     <Insets bottom="10.0" />
-                  </VBox.margin>
-               </Label>
-               <MFXListView fx:id="historyEntriesList" hideScrollBars="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="252.0" prefWidth="255.0" VBox.vgrow="ALWAYS">
-                  <VBox.margin>
-                     <Insets left="7.0" right="7.0" />
-                  </VBox.margin>
-               </MFXListView>
-            </children>
-         </VBox>
-         <VBox HBox.hgrow="ALWAYS">
-            <children>
-               <Label text="%history.transactions">
-                  <font>
-                     <Font size="16.0" />
-                  </font>
-                  <VBox.margin>
-                     <Insets bottom="10.0" />
-                  </VBox.margin>
-               </Label>
-               <MFXListView fx:id="historyTransactionsList" hideScrollBars="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="252.0" prefWidth="255.0" VBox.vgrow="ALWAYS">
-                  <VBox.margin>
-                     <Insets left="7.0" right="7.0" />
-                  </VBox.margin>
-               </MFXListView>
-            </children>
-         </VBox>
-<!--         <VBox layoutX="10.0" layoutY="10.0" HBox.hgrow="ALWAYS">-->
-<!--            <children>-->
-<!--               <Label text="%history.reservations">-->
-<!--                  <font>-->
-<!--                     <Font size="16.0" />-->
-<!--                  </font>-->
-<!--                  <VBox.margin>-->
-<!--                     <Insets bottom="10.0" />-->
-<!--                  </VBox.margin>-->
-<!--               </Label>-->
-<!--               <MFXListView fx:id="historyReservationsList" hideScrollBars="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="252.0" prefWidth="255.0" VBox.vgrow="ALWAYS">-->
-<!--                  <VBox.margin>-->
-<!--                     <Insets left="7.0" right="7.0" />-->
-<!--                  </VBox.margin>-->
-<!--               </MFXListView>-->
-<!--            </children>-->
-<!--         </VBox>-->
-      </children>
       <VBox.margin>
-         <Insets bottom="30.0" left="30.0" right="30.0" />
+         <Insets bottom="30.0" left="30.0" right="30.0"/>
       </VBox.margin>
+      <VBox layoutX="355.0" layoutY="10.0" HBox.hgrow="ALWAYS">
+         <Label text="%history.entries">
+            <font>
+               <Font size="16.0"/>
+            </font>
+            <VBox.margin>
+               <Insets bottom="10.0"/>
+            </VBox.margin>
+         </Label>
+         <MFXListView fx:id="historyEntriesList" hideScrollBars="true" maxHeight="1.7976931348623157E308"
+                      maxWidth="1.7976931348623157E308" prefHeight="252.0" prefWidth="255.0" VBox.vgrow="ALWAYS">
+            <VBox.margin>
+               <Insets left="7.0" right="7.0"/>
+            </VBox.margin>
+         </MFXListView>
+      </VBox>
+      <VBox HBox.hgrow="ALWAYS">
+         <Label text="%history.transactions">
+            <font>
+               <Font size="16.0"/>
+            </font>
+            <VBox.margin>
+               <Insets bottom="10.0"/>
+            </VBox.margin>
+         </Label>
+         <MFXListView fx:id="historyTransactionsList" hideScrollBars="true" maxHeight="1.7976931348623157E308"
+                      maxWidth="1.7976931348623157E308" prefHeight="252.0" prefWidth="255.0" VBox.vgrow="ALWAYS">
+            <VBox.margin>
+               <Insets left="7.0" right="7.0"/>
+            </VBox.margin>
+         </MFXListView>
+      </VBox>
+<!--      <VBox layoutX="10.0" layoutY="10.0" HBox.hgrow="ALWAYS">-->
+<!--         <Label text="%history.reservations">-->
+<!--            <font>-->
+<!--               <Font size="16.0"/>-->
+<!--            </font>-->
+<!--            <VBox.margin>-->
+<!--               <Insets bottom="10.0"/>-->
+<!--            </VBox.margin>-->
+<!--         </Label>-->
+<!--         <MFXListView fx:id="historyReservationsList" hideScrollBars="true" maxHeight="1.7976931348623157E308"-->
+<!--                      maxWidth="1.7976931348623157E308" prefHeight="252.0" prefWidth="255.0" VBox.vgrow="ALWAYS">-->
+<!--            <VBox.margin>-->
+<!--               <Insets left="7.0" right="7.0"/>-->
+<!--            </VBox.margin>-->
+<!--         </MFXListView>-->
+<!--      </VBox>-->
    </HBox>
 </VBox>
