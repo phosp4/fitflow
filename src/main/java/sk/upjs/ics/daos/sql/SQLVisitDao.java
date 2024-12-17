@@ -211,21 +211,21 @@ public class SQLVisitDao implements VisitDao {
             throw new IllegalArgumentException("Visit check-in time cannot be null");
         }
 
-        if (visit.getCreditTransaction() == null) {
-            throw new IllegalArgumentException("Visit credit transaction cannot be null");
-        }
+//        if (visit.getCreditTransaction() == null) {
+//            throw new IllegalArgumentException("Visit credit transaction cannot be null");
+//        }
 
-        if (visit.getCreditTransaction().getId() == null) {
-            throw new IllegalArgumentException("Visit credit transaction id cannot be null");
-        }
+//        if (visit.getCreditTransaction().getId() == null) {
+//            throw new IllegalArgumentException("Visit credit transaction id cannot be null");
+//        }
 
         if (visit.getVisitSecret() == null) {
             throw new IllegalArgumentException("Visit secret cannot be null");
         }
 
-        if (findById(visit.getId()) != null) {
-            throw new IllegalArgumentException("Visit with id " + visit.getId() + " already exists");
-        }
+//        if (findById(visit.getId()) != null) {
+//            throw new IllegalArgumentException("Visit with id " + visit.getId() + " already exists");
+//        }
 
         try ( PreparedStatement pstmt = connection.prepareStatement(insertQuery)) {
             pstmt.setLong(1, visit.getUser().getId());

@@ -292,29 +292,29 @@ public class SQLUserDao implements UserDao {
             throw new IllegalArgumentException("User id cannot be null");
         }
 
-        if (user.getRole() != null) {
-            throw new IllegalArgumentException("User role cannot be set");
-        }
+//        if (user.getRole() != null) {
+//            throw new IllegalArgumentException("User role cannot be set");
+//        } // todo
 
-        if (user.getEmail() != null) {
-            throw new IllegalArgumentException("User email cannot be set");
-        }
+//        if (user.getEmail() != null) {
+//            throw new IllegalArgumentException("User email cannot be set");
+//        }
 
-        if (user.getFirstName() != null) {
-            throw new IllegalArgumentException("User first name cannot be set");
-        }
+//        if (user.getFirstName() != null) {
+//            throw new IllegalArgumentException("User first name cannot be set");
+//        }
 
-        if (user.getLastName() != null) {
-            throw new IllegalArgumentException("User last name cannot be set");
-        }
-
-        if (user.getPhone() != null) {
-            throw new IllegalArgumentException("User phone cannot be set");
-        }
-
-        if (user.getBirthDate() != null) {
-            throw new IllegalArgumentException("User birth date cannot be set");
-        }
+//        if (user.getLastName() != null) {
+//            throw new IllegalArgumentException("User last name cannot be set");
+//        }
+//
+//        if (user.getPhone() != null) {
+//            throw new IllegalArgumentException("User phone cannot be set");
+//        }
+//
+//        if (user.getBirthDate() != null) {
+//            throw new IllegalArgumentException("User birth date cannot be set");
+//        }
 
         if (user.getCreditBalance() < 0) {
             throw new IllegalArgumentException("Credit balance cannot be negative");

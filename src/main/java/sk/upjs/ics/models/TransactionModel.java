@@ -11,6 +11,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 
 public class TransactionModel {
 
@@ -22,13 +23,14 @@ public class TransactionModel {
         ArrayList<CreditTransaction> creditTransactions = creditTransactionDao.findAll();
 
         // nechaj len prisluchajuce userovi a ktore su purchases
-        for (int i = 0; i < creditTransactions.size(); i++) {
-            CreditTransaction creditTransaction = creditTransactions.get(i);
+        Iterator<CreditTransaction> iterator = creditTransactions.iterator();
+        while (iterator.hasNext()) {
+            CreditTransaction creditTransaction = iterator.next();
 
-            // ak to nie je prisluchajuci user alebo nie je credit_purchase, tak ju odstran
+            // Remove if it does not belong to the current user or is not a credit_purchase
             if (!creditTransaction.getUser().getId().equals(principal.getId()) ||
-                    !creditTransaction.getCreditTransactionType().getId().equals(2L)) {
-                creditTransactions.remove(creditTransaction);
+                    !(creditTransaction.getCreditTransactionType().getId().equals(2L))) {
+                iterator.remove();
             } else {
                 System.out.println("CreditTransaction: " + creditTransaction);
             }
@@ -37,6 +39,12 @@ public class TransactionModel {
         // spracuj ich do spravnej textovej podoby
         ArrayList<String> transactionHistory = new ArrayList<>();
         for (CreditTransaction creditTransaction : creditTransactions) {
+
+            // todo not sure why it has to be also here but now it is working
+            if (creditTransaction.getCreditTransactionType().getId() != 2L) {
+                continue;
+            }
+
             double amount = creditTransaction.getAmount();
             LocalDateTime time = LocalDateTime.ofInstant(creditTransaction.getCreatedAt(), ZoneId.systemDefault());
             String formattedTime = time.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));

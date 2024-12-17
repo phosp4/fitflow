@@ -1,8 +1,6 @@
 package sk.upjs.ics.models;
 
 import sk.upjs.ics.Factory;
-import sk.upjs.ics.daos.interfaces.CreditTransactionDao;
-import sk.upjs.ics.daos.interfaces.ReservationDao;
 import sk.upjs.ics.daos.interfaces.VisitDao;
 import sk.upjs.ics.entities.Visit;
 import sk.upjs.ics.security.Auth;
@@ -13,6 +11,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 
 public class VisitModel {
 
@@ -23,14 +22,17 @@ public class VisitModel {
             // nacitaj arraylist tranzakcii prisluchajucich userovi
             ArrayList<Visit> visits = visitDao.findAll();
 
-            // nechaj len prisluchajuce userovi a ktore su purchases
-            for (int i = 0; i < visits.size(); i++) {
-                Visit visit = visits.get(i);
 
-                // ak to nie je prisluchajuci user alebo nie je visit, tak ju odstran
+            // vymaz nevyhovujuce tranzakcie
+            Iterator<Visit> iterator = visits.iterator();
+            while (iterator.hasNext()) {
+                Visit visit = iterator.next();
+
+                // Remove if it does not belong to the current user or is not a visit
                 if (!visit.getUser().getId().equals(principal.getId()) ||
+                        visit.getCreditTransaction() == null ||
                         !visit.getCreditTransaction().getCreditTransactionType().getId().equals(1L)) {
-                    visits.remove(visit);
+                    iterator.remove();
                 } else {
                     System.out.println("Visit: " + visit);
                 }
@@ -39,7 +41,12 @@ public class VisitModel {
             // spracuj ich do spravnej textovej podoby
             ArrayList<String> visitHistory = new ArrayList<>();
             for (Visit visit : visits) {
-                double amount = visit.getCreditTransaction().getAmount();
+                double amount;
+                try {
+                    amount = visit.getCreditTransaction().getAmount();
+                } catch (NullPointerException e) {
+                    amount = 0;
+                }
                 LocalDateTime checkin = LocalDateTime.ofInstant(visit.getCheckInTime(), ZoneId.systemDefault());
                 String formattedCheckin = checkin.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
 
