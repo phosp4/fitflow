@@ -147,13 +147,7 @@ INSERT INTO trainers_intervals (id, trainer_id, day, start_time, end_time, reser
 (200, 2, '2023-11-24', '10:00:00', '11:30:00', 2),
 (300, 1, '2023-11-25', '14:00:00', '15:15:00', 3);
 
--- these make problems because of generic user ids
--- INSERT INTO credit_transactions (id, user_id, amount, credit_transaction_type_id, created_at) VALUES
--- (100, 10, 10.00, 1, '2023-11-23 12:34:56'),
--- (200, 20, 20.00, 2, '2023-11-24 10:00:00'),
--- (300, 10, 30.00, 1, '2023-11-25 14:00:00');
-
 INSERT INTO visits (id, user_id, visit_secret, credit_transaction_id) VALUES
-(1, 10, 'secret123', 100),
-(2, 20, 'secret456', 200),
-(3, 10, 'secret789', 300);
+(1, 1, 'secret123', 100),
+(2, 2, 'secret456', 200),
+(3, 1, 'secret789', 300);
