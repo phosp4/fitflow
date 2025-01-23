@@ -15,7 +15,7 @@ public class CreditTransaction {
     private Long id;
     private User user;
     private CreditTransactionType creditTransactionType;
-    private double amount;
+    private Long amount;
     private Instant createdAt;
     private Instant updatedAt;
 
@@ -49,7 +49,7 @@ public class CreditTransaction {
             creditTransaction.setId(id);
             creditTransaction.setUser(null);
             creditTransaction.setCreditTransactionType(null);
-            creditTransaction.setAmount(rs.getDouble(prefix + "amount"));
+            creditTransaction.setAmount(rs.getLong(prefix + "amount"));
             creditTransaction.setCreatedAt(rs.getTimestamp(prefix + "created_at").toInstant());
             creditTransaction.setUpdatedAt(rs.getTimestamp(prefix + "updated_at").toInstant());
 

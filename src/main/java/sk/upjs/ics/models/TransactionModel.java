@@ -45,10 +45,13 @@ public class TransactionModel {
                 continue;
             }
 
-            double amount = creditTransaction.getAmount();
+            Long amount = creditTransaction.getAmount();
             LocalDateTime time = LocalDateTime.ofInstant(creditTransaction.getCreatedAt(), ZoneId.systemDefault());
             String formattedTime = time.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
-            transactionHistory.add(formattedTime + " | " + amount + "€");
+
+            double amountInEuro = amount / 100.0;
+
+            transactionHistory.add(formattedTime + " | " + amountInEuro + "€");
         }
 
         // Reverse the order of the transaction history

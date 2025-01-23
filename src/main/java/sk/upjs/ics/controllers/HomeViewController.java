@@ -48,8 +48,8 @@ public class HomeViewController implements Initializable {
     @FXML
     private MFXButton scanButton;
     private Timeline timeline;
-    private double price = 0;
-    private static final Long PRICE_PER_HOUR = 300L; // 3 € per hour is normal, just for testing purposes
+    private Long priceInCents = 0L;
+    private static final Long PRICE_PER_MINUTE = 8L; // 8 cents per minute = 4.8e per hour
 
     @FXML
     private Label estimatedPriceLabel;
@@ -65,8 +65,8 @@ public class HomeViewController implements Initializable {
 
     @FXML
     private GridPane infoGrid;
-
-
+    @FXML
+    private Label homeAlertLabel;
     private final VisitDao visitDao = Factory.INSTANCE.getVisitDao();
     private final TransactionTypeDao transactionTypeDao = Factory.INSTANCE.getTransactionTypeDao();
     private final CreditTransactionDao creditTransactionDao = Factory.INSTANCE.getCreditTransactionDao();
@@ -80,12 +80,21 @@ public class HomeViewController implements Initializable {
         scanButton.setVisible(false);
         qrImageView.setImage(new Image("sk/upjs/ics/dumbbell.png"));
         infoGrid.setVisible(false);
-
+        homeAlertLabel.setVisible(false);
     }
     @FXML
     void enterButtonPressed(ActionEvent event) {
+
+        // check the credit balance
+        if (userDao.findById(principal.getId()).getCreditBalance() <= 0) {
+            homeAlertLabel.setVisible(true);
+            return;
+        }
+
         // vygeneruj visitsecret qr kod
         String uniqueID = UUID.randomUUID().toString();
+
+        System.out.println(uniqueID);
 
         // vytvor novy zaznam v tabulke a posli ho tam
         Visit visit = new Visit();
@@ -119,7 +128,7 @@ public class HomeViewController implements Initializable {
         // zapni timer a pocitaj estimated price
         timeLabel.setText("00:00:00");
         estimatedPriceLabel.setText("0.0 €");
-        price = 0;
+        priceInCents = 0L;
         startTimer();
     }
 
@@ -136,8 +145,14 @@ public class HomeViewController implements Initializable {
         visit.setCheckOutTime(new Timestamp(System.currentTimeMillis()).toInstant());
 
         // vypocitaj cenu a updatni ju
-        long duration = visit.getCheckOutTime().getEpochSecond() - visit.getCheckInTime().getEpochSecond();
-        double price = Math.round(((double) duration / 3600 * PRICE_PER_HOUR)*100) / 100.0;
+        long durationInSeconds = visit.getCheckOutTime().getEpochSecond() - visit.getCheckInTime().getEpochSecond();
+        Long price = getPriceFromDuration(durationInSeconds);
+
+        // skontroluj ci ma pouzivatel dost penazi
+        if (userDao.findById(principal.getId()).getCreditBalance() < price) {
+            homeAlertLabel.setVisible(true);
+            return;
+        }
 
         // vytvor tranzakciu a pridaj ju do databazy
         CreditTransaction creditTransaction = new CreditTransaction();
@@ -148,7 +163,7 @@ public class HomeViewController implements Initializable {
 
         // realne odpocitaj kredit
         User user = visit.getUser();
-        user.setCreditBalance((float) (user.getCreditBalance() - price));
+        user.setCreditBalance(user.getCreditBalance() - price);
         userDao.updateBalance(user);
 
         // navsteve nastav tranzakciu a uloz ju
@@ -165,17 +180,31 @@ public class HomeViewController implements Initializable {
         timeline.stop();
     }
 
+    /*
+    * uses ceil to round to nearest minute
+    * returns price in cents
+     */
+    private Long getPriceFromDuration(Long durationInSeconds) {
+        return ((long) Math.ceil(durationInSeconds / 60.0)) * PRICE_PER_MINUTE;
+    }
+
     private void startTimer() {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+
         final LocalTime[] startTime = {LocalTime.of(0, 0, 0)};
+        final long[] elapsedSeconds = {0};
 
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
             timeLabel.setText(startTime[0].format(formatter));
-            price += (PRICE_PER_HOUR / 3600.0);
-            estimatedPriceLabel.setText(((double) Math.round(price * 100)/100) + " €"); // (double) Math.round(a * 100) / 100;
+
+            // price label
+            priceInCents = getPriceFromDuration(elapsedSeconds[0]);
+            estimatedPriceLabel.setText((priceInCents / 100.0) + " €"); // (double) Math.round(a * 100) / 100;
+            //System.out.println(elapsedSeconds[0]);
 
             startTime[0] = startTime[0].plusSeconds(1);
+            elapsedSeconds[0]++;
         }));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();

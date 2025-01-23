@@ -124,7 +124,7 @@ public class SQLUserDao implements UserDao {
                     pstmt.setString(4, parts[3]);
                     pstmt.setString(5, parts[4]);
                     pstmt.setString(6, parts[5]);
-                    pstmt.setFloat(7, Float.parseFloat(parts[6]));
+                    pstmt.setLong(7, Long.parseLong(parts[6]));
                     pstmt.setString(8, parts[7]);
                     pstmt.setDate(9, Date.valueOf(parts[8]));
                     pstmt.setBoolean(10, Boolean.parseBoolean(parts[9]));
@@ -196,7 +196,7 @@ public class SQLUserDao implements UserDao {
             pstmt.setString(4, password_hash);
             pstmt.setString(5, user.getFirstName());
             pstmt.setString(6, user.getLastName());
-            pstmt.setFloat(7, user.getCreditBalance());
+            pstmt.setLong(7, user.getCreditBalance());
             pstmt.setString(8, user.getPhone());
             pstmt.setDate(9, Date.valueOf(user.getBirthDate()));
             pstmt.setBoolean(10, user.isActive());
@@ -263,7 +263,7 @@ public class SQLUserDao implements UserDao {
            pstmt.setString(2, user.getEmail());
            pstmt.setString(3, user.getFirstName());
            pstmt.setString(4, user.getLastName());
-           pstmt.setFloat(5, user.getCreditBalance());
+           pstmt.setLong(5, user.getCreditBalance());
            pstmt.setString(6, user.getPhone());
            pstmt.setDate(7, Date.valueOf(user.getBirthDate()));
            pstmt.setBoolean(8, user.isActive());
@@ -326,7 +326,7 @@ public class SQLUserDao implements UserDao {
 
         String updateQuery = "UPDATE users SET credit_balance = ? WHERE id = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(updateQuery)) {
-            pstmt.setFloat(1, user.getCreditBalance());
+            pstmt.setLong(1, user.getCreditBalance());
             pstmt.setLong(2, user.getId());
             pstmt.executeUpdate();
         } catch (SQLException e) {

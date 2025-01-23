@@ -41,11 +41,11 @@ public class VisitModel {
             // spracuj ich do spravnej textovej podoby
             ArrayList<String> visitHistory = new ArrayList<>();
             for (Visit visit : visits) {
-                double amount;
+                Long amount;
                 try {
                     amount = visit.getCreditTransaction().getAmount();
                 } catch (NullPointerException e) {
-                    amount = 0;
+                    amount = 0L;
                 }
                 LocalDateTime checkin = LocalDateTime.ofInstant(visit.getCheckInTime(), ZoneId.systemDefault());
                 String formattedCheckin = checkin.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
@@ -53,7 +53,9 @@ public class VisitModel {
                 LocalDateTime checkout = LocalDateTime.ofInstant(visit.getCheckOutTime(), ZoneId.systemDefault());
                 String formattedCheckout = checkout.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
 
-                visitHistory.add(formattedCheckin + " - " + formattedCheckout + " | -" + amount + "€");
+                double amountInEuro = amount / 100.0;
+
+                visitHistory.add(formattedCheckin + " - " + formattedCheckout + " | -" + amountInEuro + "€");
             }
 
             // Reverse the order of the transaction history

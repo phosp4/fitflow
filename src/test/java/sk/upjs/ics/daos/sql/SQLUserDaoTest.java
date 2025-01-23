@@ -75,8 +75,8 @@ class SQLUserDaoTest {
     @Test
     void updateBalance() {
         User user = dao.findById(1L); // John Doe from init.sql
-        float originalBalance = user.getCreditBalance();
-        float newBalance = originalBalance + 50.0f;
+        long originalBalance = user.getCreditBalance();
+        long newBalance = originalBalance + 50L;
         
         user = new User(); // Create minimal user for balance update
         user.setId(1L);
@@ -96,7 +96,7 @@ class SQLUserDaoTest {
         user.setRole(role);
         user.setFirstName("Test");
         user.setLastName("User");
-        user.setCreditBalance(0.0f);
+        user.setCreditBalance(0L);
         user.setPhone("123-456-7890");
         user.setBirthDate(LocalDate.now());
         
@@ -108,7 +108,7 @@ class SQLUserDaoTest {
     void updateBalanceWithNegativeAmount() {
         User user = new User();
         user.setId(1L);
-        user.setCreditBalance(-50.0f);
+        user.setCreditBalance(-50L);
         
         assertThrows(IllegalArgumentException.class, 
                     () -> dao.updateBalance(user));

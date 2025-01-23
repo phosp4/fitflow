@@ -10,6 +10,7 @@ import sk.upjs.ics.entities.User;
 import sk.upjs.ics.security.Auth;
 import sk.upjs.ics.security.Principal;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -30,6 +31,7 @@ public class UserModel {
         creditTransaction.setUser(getCurrentUser());
         creditTransaction.setAmount(addBalance);
         creditTransaction.setCreditTransactionType(Factory.INSTANCE.getTransactionTypeDao().findById(2L));
+        creditTransaction.setCreatedAt(new Timestamp(System.currentTimeMillis()).toInstant());
         transactionDao.create(creditTransaction);
 
         // now update the balance
@@ -92,7 +94,7 @@ public class UserModel {
         user.setFirstName(firstName);
         user.setRole(roleDao.findById(2L));
         user.setLastName(lastName);
-        user.setCreditBalance(0.0f);
+        user.setCreditBalance(0L);
         user.setPhone(phone);
         user.setBirthDate(birthDate);
         user.setRole(Factory.INSTANCE.getRoleDao().findById(1L));

@@ -40,7 +40,7 @@ public class ReservationModel {
         // Create a credit transaction
         CreditTransaction creditTransaction = new CreditTransaction();
         creditTransaction.setUser(userModel.getUserById(userId));
-        creditTransaction.setAmount(-1);
+        creditTransaction.setAmount(-1L); // 0L ?
         creditTransaction.setCreditTransactionType(Factory.INSTANCE.getTransactionTypeDao().findById(1L)); // visit??
         transactionDao.create(creditTransaction);
         reservation.setCreditTransaction(creditTransaction);

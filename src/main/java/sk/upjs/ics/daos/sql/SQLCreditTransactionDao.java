@@ -149,7 +149,7 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
 
                 try (PreparedStatement pstm = connection.prepareStatement(insertQuery)) {
                     pstm.setLong(1, Long.parseLong(parts[0]));
-                    pstm.setFloat(2, Float.parseFloat(parts[1]));
+                    pstm.setLong(2, Long.parseLong(parts[1]));
                     pstm.setLong(3, Long.parseLong(parts[2]));
                     pstm.executeUpdate();
                 } catch (SQLException e) {
@@ -193,7 +193,7 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
 
         try (PreparedStatement pstmt = connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setLong(1, creditTransaction.getUser().getId());
-            pstmt.setDouble(2, creditTransaction.getAmount());
+            pstmt.setLong(2, creditTransaction.getAmount());
             pstmt.setLong(3, creditTransaction.getCreditTransactionType().getId());
             pstmt.executeUpdate();
 
@@ -279,7 +279,7 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
 
         try (PreparedStatement pstmt = connection.prepareStatement(updateQuery)) {
             pstmt.setLong(1, creditTransaction.getUser().getId());
-            pstmt.setDouble(2, creditTransaction.getAmount());
+            pstmt.setLong(2, creditTransaction.getAmount());
             pstmt.setLong(3, creditTransaction.getCreditTransactionType().getId());
             pstmt.setLong(4, creditTransaction.getId());
             pstmt.executeUpdate();

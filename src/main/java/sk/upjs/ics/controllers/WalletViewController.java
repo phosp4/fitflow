@@ -17,7 +17,7 @@ import java.util.ResourceBundle;
 public class WalletViewController implements Initializable {
 
     @Getter
-    private int creditChoice = 10;
+    private Long creditChoiceInCents = 1000L;
 
     @FXML
     private MFXTextField addCreditTextField;
@@ -41,7 +41,7 @@ public class WalletViewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        setCreditChoice(creditChoice);
+        setCreditChoiceInCents(creditChoiceInCents);
 
         // set currentcredit according to the principal
         userModel = new UserModel();
@@ -52,15 +52,17 @@ public class WalletViewController implements Initializable {
     /*
     sets the credit variable if it is a positive number and updates the label
      */
-    private void setCreditChoice(int val) {
-        creditChoice = Math.max(val, 10);
-        creditChoiceLabel.setText(creditChoice + " €");
+    private void setCreditChoiceInCents(Long valInCents) {
+        creditChoiceInCents = Math.max(valInCents, 1000);
+        double creditChoiceInEuros = creditChoiceInCents / 100.0;
+        creditChoiceLabel.setText(creditChoiceInEuros + " €");
     }
 
     @FXML
     void updateCreditChoiceLabel(KeyEvent event) {
         try {
-            setCreditChoice(Integer.parseInt(addCreditTextField.getText()));
+            // user inputs credit in EUROS, thats why * 100
+            setCreditChoiceInCents(Long.parseLong(addCreditTextField.getText()) * 100);
         } catch (NumberFormatException ignored) {
             // ignore input if it contains non numerical values
         }
@@ -68,21 +70,22 @@ public class WalletViewController implements Initializable {
 
     void updateCreditChoiceLabelFromUser() {
         User user = userModel.getCurrentUser();
-        currentCreditLabel.setText(String.valueOf(user.getCreditBalance()) + " €");
+        long priceInCents = user.getCreditBalance();
+        currentCreditLabel.setText(String.valueOf(priceInCents / 100.0) + " €");
     }
 
     @FXML
     void creditChoiceDown(ActionEvent event) {
-        setCreditChoice(getCreditChoice() - 5);
+        setCreditChoiceInCents(getCreditChoiceInCents() - 500);
     }
 
     @FXML
     void creditChoiceUp(ActionEvent event) {
-        setCreditChoice(getCreditChoice() + 5);
+        setCreditChoiceInCents(getCreditChoiceInCents() + 500);
     }
     @FXML
     void payCredit(ActionEvent event) {
-        if (creditChoice == 0) {
+        if (creditChoiceInCents == 0) {
             return;
         }
 
@@ -91,13 +94,13 @@ public class WalletViewController implements Initializable {
         }
 
         // load credit from dbs
-        Float newBalance = userModel.getCurrentUser().getCreditBalance() + creditChoice;
+        Long newBalance = userModel.getCurrentUser().getCreditBalance() + creditChoiceInCents;
 
         // update credit
-        userModel.updateCurrentUserCreditBalance(creditChoice);
+        userModel.updateCurrentUserCreditBalance(creditChoiceInCents);
 
         // update credit choice
-        setCreditChoice(0);
+        setCreditChoiceInCents(0L);
 
         updateCreditChoiceLabelFromUser();
     }
