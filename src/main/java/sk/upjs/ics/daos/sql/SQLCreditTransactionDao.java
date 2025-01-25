@@ -283,7 +283,7 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
         ArrayList<CreditTransaction> creditTransactions = jdbcOperations.query(selectQuery + " WHERE ct_id = ?", resultSetExtractor, id);
 
         if (creditTransactions == null || creditTransactions.isEmpty()) {
-            throw new NotFoundException("Credit transaction with id " + id + "not found!");
+            throw new NotFoundException("Credit transaction with id " + id + " not found!");
         }
 
         return creditTransactions.getFirst();

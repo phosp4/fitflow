@@ -1,5 +1,7 @@
 package sk.upjs.ics.daos.sql;
 
+import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import sk.upjs.ics.daos.interfaces.RoleDao;
 import sk.upjs.ics.entities.Role;
 import sk.upjs.ics.exceptions.CouldNotAccessDatabaseException;
@@ -18,16 +20,29 @@ import java.util.Scanner;
  */
 public class SQLRoleDao implements RoleDao {
 
-    private final Connection connection;
+    private final JdbcOperations jdbcOperations;
 
     /**
      * Constructs a new SQLRoleDao with the specified database connection.
      *
-     * @param connection the database connection
+     * @param jdbcOperations the database connection via jdbc
      */
-    public SQLRoleDao(Connection connection) {
-        this.connection = connection;
+    public SQLRoleDao(JdbcOperations jdbcOperations) {
+        this.jdbcOperations = jdbcOperations;
     }
+
+    /**
+     * Return a list of role objects from the given ResultSet
+     */
+    private final ResultSetExtractor<ArrayList<Role>> resultSetExtractor = rs -> {
+      ArrayList<Role> roles = new ArrayList<>();
+
+      while (rs.next()) {
+          roles.add(Role.fromResultSet(rs));
+      }
+
+      return roles;
+    };
 
     private final String selectQuery = "SELECT id, name FROM roles";
     private final String insertQuery = "INSERT INTO roles (name) VALUES (?)";
@@ -52,12 +67,11 @@ public class SQLRoleDao implements RoleDao {
                     continue;
                 }
 
-                try (PreparedStatement pstmt = connection.prepareStatement(insertQuery)) {
+                jdbcOperations.update(connection -> {
+                    PreparedStatement pstmt = connection.prepareStatement(insertQuery);
                     pstmt.setString(1, line.trim()); // can set the whole line since it only cotains the names
-                    pstmt.executeUpdate();
-                } catch (SQLException e) {
-                    throw new CouldNotAccessDatabaseException("Database not accessible", e);
-                }
+                    return pstmt;
+                });
             }
         } catch (FileNotFoundException e) {
             throw new CouldNotAccessFileException("Could not access file");
@@ -69,7 +83,6 @@ public class SQLRoleDao implements RoleDao {
      *
      * @param role the role to create
      * @throws IllegalArgumentException if the role or its name is null
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      */
     @Override
     public void create(Role role) {
@@ -81,16 +94,11 @@ public class SQLRoleDao implements RoleDao {
             throw new IllegalArgumentException("Role name cannot be null");
         }
 
-        if (findById(role.getId()) != null) {
-            throw new IllegalArgumentException("Role with id " + role.getId() + " already exists");
-        }
-
-        try(PreparedStatement pstmt = connection.prepareStatement(insertQuery)) {
+        jdbcOperations.update(connection -> {
+            PreparedStatement pstmt = connection.prepareStatement(insertQuery);
             pstmt.setString(1, role.getName());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-           throw new CouldNotAccessDatabaseException("Database not accessible", e);
-        }
+            return pstmt;
+        });
     }
 
     /**
@@ -99,7 +107,6 @@ public class SQLRoleDao implements RoleDao {
      * @param role the role to delete
      * @throws IllegalArgumentException if the role or its ID is null
      * @throws NotFoundException if the role with the specified ID is not found
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      */
     @Override
     public void delete(Role role) {
@@ -116,13 +123,7 @@ public class SQLRoleDao implements RoleDao {
         }
 
         String deleteQuery = "DELETE FROM roles WHERE id = ?";
-
-        try (PreparedStatement pstmt = connection.prepareStatement(deleteQuery)) {
-            pstmt.setLong(1, role.getId());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
-        }
+        jdbcOperations.update(deleteQuery, role.getId());
     }
 
     /**
@@ -131,7 +132,6 @@ public class SQLRoleDao implements RoleDao {
      * @param role the role to update
      * @throws IllegalArgumentException if the role or its ID is null
      * @throws NotFoundException if the role with the specified ID is not found
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      */
     @Override
     public void update(Role role) {
@@ -153,13 +153,12 @@ public class SQLRoleDao implements RoleDao {
 
         String updateQuery = "UPDATE roles SET name = ? WHERE id = ?";
 
-        try (PreparedStatement pstmt = connection.prepareStatement(updateQuery)) {
+        jdbcOperations.update(connection -> {
+            PreparedStatement pstmt = connection.prepareStatement(updateQuery);
             pstmt.setString(1, role.getName());
             pstmt.setLong(2, role.getId());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
-        }
+            return pstmt;
+        });
     }
 
     /**
@@ -177,20 +176,13 @@ public class SQLRoleDao implements RoleDao {
             throw new IllegalArgumentException("ID cannot be null");
         }
 
-        try (PreparedStatement pstmt = connection.prepareStatement(selectQuery + " WHERE id = ?")) {
-            pstmt.setLong(1, id);
+        ArrayList<Role> roles = jdbcOperations.query(selectQuery + " WHERE id = ?", resultSetExtractor, id);
 
-            ResultSet rs = pstmt.executeQuery();
-
-            if (!rs.next()) {
-                throw new NotFoundException("Role with id " + id + " not found");
-            }
-
-            return Role.fromResultSet(rs);
-
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
+        if (roles == null || roles.isEmpty()) {
+            throw new NotFoundException("Role with id " + id + " not found!");
         }
+
+        return roles.getFirst();
     }
 
     /**
@@ -202,22 +194,12 @@ public class SQLRoleDao implements RoleDao {
      */
     @Override
     public ArrayList<Role> findAll() {
-        ArrayList<Role> roles = new ArrayList<>();
+        ArrayList<Role> roles = jdbcOperations.query(selectQuery, resultSetExtractor);
 
-        try (Statement stmt = connection.createStatement()){
-            ResultSet rs = stmt.executeQuery(selectQuery);
-
-            while (rs.next()) {
-                roles.add(Role.fromResultSet(rs));
-            }
-
-            if (roles.isEmpty()) {
-                throw new NotFoundException("No roles found");
-            }
-
-            return roles;
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
+        if (roles == null) {
+            throw new NotFoundException("Error while finding roles!");
         }
+
+        return roles;
     }
 }
