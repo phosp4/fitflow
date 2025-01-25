@@ -1,5 +1,7 @@
 package sk.upjs.ics.daos.sql;
 
+import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import sk.upjs.ics.daos.interfaces.SpecializationDao;
 import sk.upjs.ics.entities.Specialization;
 import sk.upjs.ics.exceptions.CouldNotAccessDatabaseException;
@@ -8,10 +10,7 @@ import sk.upjs.ics.exceptions.NotFoundException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -21,16 +20,26 @@ import java.util.Scanner;
  */
 public class SQLSpecializationDao implements SpecializationDao {
 
-    private final Connection connection;
+    private final JdbcOperations jdbcOperations;
 
     /**
      * Constructs a new SQLSpecializationDao with the specified database connection.
      *
-     * @param connection the database connection
+     * @param jdbcOperations the database connection via jdbc
      */
-    public SQLSpecializationDao(Connection connection) {
-        this.connection = connection;
+    public SQLSpecializationDao(JdbcOperations jdbcOperations) {
+        this.jdbcOperations = jdbcOperations;
     }
+
+    private final ResultSetExtractor<ArrayList<Specialization>> resultSetExtractor = rs -> {
+      ArrayList<Specialization> specializations = new ArrayList<>();
+
+      while(rs.next()) {
+          specializations.add(Specialization.fromResultSet(rs));
+      }
+
+      return specializations;
+    };
 
     private final String selectQuery = "SELECT id, name FROM trainer_specializations";
     private final String insertQuery = "INSERT INTO trainer_specializations (name) VALUES (?)";
@@ -55,12 +64,12 @@ public class SQLSpecializationDao implements SpecializationDao {
                     continue;
                 }
 
-                try (PreparedStatement pstmt = connection.prepareStatement(insertQuery)) {
+                jdbcOperations.update(connection -> {
+                    PreparedStatement pstmt = connection.prepareStatement(insertQuery);
                     pstmt.setString(1, line.trim()); // can set the whole line since it only cotains the names
-                    pstmt.executeUpdate();
-                } catch (SQLException e) {
-                    throw new CouldNotAccessDatabaseException("Database not accessible", e);
-                }
+                    return pstmt;
+                });
+
             }
         } catch (FileNotFoundException e) {
             throw new CouldNotAccessFileException("Could not access file");
@@ -72,7 +81,6 @@ public class SQLSpecializationDao implements SpecializationDao {
      *
      * @param specialization the specialization to create
      * @throws IllegalArgumentException if the specialization or its name is null
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      */
     @Override
     public void create(Specialization specialization) {
@@ -88,12 +96,11 @@ public class SQLSpecializationDao implements SpecializationDao {
             throw new IllegalArgumentException("Specialization with id " + specialization.getId() + " already exists");
         }
 
-        try (PreparedStatement pstmt = connection.prepareStatement(insertQuery)) {
+        jdbcOperations.update(connection -> {
+            PreparedStatement pstmt = connection.prepareStatement(insertQuery);
             pstmt.setString(1, specialization.getName());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
-        }
+            return pstmt;
+        });
     }
 
     /**
@@ -101,7 +108,6 @@ public class SQLSpecializationDao implements SpecializationDao {
      *
      * @param specialization the specialization to delete
      * @throws IllegalArgumentException if the specialization or its ID is null
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      */
     @Override
     public void delete(Specialization specialization) {
@@ -119,12 +125,11 @@ public class SQLSpecializationDao implements SpecializationDao {
 
         String deleteQuery = "DELETE FROM trainer_specializations WHERE id = ?";
 
-        try (PreparedStatement pstmt = connection.prepareStatement(deleteQuery)) {
+        jdbcOperations.update(connection -> {
+            PreparedStatement pstmt = connection.prepareStatement(deleteQuery);
             pstmt.setLong(1, specialization.getId());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
-        }
+            return pstmt;
+        });
     }
 
     /**
@@ -132,7 +137,6 @@ public class SQLSpecializationDao implements SpecializationDao {
      *
      * @param specialization the specialization to update
      * @throws IllegalArgumentException if the specialization or any of its required fields are null
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      */
     @Override
     public void update(Specialization specialization) {
@@ -154,13 +158,12 @@ public class SQLSpecializationDao implements SpecializationDao {
 
         String updateQuery = "UPDATE trainer_specializations SET name = ? WHERE id = ?";
 
-        try (PreparedStatement pstmt = connection.prepareStatement(updateQuery)) {
+        jdbcOperations.update(connection -> {
+            PreparedStatement pstmt = connection.prepareStatement(updateQuery);
             pstmt.setString(1, specialization.getName());
             pstmt.setLong(2, specialization.getId());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
-        }
+            return pstmt;
+        });
     }
 
     /**
@@ -169,7 +172,6 @@ public class SQLSpecializationDao implements SpecializationDao {
      * @param id the ID of the specialization to find
      * @return the specialization with the specified ID
      * @throws IllegalArgumentException if the ID is null
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      * @throws NotFoundException if the specialization with the specified ID is not found
      */
     @Override
@@ -178,46 +180,29 @@ public class SQLSpecializationDao implements SpecializationDao {
             throw new IllegalArgumentException("Id cannot be null");
         }
 
-        try (PreparedStatement pstmt = connection.prepareStatement(selectQuery + " WHERE id = ?")) {
-            pstmt.setLong(1, id);
+        ArrayList<Specialization> specializations = jdbcOperations.query(selectQuery + " WHERE id = ?", resultSetExtractor, id);
 
-            ResultSet rs = pstmt.executeQuery();
-
-            if (!rs.next()) {
-                throw new NotFoundException("Specialization with id " + id + " not found");
-            }
-
-            return Specialization.fromResultSet(rs);
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
+        if (specializations == null || specializations.isEmpty()) {
+            throw new NotFoundException("Specialization with id " + id + " not found!");
         }
+
+        return specializations.getFirst();
     }
 
     /**
      * Finds all specializations in the database.
      *
      * @return a list of all specializations
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      * @throws NotFoundException if no specializations are found
      */
     @Override
     public ArrayList<Specialization> findAll() {
-        ArrayList<Specialization> specializations = new ArrayList<>();
+        ArrayList<Specialization> specializations = jdbcOperations.query(selectQuery + " WHERE id = ?", resultSetExtractor);
 
-        try (PreparedStatement pstmt = connection.prepareStatement(selectQuery)) {
-            ResultSet rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                specializations.add(Specialization.fromResultSet(rs));
-            }
-
-            if (specializations.isEmpty()) {
-                throw new NotFoundException("No specializations found");
-            }
-
-            return specializations;
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
+        if (specializations == null) {
+            throw new NotFoundException("Error while finding specializations");
         }
+
+        return specializations;
     }
 }
