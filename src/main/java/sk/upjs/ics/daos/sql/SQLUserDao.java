@@ -1,5 +1,7 @@
 package sk.upjs.ics.daos.sql;
 
+import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import sk.upjs.ics.daos.interfaces.UserDao;
 import sk.upjs.ics.entities.*;
 import sk.upjs.ics.exceptions.CouldNotAccessDatabaseException;
@@ -18,25 +20,21 @@ import java.util.Scanner;
  */
 public class SQLUserDao implements UserDao {
 
-    private final Connection connection;
+    private final JdbcOperations jdbcOperations;
 
     /**
      * Constructs a new SQLUserDao with the specified database connection.
      *
-     * @param connection the database connection
+     * @param jdbcOperations the database connection via jdbc
      */
-    public SQLUserDao(Connection connection) {
-        this.connection = connection;
+    public SQLUserDao(JdbcOperations jdbcOperations) {
+        this.jdbcOperations = jdbcOperations;
     }
 
     /**
      * Extracts a list of User objects from the given ResultSet.
-     *
-     * @param rs the ResultSet to extract users from
-     * @return a list of User objects
-     * @throws SQLException if a database access error occurs
      */
-    private ArrayList<User> extractFromResultSet(ResultSet rs) throws SQLException {
+    private final ResultSetExtractor<ArrayList<User>> resultSetExtractor = rs -> {
         ArrayList<User> users = new ArrayList<>();
 
         HashMap<Long, User> usersProcessed = new HashMap<>();
@@ -80,7 +78,7 @@ public class SQLUserDao implements UserDao {
         }
 
         return users;
-    }
+    };
 
     private final String userColumns = "u.id AS u_id, u.email AS u_email, u.first_name AS u_first_name, " +
             "u.last_name AS u_last_name, u.credit_balance AS u_credit_balance, u.phone AS u_phone, " +
@@ -117,7 +115,8 @@ public class SQLUserDao implements UserDao {
 
                 String[] parts = line.split(",");
 
-                try (PreparedStatement pstmt = connection.prepareStatement(insertQuery)) {
+                jdbcOperations.update(connection -> {
+                    PreparedStatement pstmt = connection.prepareStatement(insertQuery);
                     pstmt.setLong(1, Long.parseLong(parts[0]));
                     pstmt.setString(2, parts[1]);
                     pstmt.setString(3, parts[2]);
@@ -128,10 +127,8 @@ public class SQLUserDao implements UserDao {
                     pstmt.setString(8, parts[7]);
                     pstmt.setDate(9, Date.valueOf(parts[8]));
                     pstmt.setBoolean(10, Boolean.parseBoolean(parts[9]));
-                    pstmt.executeUpdate();
-                } catch (SQLException e) {
-                    throw new CouldNotAccessDatabaseException("Database not accessible", e);
-                }
+                    return pstmt;
+                });
             }
         } catch (FileNotFoundException e) {
             throw new CouldNotAccessFileException("Could not access file");
@@ -145,7 +142,6 @@ public class SQLUserDao implements UserDao {
      * @param salt the salt for the user's password
      * @param password_hash the hashed password
      * @throws IllegalArgumentException if any of the parameters are null or invalid
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      */
     @Override
     public void create(User user, String salt, String password_hash) {
@@ -177,19 +173,12 @@ public class SQLUserDao implements UserDao {
             throw new IllegalArgumentException("User last name cannot be null");
         }
 
-        if (user.getCreditBalance() < 0) {
-            throw new IllegalArgumentException("Credit balance cannot be negative");
+        if (user.getCreditBalance() != 0) {
+            throw new IllegalArgumentException("Credit balance has to be 0");
         }
 
-        if (user.getPhone() == null) {
-            throw new IllegalArgumentException("User phone cannot be null");
-        }
-
-        if (user.getBirthDate() == null) {
-            throw new IllegalArgumentException("User birth date cannot be null");
-        }
-
-        try (PreparedStatement pstmt = connection.prepareStatement(insertQuery)) {
+        jdbcOperations.update(connection -> {
+            PreparedStatement pstmt = connection.prepareStatement(insertQuery);
             pstmt.setLong(1, user.getRole().getId());
             pstmt.setString(2, user.getEmail());
             pstmt.setString(3, salt);
@@ -200,10 +189,8 @@ public class SQLUserDao implements UserDao {
             pstmt.setString(8, user.getPhone());
             pstmt.setDate(9, Date.valueOf(user.getBirthDate()));
             pstmt.setBoolean(10, user.isActive());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
-        }
+            return pstmt;
+        });
     }
 
     /**
@@ -211,7 +198,6 @@ public class SQLUserDao implements UserDao {
      *
      * @param user the user to update
      * @throws IllegalArgumentException if any of the parameters are null or invalid
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      */
     @Override
     public void update(User user) {
@@ -243,14 +229,6 @@ public class SQLUserDao implements UserDao {
             throw new IllegalArgumentException("Credit balance cannot be negative");
         }
 
-        if (user.getPhone() == null) {
-            throw new IllegalArgumentException("User phone cannot be null");
-        }
-
-        if (user.getBirthDate() == null) {
-            throw new IllegalArgumentException("User birth date cannot be null");
-        }
-
         if (findById(user.getId()) == null) {
             throw new NotFoundException("User with id " + user.getId() + " not found");
         }
@@ -258,20 +236,19 @@ public class SQLUserDao implements UserDao {
         String updateQuery = "UPDATE users SET role_id = ?, email = ?, first_name = ?, last_name = ?, " +
                 "credit_balance = ?, phone = ?, birth_date = ?, active = ? WHERE id = ?";
 
-        try (PreparedStatement pstmt = connection.prepareStatement(updateQuery)) {
-           pstmt.setLong(1, user.getRole().getId());
-           pstmt.setString(2, user.getEmail());
-           pstmt.setString(3, user.getFirstName());
-           pstmt.setString(4, user.getLastName());
-           pstmt.setLong(5, user.getCreditBalance());
-           pstmt.setString(6, user.getPhone());
-           pstmt.setDate(7, Date.valueOf(user.getBirthDate()));
-           pstmt.setBoolean(8, user.isActive());
-           pstmt.setLong(9, user.getId());
-           pstmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
-        }
+        jdbcOperations.update(connection -> {
+            PreparedStatement pstmt = connection.prepareStatement(updateQuery);
+            pstmt.setLong(1, user.getRole().getId());
+            pstmt.setString(2, user.getEmail());
+            pstmt.setString(3, user.getFirstName());
+            pstmt.setString(4, user.getLastName());
+            pstmt.setLong(5, user.getCreditBalance());
+            pstmt.setString(6, user.getPhone());
+            pstmt.setDate(7, Date.valueOf(user.getBirthDate()));
+            pstmt.setBoolean(8, user.isActive());
+            pstmt.setLong(9, user.getId());
+            return pstmt;
+        });
     }
 
 
@@ -280,7 +257,6 @@ public class SQLUserDao implements UserDao {
      *
      * @param user the user to update
      * @throws IllegalArgumentException if any of the parameters are null or invalid
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      */
     @Override
     public void updateBalance(User user) {
@@ -292,29 +268,21 @@ public class SQLUserDao implements UserDao {
             throw new IllegalArgumentException("User id cannot be null");
         }
 
-//        if (user.getRole() != null) {
-//            throw new IllegalArgumentException("User role cannot be set");
-//        } // todo
+        if (user.getRole() == null) {
+            throw new IllegalArgumentException("User role cannot be null");
+        }
 
-//        if (user.getEmail() != null) {
-//            throw new IllegalArgumentException("User email cannot be set");
-//        }
+        if (user.getEmail() == null) {
+            throw new IllegalArgumentException("User email cannot be null");
+        }
 
-//        if (user.getFirstName() != null) {
-//            throw new IllegalArgumentException("User first name cannot be set");
-//        }
+        if (user.getFirstName() == null) {
+            throw new IllegalArgumentException("User first name cannot be null");
+        }
 
-//        if (user.getLastName() != null) {
-//            throw new IllegalArgumentException("User last name cannot be set");
-//        }
-//
-//        if (user.getPhone() != null) {
-//            throw new IllegalArgumentException("User phone cannot be set");
-//        }
-//
-//        if (user.getBirthDate() != null) {
-//            throw new IllegalArgumentException("User birth date cannot be set");
-//        }
+        if (user.getLastName() == null) {
+            throw new IllegalArgumentException("User last name cannot be null");
+        }
 
         if (user.getCreditBalance() < 0) {
             throw new IllegalArgumentException("Credit balance cannot be negative");
@@ -325,13 +293,13 @@ public class SQLUserDao implements UserDao {
         }
 
         String updateQuery = "UPDATE users SET credit_balance = ? WHERE id = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(updateQuery)) {
+
+        jdbcOperations.update(connection -> {
+            PreparedStatement pstmt = connection.prepareStatement(updateQuery);
             pstmt.setLong(1, user.getCreditBalance());
             pstmt.setLong(2, user.getId());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException();
-        }
+            return pstmt;
+        });
     }
 
     /**
@@ -341,7 +309,6 @@ public class SQLUserDao implements UserDao {
      * @param salt the new salt for the user's password
      * @param password_hash the new hashed password
      * @throws IllegalArgumentException if any of the parameters are null or invalid
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      */
     @Override
     public void updatePassword(User user, String salt, String password_hash) {
@@ -373,14 +340,6 @@ public class SQLUserDao implements UserDao {
             throw new IllegalArgumentException("Credit balance cannot be negative");
         }
 
-        if (user.getPhone() == null) {
-            throw new IllegalArgumentException("User phone cannot be null");
-        }
-
-        if (user.getBirthDate() == null) {
-            throw new IllegalArgumentException("User birth date cannot be null");
-        }
-
         if (salt == null) {
             throw new IllegalArgumentException("Salt cannot be null");
         }
@@ -395,14 +354,13 @@ public class SQLUserDao implements UserDao {
 
         String updateString = "UPDATE users SET salt = ?, password_hash = ? WHERE id = ?";
 
-        try (PreparedStatement pstmt = connection.prepareStatement(updateString)) {
+        jdbcOperations.update(connection -> {
+            PreparedStatement pstmt = connection.prepareStatement(updateString);
             pstmt.setString(1, salt);
             pstmt.setString(2, password_hash);
             pstmt.setLong(3, user.getId());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
-        }
+            return pstmt;
+        });
     }
 
     /**
@@ -411,7 +369,6 @@ public class SQLUserDao implements UserDao {
      * @param user the user to delete
      * @throws IllegalArgumentException if any of the parameters are null or invalid
      * @throws NotFoundException if the user is not found
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      */
     @Override
     public void delete(User user) {
@@ -427,14 +384,7 @@ public class SQLUserDao implements UserDao {
             throw new NotFoundException("User with id " + user.getId() + " not found");
         }
 
-        String deleteQuery = "DELETE FROM users WHERE id = ?";
-
-        try (PreparedStatement pstmt = connection.prepareStatement(deleteQuery)) {
-            pstmt.setLong(1, user.getId());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
-        }
+        jdbcOperations.update("DELETE FROM users WHERE id = ?", user.getId());
     }
 
     /**
@@ -443,7 +393,6 @@ public class SQLUserDao implements UserDao {
      * @param id the ID of the user to find
      * @return the found user
      * @throws IllegalArgumentException if the ID is null
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      * @throws NotFoundException if the user is not found
      */
     @Override
@@ -452,28 +401,28 @@ public class SQLUserDao implements UserDao {
             throw new IllegalArgumentException("ID cannot be null");
         }
 
-        try (PreparedStatement pstmt = connection.prepareStatement(selectQuery + " WHERE u.id = ?")) {
-            pstmt.setLong(1, id);
-            ResultSet rs = pstmt.executeQuery();
-            return extractFromResultSet(rs).getFirst();
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
+        ArrayList<User> users = jdbcOperations.query(selectQuery + " WHERE u.id = ?", resultSetExtractor, id);
+
+        if (users == null || users.isEmpty()) {
+            throw new NotFoundException("User with id " + id + " not found!");
         }
+
+        return users.getFirst();
     }
 
     /**
      * Finds all users in the database.
      *
      * @return a list of all users
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      */
     @Override
     public ArrayList<User> findAll() {
-        try (Statement stmt = connection.createStatement()) {
-            ResultSet rs = stmt.executeQuery(selectQuery);
-            return extractFromResultSet(rs);
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
+        ArrayList<User> users = jdbcOperations.query(selectQuery, resultSetExtractor);
+
+        if (users == null) {
+            throw new NotFoundException("Error while finding users");
         }
+
+        return users;
     }
 }
