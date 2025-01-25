@@ -122,8 +122,7 @@ public class SQLRoleDao implements RoleDao {
             throw new NotFoundException("Role with id " + role.getId() + " not found");
         }
 
-        String deleteQuery = "DELETE FROM roles WHERE id = ?";
-        jdbcOperations.update(deleteQuery, role.getId());
+        jdbcOperations.update("DELETE FROM roles WHERE id = ?", role.getId());
     }
 
     /**

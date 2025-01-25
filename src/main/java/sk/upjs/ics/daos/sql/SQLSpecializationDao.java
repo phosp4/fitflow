@@ -123,13 +123,7 @@ public class SQLSpecializationDao implements SpecializationDao {
             throw new NotFoundException("Specialization with id " + specialization.getId() + " not found");
         }
 
-        String deleteQuery = "DELETE FROM trainer_specializations WHERE id = ?";
-
-        jdbcOperations.update(connection -> {
-            PreparedStatement pstmt = connection.prepareStatement(deleteQuery);
-            pstmt.setLong(1, specialization.getId());
-            return pstmt;
-        });
+        jdbcOperations.update("DELETE FROM trainer_specializations WHERE id = ?", specialization.getId());
     }
 
     /**

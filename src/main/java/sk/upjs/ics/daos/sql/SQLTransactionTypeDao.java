@@ -1,5 +1,7 @@
 package sk.upjs.ics.daos.sql;
 
+import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import sk.upjs.ics.daos.interfaces.TransactionTypeDao;
 import sk.upjs.ics.entities.CreditTransactionType;
 import sk.upjs.ics.exceptions.CouldNotAccessDatabaseException;
@@ -8,10 +10,7 @@ import sk.upjs.ics.exceptions.NotFoundException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -21,16 +20,26 @@ import java.util.Scanner;
  */
 public class SQLTransactionTypeDao implements TransactionTypeDao {
 
-    private final Connection connection;
+    private final JdbcOperations jdbcOperations;
 
     /**
      * Constructs a new SQLTransactionTypeDao with the specified database connection.
      *
-     * @param connection the database connection
+     * @param jdbcOperations the database connection via jdbc
      */
-    public SQLTransactionTypeDao(Connection connection) {
-        this.connection = connection;
+    public SQLTransactionTypeDao(JdbcOperations jdbcOperations) {
+        this.jdbcOperations = jdbcOperations;
     }
+
+    private final ResultSetExtractor<ArrayList<CreditTransactionType>> resultSetExtractor = rs -> {
+      ArrayList<CreditTransactionType> creditTransactionTypes =  new ArrayList<>();
+
+      while (rs.next()) {
+          creditTransactionTypes.add(CreditTransactionType.fromResultSet(rs));
+      }
+
+      return creditTransactionTypes;
+    };
 
     private final String selectQuery = "SELECT id, name FROM credit_transaction_types";
     private final String insertQuery = "INSERT INTO credit_transaction_types (name) VALUES (?)";
@@ -55,12 +64,11 @@ public class SQLTransactionTypeDao implements TransactionTypeDao {
                     continue;
                 }
 
-                try (PreparedStatement pstmt = connection.prepareStatement(insertQuery)) {
+                jdbcOperations.update(connection -> {
+                    PreparedStatement pstmt = connection.prepareStatement(insertQuery);
                     pstmt.setString(1, line.trim()); // can set the whole line since it only cotains the names
-                    pstmt.executeUpdate();
-                } catch (SQLException e) {
-                    throw new CouldNotAccessDatabaseException("Database not accessible", e);
-                }
+                    return pstmt;
+                });
             }
         } catch (FileNotFoundException e) {
             throw new CouldNotAccessFileException("Could not access file");
@@ -72,7 +80,6 @@ public class SQLTransactionTypeDao implements TransactionTypeDao {
      *
      * @param transactionType the transaction type to create
      * @throws IllegalArgumentException if the transaction type or its name is null
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      */
     @Override
     public void create(CreditTransactionType transactionType) {
@@ -88,12 +95,12 @@ public class SQLTransactionTypeDao implements TransactionTypeDao {
             throw new IllegalArgumentException("Transaction type with id " + transactionType.getId() + " already exists");
         }
 
-        try (PreparedStatement pstmt = connection.prepareStatement(insertQuery)) {
+        jdbcOperations.update(connection -> {
+            PreparedStatement pstmt = connection.prepareStatement(insertQuery);
             pstmt.setString(1, transactionType.getName());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
-        }
+            return pstmt;
+        });
+
     }
 
     /**
@@ -101,7 +108,6 @@ public class SQLTransactionTypeDao implements TransactionTypeDao {
      *
      * @param transactionType the transaction type to delete
      * @throws IllegalArgumentException if the transaction type or its ID is null
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      */
     @Override
     public void delete(CreditTransactionType transactionType) {
@@ -117,12 +123,7 @@ public class SQLTransactionTypeDao implements TransactionTypeDao {
             throw new NotFoundException("Transaction type with id " + transactionType.getId() + " not found");
         }
 
-        try (PreparedStatement pstmt = connection.prepareStatement("DELETE FROM credit_transaction_types WHERE id = ?")) {
-            pstmt.setLong(1, transactionType.getId());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
-        }
+        jdbcOperations.update("DELETE FROM credit_transaction_types WHERE id = ?", transactionType.getId());
     }
 
     /**
@@ -130,7 +131,6 @@ public class SQLTransactionTypeDao implements TransactionTypeDao {
      *
      * @param transactionType the transaction type to update
      * @throws IllegalArgumentException if the transaction type or any of its required fields are null
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      */
     @Override
     public void update(CreditTransactionType transactionType) {
@@ -150,13 +150,12 @@ public class SQLTransactionTypeDao implements TransactionTypeDao {
             throw new NotFoundException("Transaction type with id " + transactionType.getId() + " not found");
         }
 
-        try (PreparedStatement pstmt = connection.prepareStatement("UPDATE credit_transaction_types SET name = ? WHERE id = ?")) {
+        jdbcOperations.update(connection -> {
+            PreparedStatement pstmt = connection.prepareStatement("UPDATE credit_transaction_types SET name = ? WHERE id = ?");
             pstmt.setString(1, transactionType.getName());
             pstmt.setLong(2, transactionType.getId());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
-        }
+            return pstmt;
+        });
     }
 
     /**
@@ -165,7 +164,6 @@ public class SQLTransactionTypeDao implements TransactionTypeDao {
      * @param id the ID of the transaction type to find
      * @return the transaction type with the specified ID
      * @throws IllegalArgumentException if the ID is null
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      * @throws NotFoundException if the transaction type with the specified ID is not found
      */
     @Override
@@ -174,45 +172,29 @@ public class SQLTransactionTypeDao implements TransactionTypeDao {
             throw new IllegalArgumentException("ID cannot be null");
         }
 
-        try (PreparedStatement pstmt = connection.prepareStatement(selectQuery + " WHERE id = ?")) {
-            pstmt.setLong(1, id);
-            ResultSet rs = pstmt.executeQuery();
+        ArrayList<CreditTransactionType> creditTransactionTypes = jdbcOperations.query(selectQuery + " WHERE id = ?", resultSetExtractor, id);
 
-            if (!rs.next()) {
-                throw new NotFoundException("Transaction type with id " + id + " not found");
-            }
-
-            return CreditTransactionType.fromResultSet(rs);
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
+        if (creditTransactionTypes == null || creditTransactionTypes.isEmpty()) {
+            throw new NotFoundException("Credit transaction type with id " + id + " not found!");
         }
+
+        return creditTransactionTypes.getFirst();
     }
 
     /**
      * Finds all transaction types in the database.
      *
      * @return a list of all transaction types
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      * @throws NotFoundException if no transaction types are found
      */
     @Override
     public ArrayList<CreditTransactionType> findAll() {
-        ArrayList<CreditTransactionType> transactionTypes = new ArrayList<>();
+        ArrayList<CreditTransactionType> creditTransactionTypes = jdbcOperations.query(selectQuery, resultSetExtractor);
 
-        try (PreparedStatement pstmt = connection.prepareStatement(selectQuery)) {
-            ResultSet rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                transactionTypes.add(CreditTransactionType.fromResultSet(rs));
-            }
-
-            if (transactionTypes.isEmpty()) {
-                throw new NotFoundException("No transaction types found");
-            }
-
-            return transactionTypes;
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
+        if (creditTransactionTypes == null) {
+            throw new NotFoundException("Error while finding credit transaction types");
         }
+
+        return creditTransactionTypes;
     }
 }
