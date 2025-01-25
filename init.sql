@@ -1,8 +1,5 @@
 DROP TABLE IF EXISTS trainers_have_specializations;
 DROP TABLE IF EXISTS trainer_specializations;
-DROP TABLE IF EXISTS trainers_intervals;
-DROP TABLE IF EXISTS reservations;
-DROP TABLE IF EXISTS reservation_statuses;
 DROP TABLE IF EXISTS visits;
 DROP TABLE IF EXISTS credit_transactions;
 DROP TABLE IF EXISTS credit_transaction_types;
@@ -65,37 +62,6 @@ CREATE TABLE IF NOT EXISTS visits
     FOREIGN KEY (credit_transaction_id) REFERENCES credit_transactions (id)
 );
 
-CREATE TABLE IF NOT EXISTS reservation_statuses
-(
-    id   INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT
-);
-
-CREATE TABLE IF NOT EXISTS reservations
-(
-    id             INTEGER PRIMARY KEY AUTOINCREMENT,
-    customer_id    INTEGER   NOT NULL,
-    status         INTEGER   NOT NULL,
-    note           TEXT,
-    created_at     TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP),
-    updated_at     TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP),
-    credit_transaction_id INTEGER   NOT NULL,
-    FOREIGN KEY (customer_id) REFERENCES users (id),
-    FOREIGN KEY (status) REFERENCES reservation_statuses (id),
-    FOREIGN KEY (credit_transaction_id) REFERENCES credit_transactions (id)
-);
-
-CREATE TABLE IF NOT EXISTS trainers_intervals
-(
-    id             INTEGER PRIMARY KEY AUTOINCREMENT,
-    trainer_id     INTEGER NOT NULL,
-    day            DATE    NOT NULL,
-    start_time     TIME    NOT NULL,
-    end_time       TIME    NOT NULL,
-    reservation_id INTEGER,
-    FOREIGN KEY (trainer_id) REFERENCES users (id),
-    FOREIGN KEY (reservation_id) REFERENCES reservations (id)
-);
 
 CREATE TABLE IF NOT EXISTS trainer_specializations
 (
@@ -122,11 +88,6 @@ VALUES (3, 'refund'),
        (1, 'visit'),
        (2, 'credit_purchase');
 
-INSERT INTO reservation_statuses (name)
-VALUES ('pending'),
-       ('confirmed'),
-       ('cancelled');
-
 INSERT INTO trainer_specializations (name)
 VALUES ('Yoga'),
        ('Pilates'),
@@ -137,13 +98,3 @@ INSERT INTO users (id, role_id, email, salt, password_hash, first_name, last_nam
 (2, 2, 'user2@example.com', '123456', '$2b$10$xY/j5.25h8xL0t5c.jR7Bu.5x74j9.2gV9/0/j109.4e1Z9.3160', 'Jane', 'Smith', 5000, '987-654-3210', '1995-02-15', 1, '2023-11-23 12:34:56', '2023-11-23 12:34:56'),
 (3, 3, 'adminAlice@example.com', '123456', '$2b$10$xY/j5.25h8xL0t5c.jR7Bu.5x74j9.2gV9/0/j109.4e1Z9.3160', 'Alice', 'Johnson', 0, '555-555-5555', '2000-03-30', 1, '2023-11-23 12:34:56', '2023-11-23 12:34:56'),
 (4, 3, 'user3@example.com', '123456', '$2b$10$xY/j5.25h8xL0t5c.jR7Bu.5x74j9.2gV9/0/j109.4e1Z9.3160', 'Bob', 'Brown', 0, '555-555-5555', '2000-03-30', 1, '2023-11-23 12:34:56', '2023-11-23 12:34:56');
-
--- INSERT INTO reservations (id, customer_id, status, note, created_at, updated_at, credit_transaction_id) VALUES
--- (1, 10, 'pending', 'Please focus on core strength exercises.', '2023-11-23 12:34:56', '2023-11-23 12:34:56', 100),
--- (2, 20, 'confirmed', 'No special requests.', '2023-11-24 10:00:00', '2023-11-24 10:00:00', 200),
--- (3, 10, 'canceled', 'Canceled due to illness.', '2023-11-25 14:00:00', '2023-11-25 14:00:00', 300);
-
--- INSERT INTO trainers_intervals (id, trainer_id, day, start_time, end_time, reservation_id) VALUES
--- (100, 1, '2023-11-23', '12:34:56', '13:45:00', 1),
--- (200, 2, '2023-11-24', '10:00:00', '11:30:00', 2),
--- (300, 1, '2023-11-25', '14:00:00', '15:15:00', 3);

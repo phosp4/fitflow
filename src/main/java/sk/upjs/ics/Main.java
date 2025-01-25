@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 /**
@@ -70,8 +69,8 @@ public class Main extends Application {
             System.out.println("Database does not exist. Initializing...");
             try {
                 DatabaseUtil.initializeDatabase();
-            } catch (SQLException | IOException e) {
-                throw new RuntimeException(e);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }

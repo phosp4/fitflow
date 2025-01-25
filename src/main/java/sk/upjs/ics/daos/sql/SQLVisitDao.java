@@ -114,10 +114,6 @@ public class SQLVisitDao implements VisitDao {
             }
         }
 
-        if (visits.isEmpty()) {
-            throw new NotFoundException("No visits found");
-        }
-
         return visits;
     };
 

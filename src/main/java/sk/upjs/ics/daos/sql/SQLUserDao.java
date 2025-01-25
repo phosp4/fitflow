@@ -72,10 +72,6 @@ public class SQLUserDao implements UserDao {
             }
         }
 
-        if (users.isEmpty()) {
-            throw new NotFoundException("No users found");
-        }
-
         return users;
     };
 
