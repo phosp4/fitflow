@@ -1,5 +1,8 @@
 package sk.upjs.ics;
 
+import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import sk.upjs.ics.daos.interfaces.*;
 import sk.upjs.ics.daos.sql.*;
 import sk.upjs.ics.exceptions.CouldNotConnectToDatabaseException;
@@ -23,55 +26,40 @@ public enum Factory {
     public static final String DB_URL = System.getProperty("DB_URL", "jdbc:sqlite:fitflow.db");
 
     private volatile Connection connection;
-    private volatile ReservationDao reservationDao;
+    private volatile JdbcOperations jdbcOperations;
     private volatile UserDao userDao;
     private volatile TransactionTypeDao transactionTypeDao;
     private volatile CreditTransactionDao creditTransactionDao;
     private volatile RoleDao roleDao;
-    private volatile ReservationStatusDao reservationStatusDao;
     private volatile VisitDao visitDao;
     private volatile AuthDao authDao;
     private volatile SpecializationDao specializationDao;
-    private volatile TrainerIntervalDao trainerIntervalDao;
 
     private final Object lock = new Object();
 
     /**
-     * Returns a singleton instance of the database connection.
+     * Returns a singleton instance of the jdbc operations object.
      *
-     * @return the database connection
+     * @return the SQLJdbcOperations object
      * @throws CouldNotConnectToDatabaseException if a database access error occurs
      */
-    public Connection getConnection() {
-        if (connection == null) {
+    public JdbcOperations getSQLJdbcOperations() {
+        if (jdbcOperations == null) {
             synchronized (lock) {
                 System.out.println("Connecting to database...");
-                try {
-                    connection = DriverManager.getConnection(DB_URL);
-                } catch (SQLException e) {
-                    throw new CouldNotConnectToDatabaseException("Could not connect to the database.");
-                }
-                System.out.println("Connection successful!");
-            }
-        }
-
-        return connection;
-    }
-
-    /**
-     * Returns a singleton instance of the ReservationDao.
-     *
-     * @return the ReservationDao
-     */
-    public ReservationDao getReservationDao() {
-        if (reservationDao == null) {
-            synchronized (lock) {
-                if (reservationDao == null) {
-                    reservationDao = new SQLReservationDao(getConnection());
+                if (jdbcOperations == null) {
+                    try {
+                        connection = DriverManager.getConnection(DB_URL);
+                        jdbcOperations = new JdbcTemplate(new SingleConnectionDataSource(connection, true));
+                    } catch (SQLException e) {
+                        throw new CouldNotConnectToDatabaseException("Could not connect to the database.");
+                    }
+                    System.out.println("Connection successful!");
                 }
             }
         }
-        return reservationDao;
+
+        return jdbcOperations;
     }
 
     /**
@@ -83,7 +71,7 @@ public enum Factory {
         if (userDao == null) {
             synchronized (lock) {
                 if (userDao == null) {
-                    userDao = new SQLUserDao(getConnection());
+                    userDao = new SQLUserDao(getSQLJdbcOperations());
                 }
             }
         }
@@ -99,7 +87,7 @@ public enum Factory {
         if (transactionTypeDao == null) {
             synchronized (lock) {
                 if (transactionTypeDao == null) {
-                    transactionTypeDao = new SQLTransactionTypeDao(getConnection());
+                    transactionTypeDao = new SQLTransactionTypeDao(getSQLJdbcOperations());
                 }
             }
         }
@@ -115,7 +103,7 @@ public enum Factory {
         if (creditTransactionDao == null) {
             synchronized (lock) {
                 if (creditTransactionDao == null) {
-                    creditTransactionDao = new SQLCreditTransactionDao(getConnection());
+                    creditTransactionDao = new SQLCreditTransactionDao(getSQLJdbcOperations());
                 }
             }
         }
@@ -131,27 +119,11 @@ public enum Factory {
         if (roleDao == null) {
             synchronized (lock) {
                 if (roleDao == null) {
-                    roleDao = new SQLRoleDao(getConnection());
+                    roleDao = new SQLRoleDao(getSQLJdbcOperations());
                 }
             }
         }
         return roleDao;
-    }
-
-    /**
-     * Returns a singleton instance of the ReservationStatusDao.
-     *
-     * @return the ReservationStatusDao
-     */
-    public ReservationStatusDao getReservationStatusDao() {
-        if (reservationStatusDao == null) {
-            synchronized (lock) {
-                if (reservationStatusDao == null) {
-                    reservationStatusDao = new SQLReservationStatusDao(getConnection());
-                }
-            }
-        }
-        return reservationStatusDao;
     }
 
     /**
@@ -163,7 +135,7 @@ public enum Factory {
         if (visitDao == null) {
             synchronized (lock) {
                 if (visitDao == null) {
-                    visitDao = new SQLVisitDao(getConnection());
+                    visitDao = new SQLVisitDao(getSQLJdbcOperations());
                 }
             }
         }
@@ -179,7 +151,7 @@ public enum Factory {
         if (authDao == null) {
             synchronized (lock) {
                 if (authDao == null) {
-                    authDao = new SQLAuthDao(getConnection());
+                    authDao = new SQLAuthDao(getSQLJdbcOperations());
                 }
             }
         }
@@ -195,26 +167,10 @@ public enum Factory {
         if (specializationDao == null) {
             synchronized (lock) {
                 if (specializationDao == null) {
-                    specializationDao = new SQLSpecializationDao(getConnection());
+                    specializationDao = new SQLSpecializationDao(getSQLJdbcOperations());
                 }
             }
         }
         return specializationDao;
-    }
-
-    /**
-     * Returns a singleton instance of the TrainerIntervalDao.
-     *
-     * @return the TrainerIntervalDao
-     */
-    public TrainerIntervalDao getTrainerIntervalDao() {
-        if (trainerIntervalDao == null) {
-            synchronized (lock) {
-                if (trainerIntervalDao == null) {
-                    trainerIntervalDao = new SQLTrainerIntervalDao(getConnection());
-                }
-            }
-        }
-        return trainerIntervalDao;
     }
 }

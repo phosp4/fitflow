@@ -1,23 +1,37 @@
 package sk.upjs.ics.security;
 
+import org.springframework.jdbc.core.JdbcOperations;
 import sk.upjs.ics.Factory;
 
 import java.sql.*;
 import java.util.ArrayList;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import sk.upjs.ics.entities.User;
-import sk.upjs.ics.exceptions.CouldNotAccessDatabaseException;
 
+/**
+ * This class is responsible for initializing an admin user in the database.
+ */
 public class InitAdminGenerator {
+
+    /**
+     * The main method that executes the admin initialization process.
+     *
+     * @param args Command line arguments (not used).
+     */
     public static void main(String[] args) {
-        var connection = Factory.INSTANCE.getConnection();
+        // Obtain JdbcOperations instance from the Factory
+        JdbcOperations jdbcOperations = Factory.INSTANCE.getSQLJdbcOperations();
 
-        var adminName = "admin";
-        var adminEmail = "admin";
-        var adminPassword = "admin";
-        var salt = BCrypt.gensalt();
-        var adminPasswordHash = BCrypt.hashpw(adminPassword, salt);
+        // Admin user details
+        String adminName = "admin";
+        String adminEmail = "admin";
+        String adminPassword = "admin";
 
+        // Generate salt and hash the admin password
+        String salt = BCrypt.gensalt();
+        String adminPasswordHash = BCrypt.hashpw(adminPassword, salt);
+
+        // Check if admin already exists in the database
         boolean adminExists = false;
         ArrayList<User> users = Factory.INSTANCE.getUserDao().findAll();
         for (User user : users) {
@@ -27,28 +41,32 @@ public class InitAdminGenerator {
             }
         }
 
+        // If admin exists, print a message and exit
         if (adminExists) {
             System.out.println("Admin already exists in the database.");
             return;
         }
 
+        // SQL query to insert a new admin user
         String insertQuery = "INSERT INTO users(role_id, email, password_hash, first_name, last_name, credit_balance, birth_date, active, id, salt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement pstm = connection.prepareStatement(insertQuery)) {
-            pstm.setLong(1, 1); // todo ako to urobit lepsie? treba citat z ciselnika...
-            pstm.setString(2, adminEmail);
-            pstm.setString(3, adminPasswordHash);
-            pstm.setString(4, adminName);
-            pstm.setString(5, adminName);
-            pstm.setFloat(6, 1000);
-            pstm.setDate(7, new Date(1990, 1, 1));
-            pstm.setBoolean(8, true);
-            pstm.setLong(9, -1);
-            pstm.setString(10, salt);
-            pstm.executeUpdate();
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
-        }
 
+        // Execute the insert query using JdbcOperations
+        jdbcOperations.update(connection -> {
+            PreparedStatement pstmt = connection.prepareStatement(insertQuery);
+            pstmt.setLong(1, 1); // TODO: Improve this by reading from a configuration or constants
+            pstmt.setString(2, adminEmail);
+            pstmt.setString(3, adminPasswordHash);
+            pstmt.setString(4, adminName);
+            pstmt.setString(5, adminName);
+            pstmt.setFloat(6, 1000);
+            pstmt.setDate(7, new Date(1990, 1, 1));
+            pstmt.setBoolean(8, true);
+            pstmt.setLong(9, -1);
+            pstmt.setString(10, salt);
+            return pstmt;
+        });
+
+        // Print a message indicating the admin user has been created
         System.out.printf("Admin created with username `%s`, email `%s` password: `%s`%n", adminName, adminEmail, adminPassword);
     }
 }
