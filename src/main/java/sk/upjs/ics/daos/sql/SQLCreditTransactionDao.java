@@ -1,8 +1,10 @@
 package sk.upjs.ics.daos.sql;
 
+import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import sk.upjs.ics.daos.interfaces.CreditTransactionDao;
 import sk.upjs.ics.entities.*;
-import sk.upjs.ics.exceptions.CouldNotAccessDatabaseException;
 import sk.upjs.ics.exceptions.CouldNotAccessFileException;
 import sk.upjs.ics.exceptions.NotFoundException;
 
@@ -13,31 +15,30 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import org.springframework.jdbc.core.JdbcOperations;
+
 /**
  * SQL implementation of the CreditTransactionDao interface.
  */
 public class SQLCreditTransactionDao implements CreditTransactionDao {
 
-    private final Connection connection;
+    private final JdbcOperations jdbcOperations;
 
     /**
      * Constructs a new SQLCreditTransactionDao with the specified database connection.
      *
-     * @param connection the database connection
+     * @param jdbcOperations the database connection via jdbc
      */
-    public SQLCreditTransactionDao(Connection connection) {
-        this.connection = connection;
+    public SQLCreditTransactionDao(JdbcOperations jdbcOperations) {
+        this.jdbcOperations = jdbcOperations;
     }
 
 
     /**
      * Extracts a list of CreditTransaction objects from the given ResultSet.
      *
-     * @param rs the ResultSet to extract data from
-     * @return a list of CreditTransaction objects
-     * @throws SQLException if a database access error occurs
      */
-    private ArrayList<CreditTransaction> extractFromResultSet(ResultSet rs) throws SQLException {
+    private final ResultSetExtractor<ArrayList<CreditTransaction>> resultSetExtractor = rs -> {
         ArrayList<CreditTransaction> creditTransactions = new ArrayList<>();
 
         HashMap<Long, CreditTransaction> creditTransactionsProcessed= new HashMap<>();
@@ -101,12 +102,8 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
             }
         }
 
-//        if (creditTransactions.isEmpty()) {
-//            throw new NotFoundException("No credit transactions found");
-//        }
-        
         return creditTransactions;
-    }
+    };
     
     private final String creditTransactionColumns = "ct.id AS ct_id, ct.amount AS ct_amount, ct.created_at AS ct_created_at, ct.updated_at AS ct_updated_at";
     String userColumns = "us.id AS us_id, us.email AS us_email, us.first_name AS us_first_name, " +
@@ -130,7 +127,6 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
      *
      * @param file the CSV file to load data from
      * @throws CouldNotAccessFileException if the file cannot be accessed
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      */
     @Override
     public void loadFromCsv(File file) {
@@ -147,14 +143,13 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
 
                 String[] parts = line.split(",");
 
-                try (PreparedStatement pstm = connection.prepareStatement(insertQuery)) {
-                    pstm.setLong(1, Long.parseLong(parts[0]));
-                    pstm.setLong(2, Long.parseLong(parts[1]));
-                    pstm.setLong(3, Long.parseLong(parts[2]));
-                    pstm.executeUpdate();
-                } catch (SQLException e) {
-                    throw new CouldNotAccessDatabaseException("Database not accessible", e);
-                }
+                jdbcOperations.update(connection -> {
+                    PreparedStatement pstmt = connection.prepareStatement(insertQuery);
+                    pstmt.setLong(1, Long.parseLong(parts[0]));
+                    pstmt.setLong(2, Long.parseLong(parts[1]));
+                    pstmt.setLong(3, Long.parseLong(parts[2]));
+                    return pstmt;
+                });
             }
         } catch (FileNotFoundException e) {
             throw new CouldNotAccessFileException("Could not access file");
@@ -167,7 +162,6 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
      * @return the ID of the created credit transaction
      * @param creditTransaction the credit transaction to create
      * @throws IllegalArgumentException if the credit transaction or its user or type is null, or if the user or type does not have an ID
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      */
     @Override
     public Long create(CreditTransaction creditTransaction) {
@@ -187,25 +181,20 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
             throw new IllegalArgumentException("The credit transaction type does not have an id");
         }
 
-//        if (findById(creditTransaction.getId()) != null) {
-//            throw new IllegalArgumentException("Credit transaction with id " + creditTransaction.getId() + " already exists");
-//        }
+        KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        try (PreparedStatement pstmt = connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
+        jdbcOperations.update(connection -> {
+            PreparedStatement pstmt = connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS);
             pstmt.setLong(1, creditTransaction.getUser().getId());
             pstmt.setLong(2, creditTransaction.getAmount());
             pstmt.setLong(3, creditTransaction.getCreditTransactionType().getId());
-            pstmt.executeUpdate();
+            return pstmt;
+        }, keyHolder);
 
-            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    return generatedKeys.getLong(1);
-                } else {
-                    throw new SQLException("Creating credit transaction failed, no ID obtained.");
-                }
-            }
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
+        if (keyHolder.getKey() != null) {
+            return keyHolder.getKey().longValue();
+        } else {
+            throw new NotFoundException("Creating credit transaction failed, no ID obtained.");
         }
     }
 
@@ -215,7 +204,6 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
      * @param creditTransaction the credit transaction to delete
      * @throws IllegalArgumentException if the credit transaction or its ID is null
      * @throws NotFoundException if the credit transaction does not exist
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      */
     @Override
     public void delete(CreditTransaction creditTransaction) {
@@ -231,14 +219,7 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
             throw new NotFoundException("The credit transaction does not exist");
         }
 
-        String deleteQuery = "DELETE FROM credit_transactions WHERE id = ?";
-
-        try (PreparedStatement pstmt = connection.prepareStatement(deleteQuery)) {
-            pstmt.setLong(1, creditTransaction.getId());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
-        }
+        jdbcOperations.update("DELETE FROM credit_transactions WHERE id = ?", creditTransaction.getId());
     }
 
     /**
@@ -247,7 +228,6 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
      * @param creditTransaction the credit transaction to update
      * @throws IllegalArgumentException if the credit transaction or its ID, user, or type is null, or if the user or type does not have an ID
      * @throws NotFoundException if the credit transaction does not exist
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      */
     @Override
     public void update(CreditTransaction creditTransaction) {
@@ -277,24 +257,22 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
 
         String updateQuery = "UPDATE credit_transactions SET user_id = ?, amount = ?, credit_transaction_type_id = ? WHERE id = ?";
 
-        try (PreparedStatement pstmt = connection.prepareStatement(updateQuery)) {
+        jdbcOperations.update(connection -> {
+            PreparedStatement pstmt = connection.prepareStatement(updateQuery);
             pstmt.setLong(1, creditTransaction.getUser().getId());
             pstmt.setLong(2, creditTransaction.getAmount());
             pstmt.setLong(3, creditTransaction.getCreditTransactionType().getId());
             pstmt.setLong(4, creditTransaction.getId());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
-        }
+            return pstmt;
+        });
     }
 
     /**
      * Finds a credit transaction by its ID.
      *
      * @param id the ID of the credit transaction to find
-     * @return the found credit transaction, or null if not found
+     * @return the found credit transaction
      * @throws IllegalArgumentException if the ID is null
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      */
     @Override
     public CreditTransaction findById(Long id) {
@@ -302,28 +280,28 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
             throw new IllegalArgumentException("ID cannot be null");
         }
 
-        try (PreparedStatement pstmt = connection.prepareStatement(selectQuery + " WHERE ct_id = ?")) {
-            pstmt.setLong(1, id);
-            ResultSet rs = pstmt.executeQuery();
-            return extractFromResultSet(rs).getFirst();
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
+        ArrayList<CreditTransaction> creditTransactions = jdbcOperations.query(selectQuery + " WHERE ct_id = ?", resultSetExtractor, id);
+
+        if (creditTransactions == null || creditTransactions.isEmpty()) {
+            throw new NotFoundException("Credit transaction with id " + id + "not found!");
         }
+
+        return creditTransactions.getFirst();
     }
 
     /**
      * Finds all credit transactions in the database.
      *
      * @return a list of all credit transactions
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      */
     @Override
     public ArrayList<CreditTransaction> findAll() {
-       try (Statement stmt = connection.createStatement()) {
-           ResultSet rs = stmt.executeQuery(selectQuery);
-           return extractFromResultSet(rs);
-       } catch (SQLException e) {
-           throw new CouldNotAccessDatabaseException("Database not accessible", e);
-       }
+        ArrayList<CreditTransaction> creditTransactions = jdbcOperations.query(selectQuery, resultSetExtractor);
+
+        if (creditTransactions == null) {
+            throw new NotFoundException("Error while finding transactions!");
+        }
+
+        return creditTransactions;
     }
 }
