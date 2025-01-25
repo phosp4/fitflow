@@ -1,8 +1,9 @@
 package sk.upjs.ics.daos.sql;
 
+import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import sk.upjs.ics.daos.interfaces.VisitDao;
 import sk.upjs.ics.entities.*;
-import sk.upjs.ics.exceptions.CouldNotAccessDatabaseException;
 import sk.upjs.ics.exceptions.CouldNotAccessFileException;
 import sk.upjs.ics.exceptions.NotFoundException;
 
@@ -19,25 +20,22 @@ import java.util.Scanner;
  */
 public class SQLVisitDao implements VisitDao {
 
-    private final Connection connection;
+    private final JdbcOperations jdbcOperations;
 
     /**
      * Constructs a new SQLVisitDao with the specified database connection.
      *
-     * @param connection the database connection
+     * @param jdbcOperations the database connection via jdbc
      */
-    public SQLVisitDao(Connection connection) {
-        this.connection = connection;
+    public SQLVisitDao(JdbcOperations jdbcOperations) {
+        this.jdbcOperations = jdbcOperations;
     }
 
     /**
      * Extracts visits from the given ResultSet.
      *
-     * @param rs the ResultSet containing visit data
-     * @return a list of visits
-     * @throws SQLException if a database access error occurs
      */
-    private ArrayList<Visit> extractFromResultSet(ResultSet rs) throws SQLException {
+    private final ResultSetExtractor<ArrayList<Visit>> resultSetExtractor = rs -> {
         ArrayList<Visit> visits = new ArrayList<>();
 
         HashMap<Long, Visit> visitsProcessed= new HashMap<>();
@@ -84,11 +82,11 @@ public class SQLVisitDao implements VisitDao {
                 creditTransactionsProcessed.put(creditTransactionId, creditTransaction);
             }
 
-            Long creditTranscationTypeId = rs.getLong("ctt_id");
-            CreditTransactionType creditTransactionType = creditTransactionTypesProcessed.get(creditTranscationTypeId);
+            Long creditTransactionTypeId = rs.getLong("ctt_id");
+            CreditTransactionType creditTransactionType = creditTransactionTypesProcessed.get(creditTransactionTypeId);
             if (creditTransactionType == null) {
                 creditTransactionType = CreditTransactionType.fromResultSet(rs, "ctt_");
-                creditTransactionTypesProcessed.put(creditTranscationTypeId, creditTransactionType);
+                creditTransactionTypesProcessed.put(creditTransactionTypeId, creditTransactionType);
             }
 
             if (user != null && role != null) {
@@ -116,12 +114,12 @@ public class SQLVisitDao implements VisitDao {
             }
         }
 
-//        if (visits.isEmpty()) {
-//            throw new NotFoundException("No visits found");
-//        }
+        if (visits.isEmpty()) {
+            throw new NotFoundException("No visits found");
+        }
 
         return visits;
-    }
+    };
 
     private final String visitColumns = "v.id AS v_id, v.check_in_time AS v_check_in_time, v.check_out_time AS v_check_out_time, v.visit_secret AS v_visit_secret";
     private final String userColumns = "u.id AS u_id, u.email AS u_email,  u.first_name AS u_first_name, " +
@@ -151,7 +149,6 @@ public class SQLVisitDao implements VisitDao {
      *
      * @param file the CSV file containing visit data
      * @throws CouldNotAccessFileException if the file cannot be accessed
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      */
     @Override
     public void loadFromCsv(File file) {
@@ -168,16 +165,15 @@ public class SQLVisitDao implements VisitDao {
 
                 String[] parts = line.split(",");
 
-                try (PreparedStatement pstmt = connection.prepareStatement(insertQuery)) {
+                jdbcOperations.update(connection -> {
+                    PreparedStatement pstmt = connection.prepareStatement(insertQuery);
                     pstmt.setLong(1, Long.parseLong(parts[0]));
                     pstmt.setTimestamp(2, Timestamp.valueOf(parts[1]));
                     pstmt.setTimestamp(3, Timestamp.valueOf(parts[2]));
                     pstmt.setString(4, parts[3]);
                     pstmt.setLong(5, Long.parseLong(parts[4]));
-                    pstmt.executeUpdate();
-                } catch (SQLException e) {
-                    throw new CouldNotAccessDatabaseException("Database not accessible", e);
-                }
+                    return pstmt;
+                });
             }
         } catch (FileNotFoundException e) {
             throw new CouldNotAccessFileException("Could not access file");
@@ -190,7 +186,6 @@ public class SQLVisitDao implements VisitDao {
      *
      * @param visit the visit to create
      * @throws IllegalArgumentException if the visit or any of its required fields are null
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      */
     @Override
     public void create(Visit visit) {
@@ -211,34 +206,19 @@ public class SQLVisitDao implements VisitDao {
             throw new IllegalArgumentException("Visit check-in time cannot be null");
         }
 
-//        if (visit.getCreditTransaction() == null) {
-//            throw new IllegalArgumentException("Visit credit transaction cannot be null");
-//        }
-
-//        if (visit.getCreditTransaction().getId() == null) {
-//            throw new IllegalArgumentException("Visit credit transaction id cannot be null");
-//        }
-
         if (visit.getVisitSecret() == null) {
             throw new IllegalArgumentException("Visit secret cannot be null");
         }
 
-//        if (findById(visit.getId()) != null) {
-//            throw new IllegalArgumentException("Visit with id " + visit.getId() + " already exists");
-//        }
-
-        try ( PreparedStatement pstmt = connection.prepareStatement(insertQuery)) {
+        jdbcOperations.update(connection -> {
+            PreparedStatement pstmt = connection.prepareStatement(insertQuery);
             pstmt.setLong(1, visit.getUser().getId());
             pstmt.setTimestamp(2, Timestamp.from(visit.getCheckInTime()));
-//            pstmt.setTimestamp(3, Timestamp.from(visit.getCheckOutTime())); // we don' know the check out time yet
             pstmt.setTimestamp(3, null);
             pstmt.setString(4, visit.getVisitSecret());
-//            pstmt.setLong(5, visit.getCreditTransaction().getId());
             pstmt.setString(5, null);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
-        }
+            return pstmt;
+        });
     }
 
     /**
@@ -246,7 +226,6 @@ public class SQLVisitDao implements VisitDao {
      *
      * @param visit the visit to delete
      * @throws IllegalArgumentException if the visit or its ID is null
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      */
     @Override
     public void delete(Visit visit) {
@@ -262,13 +241,7 @@ public class SQLVisitDao implements VisitDao {
             throw new NotFoundException("Visit with id " + visit.getId() + " not found");
         }
 
-        String deleteQuery = "DELETE FROM visits WHERE id = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(deleteQuery)) {
-            pstmt.setLong(1, visit.getId());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
-        }
+        jdbcOperations.update("DELETE FROM visits WHERE id = ?", visit.getId());
     }
 
     /**
@@ -276,7 +249,6 @@ public class SQLVisitDao implements VisitDao {
      *
      * @param visit the visit to update
      * @throws IllegalArgumentException if the visit or any of its required fields are null
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      */
     @Override
     public void update(Visit visit) {
@@ -318,17 +290,16 @@ public class SQLVisitDao implements VisitDao {
 
         String updateQuery = "UPDATE visits SET user_id = ?, check_in_time = ?, check_out_time = ?, visit_secret = ?, credit_transaction_id = ? WHERE id = ?";
 
-        try (PreparedStatement pstmt = connection.prepareStatement(updateQuery)) {
+        jdbcOperations.update(connection -> {
+            PreparedStatement pstmt = connection.prepareStatement(updateQuery);
             pstmt.setLong(1, visit.getUser().getId());
             pstmt.setTimestamp(2, Timestamp.from(visit.getCheckInTime()));
             pstmt.setTimestamp(3, Timestamp.from(visit.getCheckOutTime()));
             pstmt.setString(4, visit.getVisitSecret());
             pstmt.setLong(5, visit.getCreditTransaction().getId());
             pstmt.setLong(6, visit.getId());
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
-        }
+            return pstmt;
+        });
     }
 
     /**
@@ -337,7 +308,6 @@ public class SQLVisitDao implements VisitDao {
      * @param id the ID of the visit to find
      * @return the visit with the specified ID
      * @throws IllegalArgumentException if the ID is null
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      */
     @Override
     public Visit findById(Long id) {
@@ -345,22 +315,21 @@ public class SQLVisitDao implements VisitDao {
             throw new IllegalArgumentException("Id cannot be null");
         }
 
-        String selectQueryById = selectQuery + " WHERE v_id = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(selectQueryById)) {
-            pstmt.setLong(1, id);
+        ArrayList<Visit> visits = jdbcOperations.query(selectQuery + " WHERE v_id = ?", resultSetExtractor, id);
 
-            ResultSet rs = pstmt.executeQuery();
-            return extractFromResultSet(rs).getFirst();
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
+        if (visits == null || visits.isEmpty()) {
+            throw new NotFoundException("Visit with id " + id + " not found!");
         }
+
+        return visits.getFirst();
     }
 
     /**
-     * Finds all visits in the database.
+     * Finds a visit by its visit secret.
      *
-     * @return a list of all visits
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
+     * @param uid the UID visit secret
+     * @return the visit with the specified visit secret UID
+     * @throws IllegalArgumentException if the UID is null
      */
     @Override
     public Visit findByVisitSecret(String uid) {
@@ -368,24 +337,28 @@ public class SQLVisitDao implements VisitDao {
             throw new IllegalArgumentException("Visit secret cannot be null");
         }
 
-        String selectQueryByVisitSecret = selectQuery + " WHERE v_visit_secret = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(selectQueryByVisitSecret)) {
-            pstmt.setString(1, uid);
+        ArrayList<Visit> visits = jdbcOperations.query(selectQuery + " WHERE v_visit_secret = ?", resultSetExtractor, uid);
 
-            ResultSet rs = pstmt.executeQuery();
-            return extractFromResultSet(rs).getFirst();
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
+        if (visits == null || visits.isEmpty()) {
+            throw new NotFoundException("Visit with visit secret " + uid + " not found!");
         }
+
+        return visits.getFirst();
     }
 
+    /**
+     * Finds all visits in the database.
+     *
+     * @return a list of all visits
+     */
     @Override
     public ArrayList<Visit> findAll() {
-        try (PreparedStatement pstmt = connection.prepareStatement(selectQuery)) {
-            ResultSet rs = pstmt.executeQuery();
-            return extractFromResultSet(rs);
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
+        ArrayList<Visit> visits = jdbcOperations.query(selectQuery, resultSetExtractor);
+
+        if (visits == null) {
+            throw new NotFoundException("Error while finding visits");
         }
+
+        return visits;
     }
 }
