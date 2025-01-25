@@ -4,7 +4,6 @@ import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import sk.upjs.ics.daos.interfaces.RoleDao;
 import sk.upjs.ics.entities.Role;
-import sk.upjs.ics.exceptions.CouldNotAccessDatabaseException;
 import sk.upjs.ics.exceptions.CouldNotAccessFileException;
 import sk.upjs.ics.exceptions.NotFoundException;
 
@@ -52,7 +51,6 @@ public class SQLRoleDao implements RoleDao {
      *
      * @param file the CSV file containing role data
      * @throws CouldNotAccessFileException if the file cannot be accessed
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      */
     @Override
     public void loadFromCsv(File file) {
@@ -165,7 +163,6 @@ public class SQLRoleDao implements RoleDao {
      *
      * @param id the ID of the role to find
      * @return the role with the specified ID
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      * @throws IllegalArgumentException if the ID is null
      * @throws NotFoundException if the role with the specified ID is not found
      */
@@ -188,7 +185,6 @@ public class SQLRoleDao implements RoleDao {
      * Finds all roles in the database.
      *
      * @return a list of all roles
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      * @throws NotFoundException if no roles are found
      */
     @Override

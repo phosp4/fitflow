@@ -4,7 +4,6 @@ import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import sk.upjs.ics.daos.interfaces.SpecializationDao;
 import sk.upjs.ics.entities.Specialization;
-import sk.upjs.ics.exceptions.CouldNotAccessDatabaseException;
 import sk.upjs.ics.exceptions.CouldNotAccessFileException;
 import sk.upjs.ics.exceptions.NotFoundException;
 
@@ -49,7 +48,6 @@ public class SQLSpecializationDao implements SpecializationDao {
      *
      * @param file the CSV file containing specialization data
      * @throws CouldNotAccessFileException if the file cannot be accessed
-     * @throws CouldNotAccessDatabaseException if the database cannot be accessed
      */
     @Override
     public void loadFromCsv(File file) {

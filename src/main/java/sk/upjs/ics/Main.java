@@ -17,11 +17,24 @@ import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+/**
+ * Main class for the FitFlow application.
+ * This class initializes the database, sets up the admin user, and starts the JavaFX application.
+ */
 public class Main extends Application {
+    /**
+     * The main entry point for the application.
+     * @param args the command line arguments
+     */
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     * Starts the JavaFX application.
+     * @param stage the primary stage for this application
+     * @throws Exception if an error occurs during application startup
+     */
     @Override
     public void start(Stage stage) throws Exception {
         initializeDatabase();
@@ -44,8 +57,11 @@ public class Main extends Application {
         stage.setTitle("FitFlow");
         stage.setScene(scene);
         stage.show();
-        }
+    }
 
+    /**
+     * Initializes the database. If the database file does not exist, it creates a new one.
+     */
     private void initializeDatabase() {
         Path path = Paths.get("fitflow.db");
         if (Files.exists(path)) {
@@ -60,8 +76,11 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * Initializes the admin user by calling the InitAdminGenerator.
+     */
     private void initializeAdminUser() {
         System.out.println("Initializing admin user...");
         InitAdminGenerator.main(new String[0]);
     }
-    }
+}
