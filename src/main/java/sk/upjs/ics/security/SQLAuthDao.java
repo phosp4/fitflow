@@ -1,78 +1,83 @@
 package sk.upjs.ics.security;
 
+import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import sk.upjs.ics.entities.User;
 import sk.upjs.ics.exceptions.AuthenticationException;
-import sk.upjs.ics.exceptions.CouldNotAccessDatabaseException;
+import sk.upjs.ics.exceptions.NotFoundException;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * SQLAuthDao is an implementation of the AuthDao interface
+ * that provides methods to authenticate users against the database.
+ */
 public class SQLAuthDao implements AuthDao {
 
-    Connection connection;
+    private final JdbcOperations jdbcOperations;
 
-    public SQLAuthDao(Connection connection) {
-        this.connection = connection;
+    /**
+     * Constructs a new SQLAuthDao with the specified database connection.
+     *
+     * @param jdbcOperations the database connection via jdbc
+     */
+    public SQLAuthDao(JdbcOperations jdbcOperations) {
+        this.jdbcOperations = jdbcOperations;
     }
 
-    // todo
-    private final String selectUserQuery = "SELECT * " +
-            "FROM users WHERE (email = ?)";
+    /**
+     * Extracts a list of PrincipalWithPassword objects from the given ResultSet.
+     */
+    private final ResultSetExtractor<ArrayList<PrincipalWithPassword>> resultSetExtractor = rs -> {
+        ArrayList<PrincipalWithPassword> principals = new ArrayList<>();
 
+        while (rs.next()) {
+            User user = User.fromResultSet(rs);
+
+            PrincipalWithPassword principalWithPassword = new PrincipalWithPassword();
+            Principal principal = new Principal();
+
+            principal.setId(user.getId());
+            principal.setEmail(user.getEmail());
+            //principal.setRole(user.getRole()); TODO
+            principalWithPassword.setPrincipal(principal);
+            principalWithPassword.setPassword(rs.getString("password_hash"));
+
+            principals.add(principalWithPassword);
+        }
+
+        return principals;
+    };
+
+    /**
+     * Authenticates a user by their email and password.
+     *
+     * @param email the email of the user
+     * @param password the password of the user
+     * @return the authenticated Principal
+     * @throws AuthenticationException if the authentication fails
+     */
     @Override
     public Principal authenticate(String email, String password) throws AuthenticationException {
-        try (PreparedStatement pstmt = connection.prepareStatement(selectUserQuery)) {
-            pstmt.setString(1, email);
-            ResultSet rs = pstmt.executeQuery();
+        ArrayList<PrincipalWithPassword> principals = jdbcOperations.query("SELECT * FROM users WHERE email = ?", resultSetExtractor, email);
 
-            ArrayList<PrincipalWithPassword> principals = new ArrayList<>();
-
-            while (rs.next()) {
-                System.out.println(rs.getString("email"));
-                User user = User.fromResultSet(rs);
-
-                PrincipalWithPassword principalWithPassword = new PrincipalWithPassword();
-                Principal principal = new Principal();
-
-                principal.setId(user.getId());
-                principal.setEmail(user.getEmail());
-                //principal.setRole(user.getRole());
-                principalWithPassword.setPrincipal(principal);
-                principalWithPassword.setPassword(rs.getString("password_hash"));
-
-                principals.add(principalWithPassword);
-            }
-
-//            if (!rs.next()) {
-//                throw new NotFoundException("User with email " + email + " not found");
-//            }
-
-            if (principals.size() > 1) {
-                System.out.println("Multiple users with the same email found.");
-                throw new IllegalStateException("Multiple users with the same username or email found.");
-            }
-
-            if (principals.isEmpty()) {
-                System.out.println("Invalid credentials1.");
-                throw new AuthenticationException("Invalid credentials.");
-            }
-
-            var principal = principals.get(0);
-
-            boolean ok = BCrypt.checkpw(password, principal.getPassword());
-            if (!ok) {
-                System.out.println("Invalid credentials2.");
-                throw new AuthenticationException("Invalid credentials.");
-            }
-
-            return principal.getPrincipal();
-
-        } catch (SQLException e) {
-            throw new CouldNotAccessDatabaseException("Database not accessible", e);
+        if (principals == null || principals.isEmpty()) {
+            throw new NotFoundException("User with email " + email + " not found");
         }
+
+        if (principals.size() > 1) {
+            System.out.println("Multiple users with the same email found.");
+            throw new IllegalStateException("Multiple users with the same username or email found.");
+        }
+
+        var principal = principals.getFirst();
+
+        boolean ok = BCrypt.checkpw(password, principal.getPassword());
+        if (!ok) {
+            throw new AuthenticationException("Invalid credentials.");
+        }
+
+        return principal.getPrincipal();
     }
 }
