@@ -2,14 +2,13 @@ package sk.upjs.ics.daos.sql;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.jdbc.core.JdbcOperations;
 import sk.upjs.ics.Factory;
 import sk.upjs.ics.daos.interfaces.RoleDao;
 import sk.upjs.ics.entities.Role;
 import sk.upjs.ics.exceptions.NotFoundException;
 
 import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -18,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class SQLRoleDaoTest {
 
     private RoleDao dao;
-    private Connection connection;
+    private JdbcOperations jdbcOperations;
 
     @BeforeEach
     void setUp() {
@@ -26,7 +25,7 @@ class SQLRoleDaoTest {
         System.setProperty("DB_URL", "jdbc:sqlite::memory:");
         
         // Get connection and dao from Factory
-        connection = Factory.INSTANCE.getConnection();
+        jdbcOperations = Factory.INSTANCE.getSQLJdbcOperations();
         dao = Factory.INSTANCE.getRoleDao();
         
         // Initialize database from init.sql
@@ -45,7 +44,7 @@ class SQLRoleDaoTest {
             while (scanner.hasNext()) {
                 String sqlStatement = scanner.next().trim();
                 if (!sqlStatement.isEmpty()) {
-                    connection.createStatement().execute(sqlStatement);
+                    jdbcOperations.update(sqlStatement);
                 }
             }
         } catch (Exception e) {
@@ -113,5 +112,35 @@ class SQLRoleDaoTest {
         role.setName("NON_EXISTENT");
         
         assertThrows(NotFoundException.class, () -> dao.delete(role));
+    }
+
+    @Test
+    void create() {
+        Role role = new Role();
+        role.setName("NewRole");
+        dao.create(role);
+
+        ArrayList<Role> all = dao.findAll();
+        boolean found = all.stream().anyMatch(r -> "NewRole".equals(r.getName()));
+        assertTrue(found, "New role should be created and found in the database");
+    }
+
+    @Test
+    void delete() {
+        Role role = new Role();
+        role.setName("ToDelete");
+        dao.create(role);
+
+        ArrayList<Role> all = dao.findAll();
+        Role createdRole = all.stream().filter(r -> "ToDelete".equals(r.getName())).findFirst().orElseThrow();
+        dao.delete(createdRole);
+
+        assertThrows(NotFoundException.class, () -> dao.findById(createdRole.getId()));
+    }
+
+
+    @Test
+    void createWithNullRoleThrowsException() {
+        assertThrows(IllegalArgumentException.class, () -> dao.create(null));
     }
 } 
