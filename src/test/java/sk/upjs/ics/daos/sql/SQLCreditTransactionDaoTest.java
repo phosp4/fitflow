@@ -2,12 +2,12 @@ package sk.upjs.ics.daos.sql;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.jdbc.core.JdbcOperations;
 import sk.upjs.ics.Factory;
 import sk.upjs.ics.daos.interfaces.CreditTransactionDao;
 import sk.upjs.ics.entities.*;
+import sk.upjs.ics.exceptions.NotFoundException;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class SQLCreditTransactionDaoTest {
 
     private CreditTransactionDao dao;
-    private Connection connection;
+    private JdbcOperations jdbcOperations;
 
     @BeforeEach
     void setUp() {
@@ -27,7 +27,7 @@ class SQLCreditTransactionDaoTest {
         System.setProperty("DB_URL", "jdbc:sqlite::memory:");
         
         // Get connection and dao from Factory
-        connection = Factory.INSTANCE.getConnection();
+        jdbcOperations = Factory.INSTANCE.getSQLJdbcOperations();
         dao = Factory.INSTANCE.getCreditTransactionDao();
         
         // Initialize database from init.sql
@@ -47,7 +47,7 @@ class SQLCreditTransactionDaoTest {
             while (scanner.hasNext()) {
                 String sqlStatement = scanner.next().trim();
                 if (!sqlStatement.isEmpty()) {
-                    connection.createStatement().execute(sqlStatement);
+                    jdbcOperations.update(sqlStatement);
                 }
             }
         } catch (Exception e) {
@@ -72,11 +72,11 @@ class SQLCreditTransactionDaoTest {
         Long id = dao.create(transaction);
         transaction.setId(id);
         
-        transaction.setAmount(200.0);
+        transaction.setAmount(200L);
         dao.update(transaction);
 
         CreditTransaction updated = dao.findById(id);
-        assertEquals(200.0, updated.getAmount());
+        assertEquals(200L, updated.getAmount());
     }
 
     @Test
@@ -90,7 +90,34 @@ class SQLCreditTransactionDaoTest {
         ArrayList<CreditTransaction> all = dao.findAll();
         assertEquals(2, all.size());
     }
+    @Test
+    void delete() {
+        CreditTransaction transaction = createTestTransaction();
+        Long id = dao.create(transaction);
+        transaction.setId(id);
 
+        dao.delete(transaction);
+
+        assertThrows(NotFoundException.class, () -> dao.findById(id));
+    }
+
+    @Test
+    void createWithNullUserThrowsException() {
+        CreditTransaction transaction = new CreditTransaction();
+        transaction.setCreditTransactionType(new CreditTransactionType());
+        transaction.setAmount(100L);
+
+        assertThrows(IllegalArgumentException.class, () -> dao.create(transaction));
+    }
+
+    @Test
+    void createWithNullTypeThrowsException() {
+        CreditTransaction transaction = new CreditTransaction();
+        transaction.setUser(new User());
+        transaction.setAmount(100L);
+
+        assertThrows(IllegalArgumentException.class, () -> dao.create(transaction));
+    }
     private CreditTransaction createTestTransaction() {
         CreditTransaction transaction = new CreditTransaction();
         
@@ -102,7 +129,7 @@ class SQLCreditTransactionDaoTest {
         type.setId(1L); // Using existing transaction type ID from init.sql
         transaction.setCreditTransactionType(type);
         
-        transaction.setAmount(100.0);
+        transaction.setAmount(100L);
         transaction.setCreatedAt(LocalDateTime.now().toInstant(ZoneOffset.UTC));
         transaction.setUpdatedAt(LocalDateTime.now().toInstant(ZoneOffset.UTC));
         
