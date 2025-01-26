@@ -33,7 +33,6 @@ public enum Factory {
     private volatile RoleDao roleDao;
     private volatile VisitDao visitDao;
     private volatile AuthDao authDao;
-    private volatile SpecializationDao specializationDao;
 
     private final Object lock = new Object();
 
@@ -156,21 +155,5 @@ public enum Factory {
             }
         }
         return authDao;
-    }
-
-    /**
-     * Returns a singleton instance of the SpecializationDao.
-     *
-     * @return the SpecializationDao
-     */
-    public SpecializationDao getSpecializationDao() {
-        if (specializationDao == null) {
-            synchronized (lock) {
-                if (specializationDao == null) {
-                    specializationDao = new SQLSpecializationDao(getSQLJdbcOperations());
-                }
-            }
-        }
-        return specializationDao;
     }
 }
