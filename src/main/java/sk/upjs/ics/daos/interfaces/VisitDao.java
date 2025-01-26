@@ -23,7 +23,7 @@ public interface VisitDao {
      *
      * @param visit the visit to create
      */
-    void create(Visit visit);
+    long create(Visit visit);
 
     /**
      * Deletes an existing visit by its ID.

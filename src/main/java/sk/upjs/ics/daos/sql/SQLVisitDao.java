@@ -2,6 +2,8 @@ package sk.upjs.ics.daos.sql;
 
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import sk.upjs.ics.daos.interfaces.VisitDao;
 import sk.upjs.ics.entities.*;
 import sk.upjs.ics.exceptions.CouldNotAccessFileException;
@@ -41,7 +43,6 @@ public class SQLVisitDao implements VisitDao {
         HashMap<Long, Visit> visitsProcessed= new HashMap<>();
         HashMap<Long, User> usersProcessed = new HashMap<>();
         HashMap<Long, Role> rolesProcessed = new HashMap<>();
-        HashMap<Long, Specialization> specializationsProcessed = new HashMap<>();
         HashMap<Long, CreditTransaction> creditTransactionsProcessed = new HashMap<>();
         HashMap<Long, CreditTransactionType> creditTransactionTypesProcessed = new HashMap<>();
 
@@ -68,13 +69,6 @@ public class SQLVisitDao implements VisitDao {
                 rolesProcessed.put(roleId, role);
             }
 
-            Long specializationId = rs.getLong("s_id");
-            Specialization specialization = specializationsProcessed.get(specializationId);
-            if (specialization == null) {
-                specialization = Specialization.fromResultSet(rs, "s_");
-                specializationsProcessed.put(specializationId, specialization);
-            }
-
             Long creditTransactionId = rs.getLong("ct_id");
             CreditTransaction creditTransaction = creditTransactionsProcessed.get(creditTransactionId);
             if (creditTransaction == null) {
@@ -91,10 +85,6 @@ public class SQLVisitDao implements VisitDao {
 
             if (user != null && role != null) {
                 user.setRole(role);
-            }
-
-            if (user != null && specialization != null) {
-                user.getTrainerSpecializationSet().add(specialization);
             }
 
             if (creditTransaction != null && creditTransactionType != null) {
@@ -123,20 +113,17 @@ public class SQLVisitDao implements VisitDao {
             "u.birth_date AS u_birth_date, u.active AS u_active, u.created_at AS u_created_at, " +
             "u.updated_at AS u_updated_at";
     private final String roleColumns = "r.id AS r_id, r.name AS r_name";
-    private final String specializationColumns = "s.id AS s_id, s.name AS s_name, ";
     private final String creditTransactionColumns = "ct.id AS ct_id, ct.amount AS ct_amount, " +
             "ct.created_at AS ct_created_at, ct.updated_at AS ct_updated_at";
     private final String creditTransactionTypeColumns = "ctt.id AS ctt_id, ctt.name AS ctt_name";
 
     private final String joins = "LEFT JOIN users u ON v.user_id = u.id " +
             "LEFT JOIN roles r ON u.role_id = r.id " +
-            "LEFT JOIN trainers_have_specializations ts ON u.id = ts.trainer_id " +
-            "LEFT JOIN trainer_specializations s ON ts.specialization_id = s.id " +
             "LEFT JOIN credit_transactions ct ON v.credit_transaction_id = ct.id " +
             "LEFT JOIN credit_transaction_types ctt ON ct.credit_transaction_type_id = ctt.id";
 
     private final String selectQuery = "SELECT " + visitColumns + ", " + userColumns + ", " + roleColumns + ", " +
-            specializationColumns + creditTransactionColumns + ", " + creditTransactionTypeColumns +
+             creditTransactionColumns + ", " + creditTransactionTypeColumns +
             " FROM visits v " + joins;
     private final String insertQuery = "INSERT INTO visits(user_id, check_in_time, check_out_time, visit_secret, credit_transaction_id) VALUES (?, ?, ?, ?, ?)";
 
@@ -184,7 +171,7 @@ public class SQLVisitDao implements VisitDao {
      * @throws IllegalArgumentException if the visit or any of its required fields are null
      */
     @Override
-    public void create(Visit visit) {
+    public long create(Visit visit) {
         if (visit == null) {
             throw new IllegalArgumentException("Visit cannot be null");
         }
@@ -206,6 +193,8 @@ public class SQLVisitDao implements VisitDao {
             throw new IllegalArgumentException("Visit secret cannot be null");
         }
 
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
         jdbcOperations.update(connection -> {
             PreparedStatement pstmt = connection.prepareStatement(insertQuery);
             pstmt.setLong(1, visit.getUser().getId());
@@ -214,7 +203,13 @@ public class SQLVisitDao implements VisitDao {
             pstmt.setString(4, visit.getVisitSecret());
             pstmt.setString(5, null);
             return pstmt;
-        });
+        }, keyHolder);
+
+        if (keyHolder.getKey() != null) {
+            return keyHolder.getKey().longValue();
+        } else {
+            throw new NotFoundException("Creating new visit failed, no ID obtained.");
+        }
     }
 
     /**
@@ -290,7 +285,11 @@ public class SQLVisitDao implements VisitDao {
             PreparedStatement pstmt = connection.prepareStatement(updateQuery);
             pstmt.setLong(1, visit.getUser().getId());
             pstmt.setTimestamp(2, Timestamp.from(visit.getCheckInTime()));
-            pstmt.setTimestamp(3, Timestamp.from(visit.getCheckOutTime()));
+            if (visit.getCheckOutTime() != null) {
+                pstmt.setTimestamp(3, Timestamp.from(visit.getCheckOutTime()));
+            } else {
+                pstmt.setTimestamp(3, null);
+            }
             pstmt.setString(4, visit.getVisitSecret());
             pstmt.setLong(5, visit.getCreditTransaction().getId());
             pstmt.setLong(6, visit.getId());
