@@ -89,10 +89,6 @@ public class SQLTransactionTypeDao implements TransactionTypeDao {
             throw new IllegalArgumentException("Transaction type name cannot be null");
         }
 
-        if (findById(transactionType.getId()) != null) {
-            throw new IllegalArgumentException("Transaction type with id " + transactionType.getId() + " already exists");
-        }
-
         jdbcOperations.update(connection -> {
             PreparedStatement pstmt = connection.prepareStatement(insertQuery);
             pstmt.setString(1, transactionType.getName());

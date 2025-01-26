@@ -2,13 +2,13 @@ package sk.upjs.ics.daos.sql;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.jdbc.core.JdbcOperations;
 import sk.upjs.ics.Factory;
 import sk.upjs.ics.daos.interfaces.TransactionTypeDao;
 import sk.upjs.ics.entities.CreditTransactionType;
 import sk.upjs.ics.exceptions.NotFoundException;
 
 import java.io.InputStream;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class SQLTransactionTypeDaoTest {
 
     private TransactionTypeDao dao;
-    private Connection connection;
+    private JdbcOperations jdbcOperations;
 
     @BeforeEach
     void setUp() {
@@ -25,7 +25,7 @@ class SQLTransactionTypeDaoTest {
         System.setProperty("DB_URL", "jdbc:sqlite::memory:");
         
         // Get connection and dao from Factory
-        connection = Factory.INSTANCE.getConnection();
+        jdbcOperations = Factory.INSTANCE.getSQLJdbcOperations();
         dao = Factory.INSTANCE.getTransactionTypeDao();
         
         // Initialize database from init.sql
@@ -44,7 +44,7 @@ class SQLTransactionTypeDaoTest {
             while (scanner.hasNext()) {
                 String sqlStatement = scanner.next().trim();
                 if (!sqlStatement.isEmpty()) {
-                    connection.createStatement().execute(sqlStatement);
+                    jdbcOperations.update(sqlStatement);
                 }
             }
         } catch (Exception e) {
@@ -120,4 +120,24 @@ class SQLTransactionTypeDaoTest {
         
         assertThrows(NotFoundException.class, () -> dao.delete(type));
     }
-} 
+
+    @Test
+    void create() {
+        CreditTransactionType type = new CreditTransactionType();
+        type.setName("NEW_TYPE");
+        dao.create(type);
+
+        ArrayList<CreditTransactionType> types = dao.findAll();
+        boolean found = types.stream().anyMatch(t -> "NEW_TYPE".equals(t.getName()));
+        assertTrue(found, "Newly created transaction type should be found");
+    }
+
+    @Test
+    void delete() {
+        // Get existing type from init.sql (id 1 = 'visit')
+        CreditTransactionType type = dao.findById(1L);
+        dao.delete(type);
+
+        assertThrows(NotFoundException.class, () -> dao.findById(1L));
+    }
+}
