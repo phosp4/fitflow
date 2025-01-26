@@ -25,7 +25,7 @@ public interface UserDao {
      * @param salt the salt used for password hashing
      * @param password_hash the hashed password
      */
-    void create(User user, String salt, String password_hash);
+    long create(User user, String salt, String password_hash);
 
     /**
      * Deletes an existing user.
@@ -47,15 +47,6 @@ public interface UserDao {
      * @param user the user whose balance to update
      */
     void updateBalance(User user);
-
-    /**
-     * Updates the password of an existing user.
-     *
-     * @param user the user whose password to update
-     * @param salt the salt used for password hashing
-     * @param password_hash the hashed password
-     */
-    void updatePassword(User user, String salt, String password_hash);
 
     /**
      * Finds a user by its ID.

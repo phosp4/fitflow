@@ -1,5 +1,3 @@
-DROP TABLE IF EXISTS trainers_have_specializations;
-DROP TABLE IF EXISTS trainer_specializations;
 DROP TABLE IF EXISTS visits;
 DROP TABLE IF EXISTS credit_transactions;
 DROP TABLE IF EXISTS credit_transaction_types;
@@ -62,39 +60,15 @@ CREATE TABLE IF NOT EXISTS visits
     FOREIGN KEY (credit_transaction_id) REFERENCES credit_transactions (id)
 );
 
-
-CREATE TABLE IF NOT EXISTS trainer_specializations
-(
-    id    INTEGER PRIMARY KEY AUTOINCREMENT,
-    name VARCHAR(45) NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS trainers_have_specializations
-(
-    trainer_id        INTEGER NOT NULL,
-    specialization_id INTEGER NOT NULL,
-    PRIMARY KEY (trainer_id, specialization_id),
-    FOREIGN KEY (trainer_id) REFERENCES users (id),
-    FOREIGN KEY (specialization_id) REFERENCES trainer_specializations (id)
-);
-
 INSERT INTO roles (name)
 VALUES ('admin'),
-       ('user'),
-       ('trainer');
+       ('user');
 
 INSERT INTO credit_transaction_types (id, name)
 VALUES (3, 'refund'),
        (1, 'visit'),
        (2, 'credit_purchase');
 
-INSERT INTO trainer_specializations (name)
-VALUES ('Yoga'),
-       ('Pilates'),
-       ('CrossFit');
-
 INSERT INTO users (id, role_id, email, salt, password_hash, first_name, last_name, credit_balance, phone, birth_date, active, created_at, updated_at) VALUES
-(1, 1, 'user1@example.com', '123456', '$2b$10$xY/j5.25h8xL0t5c.jR7Bu.5x74j9.2gV9/0/j109.4e1Z9.3160', 'John', 'Doe', 10000, '123-456-7890', '1990-01-01', 1, '2023-11-23 12:34:56', '2023-11-23 12:34:56'),
-(2, 2, 'user2@example.com', '123456', '$2b$10$xY/j5.25h8xL0t5c.jR7Bu.5x74j9.2gV9/0/j109.4e1Z9.3160', 'Jane', 'Smith', 5000, '987-654-3210', '1995-02-15', 1, '2023-11-23 12:34:56', '2023-11-23 12:34:56'),
-(3, 3, 'adminAlice@example.com', '123456', '$2b$10$xY/j5.25h8xL0t5c.jR7Bu.5x74j9.2gV9/0/j109.4e1Z9.3160', 'Alice', 'Johnson', 0, '555-555-5555', '2000-03-30', 1, '2023-11-23 12:34:56', '2023-11-23 12:34:56'),
-(4, 3, 'user3@example.com', '123456', '$2b$10$xY/j5.25h8xL0t5c.jR7Bu.5x74j9.2gV9/0/j109.4e1Z9.3160', 'Bob', 'Brown', 0, '555-555-5555', '2000-03-30', 1, '2023-11-23 12:34:56', '2023-11-23 12:34:56');
+(1, 1, 'user1@example.com', '123456', '$2b$10$xY/j5.25h8xL0t5c.jR7Bu.5x74j9.2gV9/0/j109.4e1Z9.3160', 'John', 'Doe', 10000, '123-456-7890', '1990-01-01 00:00:00.000', 1, '2023-11-23 12:34:56', '2023-11-23 12:34:56'),
+(2, 2, 'user2@example.com', '123456', '$2b$10$xY/j5.25h8xL0t5c.jR7Bu.5x74j9.2gV9/0/j109.4e1Z9.3160', 'Jane', 'Smith', 5000, '987-654-3210', '1995-02-15 00:00:00.000', 1, '2023-11-23 12:34:56', '2023-11-23 12:34:56');

@@ -2,6 +2,8 @@ package sk.upjs.ics.daos.sql;
 
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import sk.upjs.ics.daos.interfaces.UserDao;
 import sk.upjs.ics.entities.*;
 import sk.upjs.ics.exceptions.CouldNotAccessFileException;
@@ -38,7 +40,6 @@ public class SQLUserDao implements UserDao {
 
         HashMap<Long, User> usersProcessed = new HashMap<>();
         HashMap<Long, Role> rolesProcessed = new HashMap<>();
-        HashMap<Long, Specialization> specializationsProcessed = new HashMap<>();
 
         while (rs.next()) {
             Long userId = rs.getLong("u_id");
@@ -56,20 +57,10 @@ public class SQLUserDao implements UserDao {
                 rolesProcessed.put(roleId, role);
             }
 
-            Long specializationId = rs.getLong("s_id");
-            Specialization specialization = specializationsProcessed.get(specializationId);
-            if (specialization == null) {
-                specialization = Specialization.fromResultSet(rs, "s_");
-                specializationsProcessed.put(specializationId, specialization);
-            }
-
             if (user != null && role != null) {
                 user.setRole(role);
             }
 
-            if (user != null && specialization != null) {
-                user.getTrainerSpecializationSet().add(specialization);
-            }
         }
 
         return users;
@@ -79,13 +70,10 @@ public class SQLUserDao implements UserDao {
             "u.last_name AS u_last_name, u.credit_balance AS u_credit_balance, u.phone AS u_phone, " +
             "u.birth_date AS u_birth_date, u.created_at AS u_created_at, u.updated_at AS u_updated_at, u.active AS u_active";
     private final String roleColumns = "r.id AS r_id, r.name AS r_name";
-    private final String specializationsColumns = "s.id AS s_id, s.name AS s_name";
 
-    private final String joins = "LEFT JOIN roles r ON u.role_id = r.id " +
-            "LEFT JOIN trainers_have_specializations tsp ON u.id = tsp.trainer_id " +
-            "LEFT JOIN trainer_specializations s ON tsp.specialization_id = s.id";
+    private final String joins = "LEFT JOIN roles r ON u.role_id = r.id";
 
-    private final String selectQuery = "SELECT " + userColumns + ", " + roleColumns + "," + specializationsColumns + " FROM users u " + joins;
+    private final String selectQuery = "SELECT " + userColumns + ", " + roleColumns +  " FROM users u " + joins;
     private final String insertQuery = "INSERT INTO users(role_id, email, salt, password_hash, first_name, last_name, credit_balance, phone, birth_date, active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     /**
@@ -132,13 +120,14 @@ public class SQLUserDao implements UserDao {
     /**
      * Creates a new user in the database.
      *
+     * @return the ID of the newly created user
      * @param user the user to create
      * @param salt the salt for the user's password
      * @param password_hash the hashed password
      * @throws IllegalArgumentException if any of the parameters are null or invalid
      */
     @Override
-    public void create(User user, String salt, String password_hash) {
+    public long create(User user, String salt, String password_hash) {
         if (user == null) {
             throw new IllegalArgumentException("User cannot be null");
         }
@@ -171,8 +160,10 @@ public class SQLUserDao implements UserDao {
             throw new IllegalArgumentException("Credit balance has to be 0");
         }
 
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
         jdbcOperations.update(connection -> {
-            PreparedStatement pstmt = connection.prepareStatement(insertQuery);
+            PreparedStatement pstmt = connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS);
             pstmt.setLong(1, user.getRole().getId());
             pstmt.setString(2, user.getEmail());
             pstmt.setString(3, salt);
@@ -184,7 +175,13 @@ public class SQLUserDao implements UserDao {
             pstmt.setDate(9, Date.valueOf(user.getBirthDate()));
             pstmt.setBoolean(10, user.isActive());
             return pstmt;
-        });
+        }, keyHolder);
+
+        if (keyHolder.getKey() != null) {
+            return keyHolder.getKey().longValue();
+        } else {
+            throw new NotFoundException("Creating new user failed, no ID obtained.");
+        }
     }
 
     /**
@@ -292,67 +289,6 @@ public class SQLUserDao implements UserDao {
             PreparedStatement pstmt = connection.prepareStatement(updateQuery);
             pstmt.setLong(1, user.getCreditBalance());
             pstmt.setLong(2, user.getId());
-            return pstmt;
-        });
-    }
-
-    /**
-     * Updates the password of an existing user in the database.
-     *
-     * @param user the user to update
-     * @param salt the new salt for the user's password
-     * @param password_hash the new hashed password
-     * @throws IllegalArgumentException if any of the parameters are null or invalid
-     */
-    @Override
-    public void updatePassword(User user, String salt, String password_hash) {
-        if (user == null) {
-            throw new IllegalArgumentException("User cannot be null");
-        }
-
-        if (user.getId() == null) {
-            throw new IllegalArgumentException("User id cannot be null");
-        }
-
-        if (user.getRole() == null) {
-            throw new IllegalArgumentException("User role cannot be null");
-        }
-
-        if (user.getEmail() == null) {
-            throw new IllegalArgumentException("User email cannot be null");
-        }
-
-        if (user.getFirstName() == null) {
-            throw new IllegalArgumentException("User first name cannot be null");
-        }
-
-        if (user.getLastName() == null) {
-            throw new IllegalArgumentException("User last name cannot be null");
-        }
-
-        if (user.getCreditBalance() < 0) {
-            throw new IllegalArgumentException("Credit balance cannot be negative");
-        }
-
-        if (salt == null) {
-            throw new IllegalArgumentException("Salt cannot be null");
-        }
-
-        if (password_hash == null) {
-            throw new IllegalArgumentException("Password hash cannot be null");
-        }
-
-        if (findById(user.getId()) == null) {
-            throw new NotFoundException("User with id " + user.getId() + " not found");
-        }
-
-        String updateString = "UPDATE users SET salt = ?, password_hash = ? WHERE id = ?";
-
-        jdbcOperations.update(connection -> {
-            PreparedStatement pstmt = connection.prepareStatement(updateString);
-            pstmt.setString(1, salt);
-            pstmt.setString(2, password_hash);
-            pstmt.setLong(3, user.getId());
             return pstmt;
         });
     }
