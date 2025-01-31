@@ -73,4 +73,10 @@ public class User {
             throw new CouldNotAccessResultSetException("Could not access ResultSet", e);
         }
     }
+
+    @Override
+    public String toString() {
+        return firstName + " " + lastName;
+    }
+
 }

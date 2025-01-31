@@ -40,12 +40,24 @@ public class UserModel {
         userDao.updateBalance(user);
     }
 
-    public ArrayList<String> getTrainers() {
-        ArrayList<String> trainers = new ArrayList<>();
+//    public ArrayList<String> getTrainers() {
+//        ArrayList<String> trainers = new ArrayList<>();
+//
+//        userDao.findAll().forEach(user -> {
+//            if (user.getRole().getId() == 3) {
+//                trainers.add(user.getFirstName() + " " + user.getLastName());
+//            }
+//        });
+//
+//        return trainers;
+//    }
+
+    public ArrayList<User> getTrainers() {
+        ArrayList<User> trainers = new ArrayList<>();
 
         userDao.findAll().forEach(user -> {
             if (user.getRole().getId() == 3) {
-                trainers.add(user.getFirstName() + " " + user.getLastName());
+                trainers.add(user);
             }
         });
 

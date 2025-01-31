@@ -59,4 +59,5 @@ public class TrainerInterval {
             throw new CouldNotAccessResultSetException("Could not access ResultSet", e);
         }
     }
+
 }

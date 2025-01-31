@@ -379,6 +379,21 @@ public class SQLTrainerIntervalDao implements TrainerIntervalDao {
         }
     }
 
+    @Override
+    public ArrayList<TrainerInterval> findByTrainer(User trainer) {
+        if (trainer == null) {
+            throw new IllegalArgumentException("Trainer cannot be null");
+        }
+
+        try (PreparedStatement pstmt = connection.prepareStatement(selectQuery + " WHERE ti.trainer_id = ?")) {
+            pstmt.setLong(1, trainer.getId());
+            ResultSet rs = pstmt.executeQuery();
+            return extractFromResultSet(rs);
+        } catch (SQLException e) {
+            throw new CouldNotAccessDatabaseException("Database not accessible", e);
+        }
+    }
+
     /**
      * Finds all trainer intervals in the database.
      *

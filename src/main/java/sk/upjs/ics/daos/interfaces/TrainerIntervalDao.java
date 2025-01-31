@@ -1,6 +1,7 @@
 package sk.upjs.ics.daos.interfaces;
 
 import sk.upjs.ics.entities.TrainerInterval;
+import sk.upjs.ics.entities.User;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -53,4 +54,9 @@ public interface TrainerIntervalDao {
      * @return a list of all trainer intervals
      */
     ArrayList<TrainerInterval> findAll();
+
+    /**
+     * Finds all trainers intervals by its trainers id
+     */
+    ArrayList<TrainerInterval> findByTrainer(User trainer);
 }
