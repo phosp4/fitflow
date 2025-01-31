@@ -7,6 +7,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import sk.upjs.ics.daos.interfaces.VisitDao;
 import sk.upjs.ics.entities.*;
 import sk.upjs.ics.exceptions.CouldNotAccessFileException;
+import sk.upjs.ics.exceptions.EntityCreationFailedException;
 import sk.upjs.ics.exceptions.NotFoundException;
 
 import java.io.File;
@@ -169,6 +170,7 @@ public class SQLVisitDao implements VisitDao {
      *
      * @param visit the visit to create
      * @throws IllegalArgumentException if the visit or any of its required fields are null
+     * @throws EntityCreationFailedException if the visit cannot be created
      */
     @Override
     public long create(Visit visit) {
@@ -208,7 +210,7 @@ public class SQLVisitDao implements VisitDao {
         if (keyHolder.getKey() != null) {
             return keyHolder.getKey().longValue();
         } else {
-            throw new NotFoundException("Creating new visit failed, no ID obtained.");
+            throw new EntityCreationFailedException("Creating new visit failed, no ID obtained.");
         }
     }
 

@@ -7,6 +7,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import sk.upjs.ics.daos.interfaces.UserDao;
 import sk.upjs.ics.entities.*;
 import sk.upjs.ics.exceptions.CouldNotAccessFileException;
+import sk.upjs.ics.exceptions.EntityCreationFailedException;
 import sk.upjs.ics.exceptions.NotFoundException;
 
 import java.io.File;
@@ -120,11 +121,12 @@ public class SQLUserDao implements UserDao {
     /**
      * Creates a new user in the database.
      *
-     * @return the ID of the newly created user
      * @param user the user to create
      * @param salt the salt for the user's password
      * @param password_hash the hashed password
+     * @return the ID of the newly created user
      * @throws IllegalArgumentException if any of the parameters are null or invalid
+     * @throws EntityCreationFailedException if creating the user fails
      */
     @Override
     public long create(User user, String salt, String password_hash) {
@@ -180,7 +182,7 @@ public class SQLUserDao implements UserDao {
         if (keyHolder.getKey() != null) {
             return keyHolder.getKey().longValue();
         } else {
-            throw new NotFoundException("Creating new user failed, no ID obtained.");
+            throw new EntityCreationFailedException("Creating new user failed, no ID obtained.");
         }
     }
 
