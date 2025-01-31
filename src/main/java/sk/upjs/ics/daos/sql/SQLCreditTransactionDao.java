@@ -6,6 +6,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import sk.upjs.ics.daos.interfaces.CreditTransactionDao;
 import sk.upjs.ics.entities.*;
 import sk.upjs.ics.exceptions.CouldNotAccessFileException;
+import sk.upjs.ics.exceptions.EntityCreationFailedException;
 import sk.upjs.ics.exceptions.NotFoundException;
 
 import java.io.File;
@@ -44,7 +45,6 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
         HashMap<Long, CreditTransaction> creditTransactionsProcessed= new HashMap<>();
         HashMap<Long, User> usersProcessed = new HashMap<>();
         HashMap<Long, Role> rolesProcessed = new HashMap<>();
-        HashMap<Long, Specialization> specializationsProcessed = new HashMap<>();
         HashMap<Long, CreditTransactionType> creditTransactionTypesProcessed = new HashMap<>();
 
         while (rs.next()) {
@@ -71,13 +71,6 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
                 rolesProcessed.put(roleId, role);
             }
 
-            Long specializationId = rs.getLong("tsp_id");
-            Specialization specialization = specializationsProcessed.get(specializationId);
-            if (specialization == null) {
-                specialization = Specialization.fromResultSet(rs, "tsp_");
-                specializationsProcessed.put(specializationId, specialization);
-            }
-
             Long creditTransactionTypeId = rs.getLong("ctt_id");
             CreditTransactionType creditTransactionType = creditTransactionTypesProcessed.get(creditTransactionTypeId);
             if (creditTransactionType == null) {
@@ -87,10 +80,6 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
 
             if (user != null && role != null) {
                 user.setRole(role);
-            }
-
-            if (user != null && specialization != null) {
-                user.getTrainerSpecializationSet().add(specialization);
             }
 
             if (creditTransaction != null && creditTransaction.getUser() == null) {
@@ -110,16 +99,13 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
             "us.last_name AS us_last_name, us.credit_balance AS us_credit_balance, us.phone AS us_phone, " +
             "us.birth_date AS us_birth_date, us.active AS us_active, us.created_at AS us_created_at, us.updated_at AS us_updated_at";
     private final String roleColumns = "r.id AS r_id, r.name AS r_name";
-    private final String specializationColumns = "tsp.id AS tsp_id, tsp.name AS tsp_name";
     private final String creditTransactionTypeColumns = "ctt.id AS ctt_id, ctt.name AS ctt_name";
 
     private final String joins = "LEFT JOIN users us ON us.id = ct.user_id " +
             "LEFT JOIN roles r ON r.id = us.role_id " +
-            "LEFT JOIN trainers_have_specializations ts ON ts.trainer_id = us.id " +
-            "LEFT JOIN trainer_specializations tsp ON tsp.id = ts.specialization_id " +
             "LEFT JOIN credit_transaction_types ctt ON ctt.id = ct.credit_transaction_type_id";
 
-    private final String selectQuery = "SELECT " + creditTransactionColumns + ", " + userColumns + ", " + roleColumns + ", " + specializationColumns + ", " + creditTransactionTypeColumns + " FROM credit_transactions ct " + joins;
+    private final String selectQuery = "SELECT " + creditTransactionColumns + ", " + userColumns + ", " + roleColumns + ", " + creditTransactionTypeColumns + " FROM credit_transactions ct " + joins;
     private final String insertQuery = "INSERT INTO credit_transactions (user_id, amount, credit_transaction_type_id) VALUES (?, ?, ?)";
 
     /**
@@ -162,6 +148,7 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
      * @return the ID of the created credit transaction
      * @param creditTransaction the credit transaction to create
      * @throws IllegalArgumentException if the credit transaction or its user or type is null, or if the user or type does not have an ID
+     * @throws EntityCreationFailedException if the creation of the credit transaction fails
      */
     @Override
     public Long create(CreditTransaction creditTransaction) {
@@ -194,7 +181,7 @@ public class SQLCreditTransactionDao implements CreditTransactionDao {
         if (keyHolder.getKey() != null) {
             return keyHolder.getKey().longValue();
         } else {
-            throw new NotFoundException("Creating credit transaction failed, no ID obtained.");
+            throw new EntityCreationFailedException("Creating credit transaction failed, no ID obtained.");
         }
     }
 

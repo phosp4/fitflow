@@ -62,7 +62,8 @@ CREATE TABLE IF NOT EXISTS visits
 
 INSERT INTO roles (name)
 VALUES ('admin'),
-       ('user');
+       ('user'),
+       ('trainer');
 
 INSERT INTO credit_transaction_types (id, name)
 VALUES (3, 'refund'),

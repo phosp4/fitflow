@@ -135,4 +135,4 @@ class SQLCreditTransactionDaoTest {
         
         return transaction;
     }
-} 
+}
