@@ -32,13 +32,5 @@ public class HistoryViewController implements Initializable {
         VisitModel visitModel = new VisitModel();
         ArrayList<String> visitHistory = visitModel.loadVisitsHistory();
         historyEntriesList.setItems(FXCollections.observableArrayList(visitHistory));
-
-
-        // TODO nacitaj tranzakcie
-        // nacitaj arraylist tranzakcii prisluchajucich userovi
-        // vyfiltruj len tie, ktore su purchases
-        // spracuj ich do spravnej textovej podoby
-        // nahod ich to mfxListu
-        //// to iste s entries, ak uz maju aj vystup
     }
 }

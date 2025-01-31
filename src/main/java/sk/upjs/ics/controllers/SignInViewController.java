@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import javafx.scene.control.Hyperlink;
 import lombok.Setter;
 import sk.upjs.ics.Factory;
+import sk.upjs.ics.exceptions.NotFoundException;
 import sk.upjs.ics.utilities.LocaleManager;
 import sk.upjs.ics.exceptions.AuthenticationException;
 import sk.upjs.ics.security.Auth;
@@ -59,15 +60,23 @@ public class SignInViewController {
         var email = emailTextField.getText();
         var password = passwordField.getText();
 
+        // for error messages
+        ResourceBundle bundle = ResourceBundle.getBundle("sk.upjs.ics.MyResources.MyResources", LocaleManager.getLocale());
+
         Principal principal;
         try {
             principal = authDao.authenticate(email, password);
         } catch (AuthenticationException e) {
-            ResourceBundle bundle = ResourceBundle.getBundle("sk.upjs.ics.MyResources.MyResources", LocaleManager.getLocale());
+            // write error message to IncorrectLabel
             String incorrectMessage = bundle.getString("auth.incorrect");
             IncorrectLabel.setTextFill(javafx.scene.paint.Color.RED);
             IncorrectLabel.setText(incorrectMessage);
-            System.out.println("Incorrect password");
+            return;
+        } catch (NotFoundException e) {
+            // write error message to IncorrectLabel
+            String incorrectMessage = bundle.getString("auth.doesNotExist");
+            IncorrectLabel.setTextFill(javafx.scene.paint.Color.RED);
+            IncorrectLabel.setText(incorrectMessage);
             return;
         }
 
