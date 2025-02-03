@@ -33,8 +33,8 @@ import java.util.UUID;
 
 public class HomeViewController implements Initializable {
 
-    @FXML
-    private MFXListView<String> activeReservationsList;
+//    @FXML
+//    private MFXListView<String> activeReservationsList;
 
     @FXML
     private MFXButton enterButton;
