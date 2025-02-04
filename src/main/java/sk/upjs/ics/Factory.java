@@ -3,6 +3,7 @@ package sk.upjs.ics;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
+import org.sqlite.SQLiteDataSource;
 import sk.upjs.ics.daos.interfaces.*;
 import sk.upjs.ics.daos.sql.*;
 import sk.upjs.ics.exceptions.CouldNotConnectToDatabaseException;
@@ -25,7 +26,6 @@ public enum Factory {
      */
     public static final String DB_URL = System.getProperty("DB_URL", "jdbc:sqlite:fitflow.db");
 
-    private volatile Connection connection;
     private volatile JdbcOperations jdbcOperations;
     private volatile UserDao userDao;
     private volatile TransactionTypeDao transactionTypeDao;
@@ -47,12 +47,9 @@ public enum Factory {
             synchronized (lock) {
                 System.out.println("Connecting to database...");
                 if (jdbcOperations == null) {
-                    try {
-                        connection = DriverManager.getConnection(DB_URL);
-                        jdbcOperations = new JdbcTemplate(new SingleConnectionDataSource(connection, true));
-                    } catch (SQLException e) {
-                        throw new CouldNotConnectToDatabaseException("Could not connect to the database.");
-                    }
+                    var dataSource = new SQLiteDataSource();
+                    dataSource.setUrl(DB_URL);
+                    jdbcOperations = new JdbcTemplate(dataSource);
                     System.out.println("Connection successful!");
                 }
             }
