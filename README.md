@@ -207,6 +207,41 @@ Supported languages:
 - German (MyResources_de.properties)
 - Slovak (MyResources_sk.properties)
 
+## User Interface
+
+<details>
+
+<summary>Home</summary>
+
+<img width="798" alt="Snímka obrazovky 2025-02-05 o 14 35 28" src="https://github.com/user-attachments/assets/4e0cfdb8-3dac-41c5-aced-77ea6d1df6de" />
+
+</details>
+<details>
+<summary>Wallet</summary>
+
+<img width="799" alt="Snímka obrazovky 2025-02-05 o 14 35 40" src="https://github.com/user-attachments/assets/3c50afc7-39d9-47eb-9625-f94842f9d886" />
+
+
+</details>
+<details>
+<summary>History</summary>
+
+<img width="795" alt="Snímka obrazovky 2025-02-05 o 14 35 53" src="https://github.com/user-attachments/assets/86d3abd8-b825-446b-a944-5b68a7612dcc" />
+
+</details>
+<details>
+<summary>Settings</summary>
+
+<img width="796" alt="Snímka obrazovky 2025-02-05 o 14 36 04" src="https://github.com/user-attachments/assets/5f969d5e-e43a-44de-a517-2c986c18eda9" />
+
+</details>
+<details>
+<summary>Dark mode and Internationalization</summary>
+
+<img width="793" alt="Snímka obrazovky 2025-02-05 o 14 36 33" src="https://github.com/user-attachments/assets/1b58e881-0a72-4715-afd2-453467ccafc0" />
+
+</details>
+
 ## Contributing
 
 1. Fork the repository
